@@ -1,9 +1,11 @@
 ﻿using System.Web.Http;
+using System.Web.Http.Cors;
 using DevStats.Data.Repositories;
 using DevStats.Domain.Burndown;
 
 namespace DevStats.Controllers
 {
+    [EnableCors("*", "*", "GET,POST")]
     public class BurndownController : ApiController
     {
         private readonly IBurndownRepository repository;
@@ -11,12 +13,6 @@ namespace DevStats.Controllers
         public BurndownController()
         {
             repository = new BurndownRepository();
-        }
-
-        [HttpGet]
-        public string Check()
-        {
-            return "Hello World!";
         }
 
         [HttpGet]
