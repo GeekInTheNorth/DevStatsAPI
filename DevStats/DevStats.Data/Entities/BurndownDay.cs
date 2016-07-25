@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DevStats.Data
+namespace DevStats.Data.Entities
 {
     public class BurndownDay
     {

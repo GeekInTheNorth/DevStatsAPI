@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using DevStats.Data.Entities;
 
 namespace DevStats.Data
 {
@@ -8,6 +9,8 @@ namespace DevStats.Data
         public DevStatContext() : base("DevStatSQL")
         {
         }
+
+        public DbSet<AllowedOrigin> AllowedOrigins { get; set; }
 
         public DbSet<BurndownDay> BurndownDays { get; set; }
 

@@ -22,13 +22,13 @@ namespace DevStats.Data.Repositories
             };
         }
 
-        public void Save(Domain.Burndown.BurndownDay burndownDay)
+        public void Save(BurndownDay burndownDay)
         {
             var existingItem = Context.BurndownDays.FirstOrDefault(x => x.Sprint == burndownDay.Sprint && x.Date == burndownDay.Date);
 
             if (existingItem == null)
             {
-                var newEntity = new BurndownDay
+                var newEntity = new Entities.BurndownDay
                 {
                     Sprint = burndownDay.Sprint,
                     Date = burndownDay.Date,
