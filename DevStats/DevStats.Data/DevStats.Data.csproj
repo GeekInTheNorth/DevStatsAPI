@@ -56,6 +56,10 @@
     <Compile Include="Migrations\201607260714400_InitialCreate.Designer.cs">
       <DependentUpon>201607260714400_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201609061352126_AddDefectTracking.cs" />
+    <Compile Include="Migrations\201609061352126_AddDefectTracking.Designer.cs">
+      <DependentUpon>201609061352126_AddDefectTracking.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,6 +81,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201607260714400_InitialCreate.resx">
       <DependentUpon>201607260714400_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201609061352126_AddDefectTracking.resx">
+      <DependentUpon>201609061352126_AddDefectTracking.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
