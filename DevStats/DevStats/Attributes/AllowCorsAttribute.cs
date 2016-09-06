@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,10 +30,16 @@ namespace DevStats.Attributes
 
             var repository = new OriginsRepository();
             var allowedOrigins = repository.Get();
-            foreach (var allowedOrigin in allowedOrigins)
+
+            if (allowedOrigins.Any())
             {
-                corsPolicy.Origins.Add(allowedOrigin);
+                foreach (var allowedOrigin in allowedOrigins)
+                {
+                    corsPolicy.Origins.Add(allowedOrigin);
+                }
             }
+            else
+                corsPolicy.AllowAnyOrigin = true;
 
             if (allowedHeaders == "*")
                 corsPolicy.AllowAnyHeader = true;
