@@ -43,6 +43,13 @@
     <Compile Include="Burndown\BurndownDay.cs" />
     <Compile Include="Burndown\BurndownSummary.cs" />
     <Compile Include="Burndown\IBurndownRepository.cs" />
+    <Compile Include="DefectAnalysis\Defect.cs" />
+    <Compile Include="DefectAnalysis\DefectService.cs" />
+    <Compile Include="DefectAnalysis\DefectSummaries.cs" />
+    <Compile Include="DefectAnalysis\DefectSummary.cs" />
+    <Compile Include="DefectAnalysis\DefectType.cs" />
+    <Compile Include="DefectAnalysis\IDefectRepository.cs" />
+    <Compile Include="DefectAnalysis\IDefectService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

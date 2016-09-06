@@ -53,9 +53,11 @@
     <Compile Include="Entities\BurndownDay.cs" />
     <Compile Include="DevStatContext.cs" />
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\BurndownRepository.cs" />
+    <Compile Include="Repositories\DefectRepository.cs" />
     <Compile Include="Repositories\OriginsRepository.cs" />
   </ItemGroup>
   <ItemGroup>
