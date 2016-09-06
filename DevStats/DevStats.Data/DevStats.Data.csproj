@@ -52,6 +52,7 @@
     <Compile Include="Entities\AllowedOrigin.cs" />
     <Compile Include="Entities\BurndownDay.cs" />
     <Compile Include="DevStatContext.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\BurndownRepository.cs" />
