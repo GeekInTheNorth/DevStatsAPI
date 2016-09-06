@@ -52,6 +52,10 @@
     <Compile Include="Entities\AllowedOrigin.cs" />
     <Compile Include="Entities\BurndownDay.cs" />
     <Compile Include="DevStatContext.cs" />
+    <Compile Include="Migrations\201607260714400_InitialCreate.cs" />
+    <Compile Include="Migrations\201607260714400_InitialCreate.Designer.cs">
+      <DependentUpon>201607260714400_InitialCreate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,6 +73,11 @@
       <Project>{FCBD75B5-A6E3-4C13-B49B-52631DCB9567}</Project>
       <Name>DevStats.Domain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201607260714400_InitialCreate.resx">
+      <DependentUpon>201607260714400_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
