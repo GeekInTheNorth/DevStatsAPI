@@ -190,9 +190,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\DevStats.Data\DevStats.Data.csproj">
       <Project>{A4C04FC4-54CF-4BD8-9624-69C4FD89DBC9}</Project>
