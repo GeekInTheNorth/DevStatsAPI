@@ -24,12 +24,11 @@ namespace DevStats.Domain.DefectAnalysis
 
         public List<DefectSummary> ReworkItemsLogged { get; private set; }
 
+        public List<string> Modules { get; private set; }
+
         public DefectSummaries(IEnumerable<Defect> defects, DateTime firstMonthStart, DateTime lastMonthEnd)
         {
-            var today = DateTime.Today;
-            var currentMonthEnd = firstMonthStart.AddMonths(1).AddDays(-1);
-            var distinctModules = defects.Select(x => x.Module).Distinct();
-
+            Modules = defects.Select(x => x.Module).Distinct().OrderBy(x => x).ToList();
             TotalOutstandingDefects = new List<DefectSummary>();
             InternalOutstandingDefects = new List<DefectSummary>();
             ExternalOutstandingDefects = new List<DefectSummary>();
@@ -38,73 +37,73 @@ namespace DevStats.Domain.DefectAnalysis
             ExternalItemsLogged = new List<DefectSummary>();
             ReworkItemsLogged = new List<DefectSummary>();
 
-            while (currentMonthEnd <= lastMonthEnd)
+            foreach(var module in Modules)
             {
-                TotalOutstandingDefects.Add(GetOutstandingDefectsForPeriod(defects, distinctModules, currentMonthEnd, InternalAndExternal));
-                InternalOutstandingDefects.Add(GetOutstandingDefectsForPeriod(defects, distinctModules, currentMonthEnd, DefectType.Internal));
-                ExternalOutstandingDefects.Add(GetOutstandingDefectsForPeriod(defects, distinctModules, currentMonthEnd, DefectType.External));
-                TotalItemsLogged.Add(GetLoggedDefectsForPeriod(defects, distinctModules, currentMonthEnd, AllDefectTypes));
-                InternalItemsLogged.Add(GetLoggedDefectsForPeriod(defects, distinctModules, currentMonthEnd, DefectType.Internal));
-                ExternalItemsLogged.Add(GetLoggedDefectsForPeriod(defects, distinctModules, currentMonthEnd, DefectType.External));
-                ReworkItemsLogged.Add(GetLoggedDefectsForPeriod(defects, distinctModules, currentMonthEnd, DefectType.External));
+                var today = DateTime.Today;
+                var currentMonthEnd = firstMonthStart.AddMonths(1).AddDays(-1);
+                var totalOutstandingDefects = new DefectSummary(module);
+                var internalOutstandingDefects = new DefectSummary(module);
+                var externalOutstandingDefects = new DefectSummary(module);
+                var totalItemsLogged = new DefectSummary(module);
+                var internalItemsLogged = new DefectSummary(module);
+                var externalItemsLogged = new DefectSummary(module);
+                var reworkItemsLogged = new DefectSummary(module);
 
-                currentMonthEnd = new DateTime(currentMonthEnd.Year, currentMonthEnd.Month, 1).AddMonths(2).AddDays(-1);
+                while (currentMonthEnd <= lastMonthEnd)
+                {
+                    var monthString = currentMonthEnd.ToString("MMM yy");
+
+                    totalOutstandingDefects.MonthlyBreakdown.Add(monthString, GetOutstandingDefectsForPeriod(defects, module, currentMonthEnd, InternalAndExternal));
+                    internalOutstandingDefects.MonthlyBreakdown.Add(monthString, GetOutstandingDefectsForPeriod(defects, module, currentMonthEnd, DefectType.Internal));
+                    externalOutstandingDefects.MonthlyBreakdown.Add(monthString, GetOutstandingDefectsForPeriod(defects, module, currentMonthEnd, DefectType.External));
+                    totalItemsLogged.MonthlyBreakdown.Add(monthString, GetLoggedDefectsForPeriod(defects, module, currentMonthEnd, AllDefectTypes));
+                    internalItemsLogged.MonthlyBreakdown.Add(monthString, GetLoggedDefectsForPeriod(defects, module, currentMonthEnd, DefectType.Internal));
+                    externalItemsLogged.MonthlyBreakdown.Add(monthString, GetLoggedDefectsForPeriod(defects, module, currentMonthEnd, DefectType.External));
+                    reworkItemsLogged.MonthlyBreakdown.Add(monthString, GetLoggedDefectsForPeriod(defects, module, currentMonthEnd, DefectType.Rework));
+
+                    currentMonthEnd = new DateTime(currentMonthEnd.Year, currentMonthEnd.Month, 1).AddMonths(2).AddDays(-1);
+                }
+
+                TotalOutstandingDefects.Add(totalOutstandingDefects);
+                InternalOutstandingDefects.Add(internalOutstandingDefects);
+                ExternalOutstandingDefects.Add(externalOutstandingDefects);
+                TotalItemsLogged.Add(totalItemsLogged);
+                InternalItemsLogged.Add(internalItemsLogged);
+                ExternalItemsLogged.Add(externalItemsLogged);
+                ReworkItemsLogged.Add(reworkItemsLogged);
             }
         }
 
-        private DefectSummary GetOutstandingDefectsForPeriod(IEnumerable<Defect> defects, IEnumerable<string> distinctModules, DateTime currentMonthEnd, DefectType defectType)
+        private int GetOutstandingDefectsForPeriod(IEnumerable<Defect> defects, string module, DateTime currentMonthEnd, DefectType defectType)
         {
-            var defectTypes = new DefectType[] { defectType };
-
-            return GetOutstandingDefectsForPeriod(defects, distinctModules, currentMonthEnd, defectTypes);
+            return defects.Where(x => x.Type == defectType && x.Module == module)
+                          .Where(x => x.Created <= currentMonthEnd && !x.WasClosedBy(currentMonthEnd))
+                          .Count();
         }
 
-        private DefectSummary GetOutstandingDefectsForPeriod(IEnumerable<Defect> defects, IEnumerable<string> distinctModules, DateTime currentMonthEnd, DefectType[] defectTypes)
+        private int GetOutstandingDefectsForPeriod(IEnumerable<Defect> defects, string module, DateTime currentMonthEnd, DefectType[] defectTypes)
         {
-            var moduleBreakdown = defects.Where(x => defectTypes.Contains(x.Type))
-                                         .Where(x => x.Created <= currentMonthEnd && !x.WasClosedBy(currentMonthEnd))
-                                         .GroupBy(x => x.Module)
-                                         .Select(x => new { Module = x.Key, Items = x.Count() })
-                                         .ToDictionary(x => x.Module, x => x.Items);
-
-            var absentModules = distinctModules.Where(x => !moduleBreakdown.ContainsKey(x));
-
-            foreach (var absentModule in absentModules)
-                moduleBreakdown.Add(absentModule, 0);
-
-            return new DefectSummary
-            {
-                MonthString = currentMonthEnd.ToString("MMM-yy"),
-                ModuleBreakdown = moduleBreakdown.OrderBy(x => x.Key).ToDictionary(x => x.Key, x=> x.Value)
-            };
+            return defects.Where(x => defectTypes.Contains(x.Type) && x.Module == module)
+                          .Where(x => x.Created <= currentMonthEnd && !x.WasClosedBy(currentMonthEnd))
+                          .Count();
         }
 
-        private DefectSummary GetLoggedDefectsForPeriod(IEnumerable<Defect> defects, IEnumerable<string> distinctModules, DateTime currentMonthEnd, DefectType defectType)
-        {
-            var defectTypes = new DefectType[] { defectType };
-
-            return GetLoggedDefectsForPeriod(defects, distinctModules, currentMonthEnd, defectTypes);
-        }
-
-        private DefectSummary GetLoggedDefectsForPeriod(IEnumerable<Defect> defects, IEnumerable<string> distinctModules, DateTime currentMonthEnd, DefectType[] defectTypes)
+        private int GetLoggedDefectsForPeriod(IEnumerable<Defect> defects, string module, DateTime currentMonthEnd, DefectType defectType)
         {
             var currentMonthStart = new DateTime(currentMonthEnd.Year, currentMonthEnd.Month, 1);
-            var moduleBreakdown = defects.Where(x => defectTypes.Contains(x.Type))
-                                         .Where(x => x.Created >= currentMonthStart && x.Created <= currentMonthEnd)
-                                         .GroupBy(x => x.Module)
-                                         .Select(x => new { Module = x.Key, Items = x.Count() })
-                                         .ToDictionary(x => x.Module, x => x.Items);
 
-            var absentModules = distinctModules.Where(x => !moduleBreakdown.ContainsKey(x));
+            return defects.Where(x => x.Type == defectType && x.Module == module)
+                          .Where(x => x.Created >= currentMonthStart && x.Created <= currentMonthEnd)
+                          .Count();
+        }
 
-            foreach (var absentModule in absentModules)
-                moduleBreakdown.Add(absentModule, 0);
+        private int GetLoggedDefectsForPeriod(IEnumerable<Defect> defects, string module, DateTime currentMonthEnd, DefectType[] defectTypes)
+        {
+            var currentMonthStart = new DateTime(currentMonthEnd.Year, currentMonthEnd.Month, 1);
 
-            return new DefectSummary
-            {
-                MonthString = currentMonthEnd.ToString("MMM-yy"),
-                ModuleBreakdown = moduleBreakdown.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value)
-            };
+            return defects.Where(x => defectTypes.Contains(x.Type) && x.Module == module)
+                          .Where(x => x.Created >= currentMonthStart && x.Created <= currentMonthEnd)
+                          .Count();
         }
     }
 }

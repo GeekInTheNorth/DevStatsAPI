@@ -1,0 +1,30 @@
+﻿body {
+    font-family: Calibri, Arial;
+    font-size: 1em;
+}
+
+table.defectdata {
+    border-collapse:collapse;
+    border: 1px solid black;
+}
+
+table.defectdata th {
+    border-collapse:collapse;
+    border: 1px solid black;
+    color: white;
+    background-color: dodgerblue;
+}
+
+table.defectdata td, table.defectdata th {
+    border-collapse:collapse;
+    border: 1px solid black;
+    padding: 2px;
+}
+
+table.defectdata td.text {
+    text-align: left;
+}
+
+table.defectdata td.numeric {
+    text-align: right;
+}

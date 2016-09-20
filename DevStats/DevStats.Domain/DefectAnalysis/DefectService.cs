@@ -31,7 +31,7 @@ namespace DevStats.Domain.DefectAnalysis
             if (defects == null || !defects.Any())
                 return;
 
-            repository.Save(defects);
+            repository.Save(defects.Where(x => !string.IsNullOrWhiteSpace(x.DefectId)));
         }
     }
 }

@@ -14,14 +14,10 @@ namespace DevStats.Domain.DefectAnalysis
 
         public DateTime? Closed { get; set; }
 
-        public Defect()
-        {
-        }
-
         public Defect(string defectId, string module, string type, DateTime created, DateTime? closed)
         {
             DefectId = defectId;
-            Module = module;
+            Module = string.IsNullOrWhiteSpace(module) ? "Unknown" : module;
             Created = created;
             Closed = closed;
 

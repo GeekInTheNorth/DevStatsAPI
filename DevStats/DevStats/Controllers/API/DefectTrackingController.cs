@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using DevStats.Attributes;
-using DevStats.Data.Repositories;
 using DevStats.Domain.DefectAnalysis;
+using DevStats.Models.DefectTracking;
 
-namespace DevStats.Controllers
+namespace DevStats.Controllers.API
 {
     [AllowCors("*", "GET,POST")]
     public class DefectTrackingController : ApiController
     {
         private readonly IDefectService service;
 
-        public DefectTrackingController()
+        public DefectTrackingController(IDefectService service)
         {
-            service = new DefectService(new DefectRepository());
+            this.service = service;
         }
 
         [HttpGet]
@@ -23,11 +24,16 @@ namespace DevStats.Controllers
         }
 
         [HttpPost]
-        public bool Save([FromBody]IEnumerable<Defect> defects)
+        public bool Save([FromBody]List<DefectModel> defects)
         {
+            if (defects == null || !defects.Any())
+                return false;
+
+            var defectsToSave = defects.Select(x => new Defect(x.DefectId, x.Module, x.Type, x.Created, x.Closed));
+
             try
             {
-                service.Save(defects);
+                service.Save(defectsToSave);
                 return true;
             }
             catch

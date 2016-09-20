@@ -30,6 +30,7 @@ namespace DevStats.Data.Repositories
             if (dbItem == null)
             {
                 dbItem = new Entities.Defect();
+                dbItem.DefectId = defect.DefectId;
                 Context.Defects.Add(dbItem);
             }
 
