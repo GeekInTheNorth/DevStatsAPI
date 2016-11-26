@@ -10,8 +10,6 @@ namespace DevStats.Data
         {
         }
 
-        public DbSet<AllowedOrigin> AllowedOrigins { get; set; }
-
         public DbSet<BurndownDay> BurndownDays { get; set; }
 
         public DbSet<Defect> Defects { get; set; }

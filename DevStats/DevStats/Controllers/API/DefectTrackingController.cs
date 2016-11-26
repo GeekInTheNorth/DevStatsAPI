@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using DevStats.Attributes;
 using DevStats.Domain.DefectAnalysis;
 using DevStats.Models.DefectTracking;
 
 namespace DevStats.Controllers.API
 {
-    [AllowCors("*", "GET,POST")]
     public class DefectTrackingController : ApiController
     {
         private readonly IDefectService service;

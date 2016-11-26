@@ -1,11 +1,8 @@
 ﻿using System.Web.Http;
-using DevStats.Attributes;
-using DevStats.Data.Repositories;
 using DevStats.Domain.Burndown;
 
 namespace DevStats.Controllers.API
 {
-    [AllowCors("*", "GET,POST")]
     public class BurndownController : ApiController
     {
         private readonly IBurndownRepository repository;
