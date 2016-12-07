@@ -31,5 +31,16 @@
                 }
             </tr>
         }
+
+        @if (Model.ShowTotals)
+        {
+            <tr>
+                <th class="text">Totals</th>
+                @foreach (var total in summaryCollection.Totals.MonthlyBreakdown)
+                {
+                    <th class="numeric">@total.Value</th>
+                }
+            </tr>
+        }        
     </table>
 }

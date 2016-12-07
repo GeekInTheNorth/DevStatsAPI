@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Web.Http;
+using System.Web.Mvc;
 using DevStats.Domain.DefectAnalysis;
 using DevStats.Models.DefectSummary;
 
@@ -14,9 +15,9 @@ namespace DevStats.Controllers.MVC
         }
 
         // GET: DefectSummary
-        public ActionResult Index()
+        public ActionResult Index([FromUri]bool showTotals = false)
         {
-            var model = new DefectSummaryModel(service.GetSummary());
+            var model = new DefectSummaryModel(service.GetSummary(), showTotals);
 
             return View(model);
         }
