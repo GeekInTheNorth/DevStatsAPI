@@ -14,6 +14,8 @@ namespace DevStats.Data
 
         public DbSet<Defect> Defects { get; set; }
 
+        public DbSet<Sprint> Sprints { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
