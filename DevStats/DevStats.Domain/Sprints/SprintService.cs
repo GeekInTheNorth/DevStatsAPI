@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DevStats.Domain.Sprints
 {
@@ -11,6 +12,11 @@ namespace DevStats.Domain.Sprints
             if (repository == null) throw new ArgumentNullException(nameof(repository));
 
             this.repository = repository;
+        }
+
+        public IEnumerable<Sprint> Get()
+        {
+            return repository.Get();
         }
 
         public Sprint GetSprint(string pod)

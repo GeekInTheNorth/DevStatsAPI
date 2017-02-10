@@ -1,4 +1,6 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
 using DevStats.Domain.Sprints;
 
 namespace DevStats.Controllers.API
@@ -10,6 +12,12 @@ namespace DevStats.Controllers.API
         public SprintController(ISprintService service)
         {
             this.service = service;
+        }
+
+        [HttpGet]
+        public List<Sprint> Get()
+        {
+            return service.Get().ToList();
         }
 
         [HttpGet]
