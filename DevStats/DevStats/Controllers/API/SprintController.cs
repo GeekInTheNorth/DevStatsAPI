@@ -35,5 +35,11 @@ namespace DevStats.Controllers.API
 
             return service.GetSprint(pod);
         }
+
+        [HttpPost]
+        public void Save([FromBody]Sprint sprint)
+        {
+            service.Save(sprint);
+        }
     }
 }

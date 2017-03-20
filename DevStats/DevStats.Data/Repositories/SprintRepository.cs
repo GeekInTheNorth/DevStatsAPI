@@ -53,5 +53,23 @@ namespace DevStats.Data.Repositories
                           })
                           .FirstOrDefault();
         }
+
+        public void Save(Sprint sprint)
+        {
+            var data = Context.Sprints.FirstOrDefault(x => x.Pod == sprint.Pod && x.Name == sprint.Name);
+
+            if (data == null)
+            {
+                data = new Entities.Sprint();
+                data.Pod = sprint.Pod;
+                data.Name = sprint.Name;
+                Context.Sprints.Add(data);
+            }
+
+            data.StartDate = sprint.StartDate;
+            data.PlannedEffort = sprint.PlannedEffort;
+
+            Context.SaveChanges();
+        }
     }
 }

@@ -34,5 +34,13 @@ namespace DevStats.Domain.Sprints
 
             return repository.GetSprint(pod, sprint);
         }
+
+        public void Save(Sprint sprint)
+        {
+            if (sprint == null || string.IsNullOrWhiteSpace(sprint.Pod) || string.IsNullOrWhiteSpace(sprint.Name))
+                return;
+
+            repository.Save(sprint);
+        }
     }
 }

@@ -9,5 +9,7 @@ namespace DevStats.Domain.Sprints
         Sprint GetSprint(string podName);
 
         Sprint GetSprint(string podName, string sprintName);
+
+        void Save(Sprint sprint);
     }
 }
