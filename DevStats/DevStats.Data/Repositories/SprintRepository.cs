@@ -68,6 +68,7 @@ namespace DevStats.Data.Repositories
 
             data.StartDate = sprint.StartDate;
             data.PlannedEffort = sprint.PlannedEffort;
+            data.DurationDays = sprint.DurationDays;
 
             Context.SaveChanges();
         }
