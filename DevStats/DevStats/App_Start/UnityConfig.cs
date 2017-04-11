@@ -5,7 +5,8 @@ using DevStats.Domain.Burndown;
 using DevStats.Domain.DefectAnalysis;
 using System.Web.Mvc;
 using DevStats.Domain.Sprints;
-using DevStats.Domain.Jira.WebHookLog;
+using DevStats.Domain.Jira;
+using DevStats.Domain.Jira.Logging;
 
 namespace DevStats
 {
@@ -21,9 +22,13 @@ namespace DevStats
             container.RegisterType<ISprintRepository, SprintRepository>();
             container.RegisterType<IJiraLogRepository, JiraLogRepository>();
 
+            // Utilities
+            container.RegisterType<IJiraConvertor, JiraConvertor>();
+
             // Services
             container.RegisterType<IDefectService, DefectService>();
             container.RegisterType<ISprintService, SprintService>();
+            container.RegisterType<IJiraService, JiraService>();
 
             DependencyResolver.SetResolver(new Unity.Mvc5.UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);

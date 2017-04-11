@@ -30,8 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="JWT, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\JWT.1.3.4\lib\3.5\JWT.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,14 +58,36 @@
     <Compile Include="DefectAnalysis\DefectType.cs" />
     <Compile Include="DefectAnalysis\IDefectRepository.cs" />
     <Compile Include="DefectAnalysis\IDefectService.cs" />
-    <Compile Include="Jira\WebHookLog\IJiraLogRepository.cs" />
+    <Compile Include="Jira\JsonModels\Parent.cs" />
+    <Compile Include="Jira\JsonModels\Create\Subtask.cs" />
+    <Compile Include="Jira\Logging\IJiraLogRepository.cs" />
+    <Compile Include="Jira\FilterBuilder.cs" />
+    <Compile Include="Jira\IJiraConvertor.cs" />
+    <Compile Include="Jira\IJiraService.cs" />
+    <Compile Include="Jira\JiraConvertor.cs" />
+    <Compile Include="Jira\JiraService.cs" />
+    <Compile Include="Jira\JsonModels\FixVersion.cs" />
+    <Compile Include="Jira\JsonModels\JiraIssues.cs" />
+    <Compile Include="Jira\JsonModels\ComplexField.cs" />
+    <Compile Include="Jira\JsonModels\Fields.cs" />
+    <Compile Include="Jira\JsonModels\Issue.cs" />
+    <Compile Include="Jira\JsonModels\Issuetype.cs" />
+    <Compile Include="Jira\JsonModels\Priority.cs" />
+    <Compile Include="Jira\JsonModels\Progress.cs" />
+    <Compile Include="Jira\JsonModels\Project.cs" />
+    <Compile Include="Jira\JsonModels\Status.cs" />
+    <Compile Include="Jira\JsonModels\StatusCategory.cs" />
+    <Compile Include="Jira\JsonModels\User.cs" />
+    <Compile Include="Jira\JsonModels\Votes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprints\ISprintRepository.cs" />
     <Compile Include="Sprints\ISprintService.cs" />
     <Compile Include="Sprints\Sprint.cs" />
     <Compile Include="Sprints\SprintService.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

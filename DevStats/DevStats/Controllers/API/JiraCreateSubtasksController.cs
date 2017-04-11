@@ -1,17 +1,18 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using DevStats.Domain.Jira.WebHookLog;
+using DevStats.Domain.Jira;
 
 namespace DevStats.Controllers.API
 {
     public class JiraCreateSubtasksController : ApiController
     {
-        private readonly IJiraLogRepository hookLogRepository;
+        private readonly IJiraService service;
 
-        public JiraCreateSubtasksController(IJiraLogRepository hookLogRepository)
+        public JiraCreateSubtasksController(IJiraService service)
         {
-            this.hookLogRepository = hookLogRepository;
+            this.service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
         [EnableCors("*", "*", "*")]
@@ -26,7 +27,7 @@ namespace DevStats.Controllers.API
                 domain = Request.Headers.GetValues("Origin").FirstOrDefault();
             }
 
-            hookLogRepository.Save(issueId, displayIssueId, domain, jsonContent);
+            service.CreateSubTasks(issueId, displayIssueId, domain, jsonContent);
         }
     }
 }

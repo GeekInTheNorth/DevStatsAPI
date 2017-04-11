@@ -10,10 +10,12 @@ namespace DevStats.Data.Entities
 
         public string IssueKey { get; set; }
 
-        public string SourceDomain { get; set; }
+        public DateTime Triggered { get; set; }
+
+        public bool Success { get; set; }
+
+        public string Action { get; set; }
 
         public string Content { get; set; }
-
-        public DateTime Triggered { get; set; }
     }
 }

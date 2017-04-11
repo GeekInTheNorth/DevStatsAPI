@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="Entities\BurndownDay.cs" />
     <Compile Include="DevStatContext.cs" />
-    <Compile Include="Entities\JiraHookLog.cs" />
+    <Compile Include="Entities\JiraLog.cs" />
     <Compile Include="Entities\Sprint.cs" />
     <Compile Include="Migrations\201607260714400_InitialCreate.cs" />
     <Compile Include="Migrations\201607260714400_InitialCreate.Designer.cs">
@@ -76,6 +76,10 @@
     <Compile Include="Migrations\201705241457530_JiraSubTaskHook.cs" />
     <Compile Include="Migrations\201705241457530_JiraSubTaskHook.Designer.cs">
       <DependentUpon>201705241457530_JiraSubTaskHook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705251226592_StoreMoreInJiraLog.cs" />
+    <Compile Include="Migrations\201705251226592_StoreMoreInJiraLog.Designer.cs">
+      <DependentUpon>201705251226592_StoreMoreInJiraLog.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
@@ -114,6 +118,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705241457530_JiraSubTaskHook.resx">
       <DependentUpon>201705241457530_JiraSubTaskHook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705251226592_StoreMoreInJiraLog.resx">
+      <DependentUpon>201705251226592_StoreMoreInJiraLog.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
