@@ -9,17 +9,14 @@ namespace DevStats.Data.Repositories
         {
             var burndownDays = (from days in Context.BurndownDays
                                 where days.Sprint == sprintName
-                                select new Domain.Burndown.BurndownDay
+                                select new BurndownDay
                                 {
                                     Date = days.Date,
                                     Sprint = days.Sprint,
                                     WorkRemaining = days.WorkRemaining
                                 }).ToList();
 
-            return new BurndownSummary
-            {
-                Days = burndownDays
-            };
+            return new BurndownSummary(burndownDays);
         }
 
         public void Save(BurndownDay burndownDay)
