@@ -14,6 +14,7 @@ namespace DevStats.Controllers.API
         }
 
         [EnableCors("*", "*", "*")]
+        [HttpPost]
         public void CreateDefaultSubTasks([FromUri]string user_id, [FromUri]string user_key, [FromBody]string content)
         {
             hookLogRepository.Save(user_id, user_key, content);
