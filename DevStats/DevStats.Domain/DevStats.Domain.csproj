@@ -50,7 +50,7 @@
     <Compile Include="DefectAnalysis\DefectType.cs" />
     <Compile Include="DefectAnalysis\IDefectRepository.cs" />
     <Compile Include="DefectAnalysis\IDefectService.cs" />
-    <Compile Include="Jira\WebHookLog\IJiraWebHookLogRepository.cs" />
+    <Compile Include="Jira\WebHookLog\IJiraLogRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprints\ISprintRepository.cs" />
     <Compile Include="Sprints\ISprintService.cs" />

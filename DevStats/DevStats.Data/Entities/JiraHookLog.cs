@@ -2,15 +2,17 @@
 
 namespace DevStats.Data.Entities
 {
-    public class JiraHookLog
+    public class JiraLog
     {
         public int ID { get; set; }
 
-        public string UserIdentity { get; set; }
+        public string IssueIdentity { get; set; }
 
-        public string UserKey { get; set; }
+        public string IssueKey { get; set; }
 
-        public string Body { get; set; }
+        public string SourceDomain { get; set; }
+
+        public string Content { get; set; }
 
         public DateTime Triggered { get; set; }
     }

@@ -16,7 +16,7 @@ namespace DevStats.Data
 
         public DbSet<Sprint> Sprints { get; set; }
 
-        public DbSet<JiraHookLog> JiraHookLogs { get; set; }
+        public DbSet<JiraLog> JiraLogs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

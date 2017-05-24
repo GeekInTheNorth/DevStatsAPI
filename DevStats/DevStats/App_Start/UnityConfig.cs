@@ -19,7 +19,7 @@ namespace DevStats
             container.RegisterType<IBurndownRepository, BurndownRepository>();
             container.RegisterType<IDefectRepository, DefectRepository>();
             container.RegisterType<ISprintRepository, SprintRepository>();
-            container.RegisterType<IJiraWebHookLogRepository, JiraWebHookLogRepository>();
+            container.RegisterType<IJiraLogRepository, JiraLogRepository>();
 
             // Services
             container.RegisterType<IDefectService, DefectService>();

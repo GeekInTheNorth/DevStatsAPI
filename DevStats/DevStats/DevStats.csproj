@@ -167,7 +167,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\BurndownController.cs" />
-    <Compile Include="Controllers\API\JiraController.cs" />
+    <Compile Include="Controllers\API\JiraCreateSubtasksController.cs" />
     <Compile Include="Controllers\API\SprintController.cs" />
     <Compile Include="Controllers\MVC\DefectSummaryController.cs" />
     <Compile Include="Controllers\API\DefectTrackingController.cs" />

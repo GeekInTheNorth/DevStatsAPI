@@ -73,13 +73,17 @@
     <Compile Include="Migrations\201705240640073_JiraHook.Designer.cs">
       <DependentUpon>201705240640073_JiraHook.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705241457530_JiraSubTaskHook.cs" />
+    <Compile Include="Migrations\201705241457530_JiraSubTaskHook.Designer.cs">
+      <DependentUpon>201705241457530_JiraSubTaskHook.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\BurndownRepository.cs" />
     <Compile Include="Repositories\DefectRepository.cs" />
-    <Compile Include="Repositories\JiraWebHookLogRepository.cs" />
+    <Compile Include="Repositories\JiraLogRepository.cs" />
     <Compile Include="Repositories\SprintRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +111,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705240640073_JiraHook.resx">
       <DependentUpon>201705240640073_JiraHook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705241457530_JiraSubTaskHook.resx">
+      <DependentUpon>201705241457530_JiraSubTaskHook.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
