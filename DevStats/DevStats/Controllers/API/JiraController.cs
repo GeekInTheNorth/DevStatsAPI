@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using System.Web.Http.Cors;
 using DevStats.Domain.Jira.WebHookLog;
 
 namespace DevStats.Controllers.API
@@ -12,6 +13,7 @@ namespace DevStats.Controllers.API
             this.hookLogRepository = hookLogRepository;
         }
 
+        [EnableCors("*", "*", "*")]
         public void CreateDefaultSubTasks([FromUri]string user_id, [FromUri]string user_key, [FromBody]string content)
         {
             hookLogRepository.Save(user_id, user_key, content);
