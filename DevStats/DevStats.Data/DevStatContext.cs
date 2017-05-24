@@ -16,6 +16,8 @@ namespace DevStats.Data
 
         public DbSet<Sprint> Sprints { get; set; }
 
+        public DbSet<JiraHookLog> JiraHookLogs { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

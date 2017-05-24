@@ -5,6 +5,7 @@ using DevStats.Domain.Burndown;
 using DevStats.Domain.DefectAnalysis;
 using System.Web.Mvc;
 using DevStats.Domain.Sprints;
+using DevStats.Domain.Jira.WebHookLog;
 
 namespace DevStats
 {
@@ -18,6 +19,7 @@ namespace DevStats
             container.RegisterType<IBurndownRepository, BurndownRepository>();
             container.RegisterType<IDefectRepository, DefectRepository>();
             container.RegisterType<ISprintRepository, SprintRepository>();
+            container.RegisterType<IJiraWebHookLogRepository, JiraWebHookLogRepository>();
 
             // Services
             container.RegisterType<IDefectService, DefectService>();

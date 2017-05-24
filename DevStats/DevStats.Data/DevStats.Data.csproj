@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Entities\BurndownDay.cs" />
     <Compile Include="DevStatContext.cs" />
+    <Compile Include="Entities\JiraHookLog.cs" />
     <Compile Include="Entities\Sprint.cs" />
     <Compile Include="Migrations\201607260714400_InitialCreate.cs" />
     <Compile Include="Migrations\201607260714400_InitialCreate.Designer.cs">
@@ -68,12 +69,17 @@
     <Compile Include="Migrations\201702101023420_RecordSprints.Designer.cs">
       <DependentUpon>201702101023420_RecordSprints.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201705240640073_JiraHook.cs" />
+    <Compile Include="Migrations\201705240640073_JiraHook.Designer.cs">
+      <DependentUpon>201705240640073_JiraHook.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\BurndownRepository.cs" />
     <Compile Include="Repositories\DefectRepository.cs" />
+    <Compile Include="Repositories\JiraWebHookLogRepository.cs" />
     <Compile Include="Repositories\SprintRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201702101023420_RecordSprints.resx">
       <DependentUpon>201702101023420_RecordSprints.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705240640073_JiraHook.resx">
+      <DependentUpon>201705240640073_JiraHook.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
