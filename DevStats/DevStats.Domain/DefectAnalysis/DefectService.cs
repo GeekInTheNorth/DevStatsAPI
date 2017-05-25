@@ -10,8 +10,7 @@ namespace DevStats.Domain.DefectAnalysis
 
         public DefectService(IDefectRepository repository)
         {
-            if (repository == null)
-                throw new ArgumentNullException("repository");
+            if (repository == null) throw new ArgumentNullException("repository");
 
             this.repository = repository;
         }

@@ -12,7 +12,9 @@ namespace DevStats.Controllers.API
 
         public JiraCreateSubtasksController(IJiraService service)
         {
-            this.service = service ?? throw new ArgumentNullException(nameof(service));
+            if (service == null) throw new ArgumentNullException(nameof(service));
+
+            this.service = service;
         }
 
         [EnableCors("*", "*", "*")]

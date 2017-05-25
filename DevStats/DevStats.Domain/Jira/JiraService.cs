@@ -22,8 +22,11 @@ namespace DevStats.Domain.Jira
 
         public JiraService(IJiraConvertor convertor, IJiraLogRepository loggingRepository)
         {
-            this.convertor = convertor ?? throw new ArgumentNullException(nameof(convertor));
-            this.loggingRepository = loggingRepository ?? throw new ArgumentNullException(nameof(loggingRepository));
+            if (convertor == null) throw new ArgumentNullException(nameof(convertor));
+            if (loggingRepository == null) throw new ArgumentNullException(nameof(loggingRepository));
+
+            this.convertor = convertor;
+            this.loggingRepository = loggingRepository;
         }
 
         public void ProcessUpdatedItems()
