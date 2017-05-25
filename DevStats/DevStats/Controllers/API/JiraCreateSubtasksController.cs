@@ -29,5 +29,11 @@ namespace DevStats.Controllers.API
 
             service.CreateSubTasks(issueId, displayIssueId, domain, jsonContent);
         }
+
+        [HttpGet]
+        public void Test([FromUri]string issueId, [FromUri]string displayIssueId)
+        {
+            service.CreateSubTasks(issueId, displayIssueId, string.Empty, string.Empty);
+        }
     }
 }
