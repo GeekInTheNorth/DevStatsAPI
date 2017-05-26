@@ -59,6 +59,12 @@
     <Compile Include="DefectAnalysis\DefectType.cs" />
     <Compile Include="DefectAnalysis\IDefectRepository.cs" />
     <Compile Include="DefectAnalysis\IDefectService.cs" />
+    <Compile Include="Jira\JsonModels\Create\Fields.cs" />
+    <Compile Include="Jira\JsonModels\Create\IssueType.cs" />
+    <Compile Include="Jira\JsonModels\Create\SimpleField.cs" />
+    <Compile Include="Jira\JsonModels\Create\SubtaskType.cs" />
+    <Compile Include="Jira\JsonModels\Create\TaskType.cs" />
+    <Compile Include="Jira\JsonModels\Create\TimeTracking.cs" />
     <Compile Include="Jira\JsonModels\Parent.cs" />
     <Compile Include="Jira\JsonModels\Create\Subtask.cs" />
     <Compile Include="Jira\Logging\IJiraLogRepository.cs" />
