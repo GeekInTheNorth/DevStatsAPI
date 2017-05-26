@@ -40,7 +40,7 @@ namespace DevStats.Domain.Jira.JsonModels.Create
             Parent = new SimpleField(parentId);
             Summary = GetSummary(subtaskType);
             IssueType = new IssueType(5);
-            TimeTracking = subtaskType == SubtaskType.Merge ? new TimeTracking(1800) : new TimeTracking(900);
+            TimeTracking = subtaskType == SubtaskType.Merge ? new TimeTracking(30) : new TimeTracking(15);
             TaskType = new TaskType(subtaskType);
         }
 
