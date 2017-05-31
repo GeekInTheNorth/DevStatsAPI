@@ -1,5 +1,8 @@
 # DevStatsAPI
-A WebAPI project for retaining development statistics.  This is currently limited to handling the WorkRemaining for an external burndown chart.  This may be expanded upon later.
+Current functionality includes:
+- Jira Webhook for creating subtasks against Jira stories
+- Historical recording of defect stats
+- Historical burndown data
 
 ## Azure Webapp Settings that need setting up
 
