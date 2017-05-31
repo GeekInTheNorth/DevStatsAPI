@@ -28,3 +28,15 @@ table.defectdata td.text {
 table.defectdata td.numeric {
     text-align: right;
 }
+
+div.filter {
+    padding: 3px;
+    border: 1px solid dodgerblue;
+    background-color: lightsteelblue;
+    margin-bottom: 5px;
+}
+
+span.filter-label {
+    margin-left: 10px;
+    margin-right: 5px;
+}

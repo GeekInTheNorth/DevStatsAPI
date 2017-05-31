@@ -144,11 +144,13 @@
     <Compile Include="Controllers\MVC\DefectSummaryController.cs" />
     <Compile Include="Controllers\API\DefectTrackingController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
+    <Compile Include="Controllers\MVC\JiraController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\DefectSummary\DefectSummaryModel.cs" />
     <Compile Include="Models\DefectTracking\DefectModel.cs" />
+    <Compile Include="Models\Jira\AuditModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +159,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="packages.config" />
+    <Content Include="Views\Jira\Audit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

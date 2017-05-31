@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using DevStats.Data.Entities;
+using DevStats.Domain.Jira;
 using DevStats.Domain.Jira.JsonModels.Create;
 using DevStats.Domain.Jira.Logging;
 
@@ -37,6 +40,14 @@ namespace DevStats.Data.Repositories
 
             Context.JiraLogs.Add(log);
             Context.SaveChanges();
+        }
+
+        public IEnumerable<JiraAudit> Get(DateTime fromDate, DateTime toDate)
+        {
+            return Context.JiraLogs
+                          .Where(x => x.Triggered >= fromDate && x.Triggered <= toDate)
+                          .AsEnumerable()
+                          .Select(x => new JiraAudit(x.IssueKey, x.Action, x.Content, x.Success, x.Triggered));
         }
     }
 }

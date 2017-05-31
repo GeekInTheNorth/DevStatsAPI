@@ -1,0 +1,340 @@
+﻿@model DevStats.Models.Jira.AuditModel
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="filter">
+        <span class="filter-label">Date From:</span>
+        @Html.TextBox("dateFrom", Model.FilterFrom.ToString("dd/MM/yyyy"), new { @class = "datepicker", onblur = "formatDateControl(this)" })
+        <span class="filter-label">To:</span>
+        @Html.TextBox("dateTo", Model.FilterTo.ToString("dd/MM/yyyy"), new { @class = "datepicker", onblur = "formatDateControl(this)" })
+        <button type="submit" class="btn btn-success">Search</button>
+    </div>
+}
+
+<table class="defectdata">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Jira Id</th>
+            <th>Action</th>
+            <th>Successful</th>
+            <th>Content</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var auditItem in Model.AuditItems)
+        {
+            <tr>
+                <td>@auditItem.AuditDate.ToString("dd/MM/yyyy hh:mm:ss")</td>
+                <td>@auditItem.JiraId</td>
+                <td>@auditItem.Action</td>
+                <td>@auditItem.WasSuccessful</td>
+                <td>@auditItem.Content</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    function formatDateControl(dateControl) {
+        dateControl.value = parseDateText(dateControl.value);
+    }
+
+    function parseDateText(dateString) {
+        var str = dateString;
+        var dtToday = new Date();
+        var bFailed = false;
+        var dt = "";
+
+        strDate = new String(str.replace(/^\s+|\s+$/g, '')); // regex to remove whitespace from start and end of string
+
+        if (strDate.length == 0) {
+            dtField.value = strDate;
+            return;
+        }
+
+        // using a plus or minus character with a number will return the number of days from today's date. e.g. +1 or -6
+        if (strDate.charAt(0) == "+" || strDate.charAt(0) == "-") {
+            offSetDate = new Date();
+            offSetValue = Number(strDate.replace(/[^0-9]/g, ''));
+
+            if (offSetValue > 50000) offSetValue = 50000; // if the +/- figure is used cap the number of days at 50,000 (~137 years)
+
+            if (strDate.charAt(0) == "+") {
+                offSetDate.setDate(dtToday.getDate() + offSetValue);
+            }
+            else {
+                offSetDate.setDate(dtToday.getDate() - offSetValue);
+            }
+            strDate = FormatDate(offSetDate, 0);
+        }
+
+        var strDelimiter = "";
+
+        // Did we get any delimiters?
+        for (var x = 0; x < strDate.length; x++) {
+            i = parseInt(strDate.charAt(x));
+            if (isNaN(i)) {
+                // if we already have a delimiter and someone has tried to use two then swap out the newer one with the first delimiter
+                if (strDelimiter != "" && strDelimiter != strDate.charAt(x))
+                    strDate = strDate.replace(strDate.charAt(x), strDelimiter);
+                else
+                    strDelimiter = strDate.charAt(x);
+            }
+        }
+
+        var strDayGuess = "";
+        var strMonthGuess = "";
+        var strYearGuess = "";
+
+        if (strDelimiter != "" && strDate.length >= 1) {
+            strDateArray = strDate.split(strDelimiter);
+            var re = /[^0-9]/g;
+
+            if (strDateArray.length >= 1) strDayGuess = strDateArray[0].replace(re, "");
+            if (strDateArray.length >= 2) strMonthGuess = strDateArray[1].replace(re, "");
+            if (strDateArray.length >= 3) strYearGuess = strDateArray[2].replace(re, "");
+
+            // Dates between 0 and 99 (inclusive) are handled by the y2k function (1950 - 2049)
+            if (strYearGuess != "") {
+                if (Number(strYearGuess) < 100 && Number(strYearGuess) >= 0) strYearGuess = y2k(Number(strYearGuess));
+                if (Number(strYearGuess) < 1753 || Number(strYearGuess) > 9999) {
+                    strYearGuess = "";
+                    strMonthGuess = "";
+                    strDayGuess = "";
+                }
+            }
+
+            if (Number(strMonthGuess) < 1 || Number(strMonthGuess) > 12) strMonthGuess = "";
+
+            if (strDayGuess == "") strDayGuess = dtToday.getDate();
+            if (strMonthGuess == "") strMonthGuess = (dtToday.getMonth() + 1);
+            if (strYearGuess == "") strYearGuess = dtToday.getFullYear();
+
+            if (Number(strDayGuess) > 28) {
+                // if the day is greater than the last day of the month then set it to the last day of the month
+                if (isDate(1, new Number(strMonthGuess), new Number(strYearGuess))) {
+                    var nextMonth = Number(strMonthGuess) + 1;
+                    var currentNextYear = Number(strYearGuess);
+
+                    if (nextMonth > 12) {
+                        nextMonth = 1;
+                        currentNextYear++;
+                    }
+
+                    // 0th day of next month is the last day of the current month
+                    var resetDate = new Date(currentNextYear, nextMonth - 1, 0);
+                    if (Number(strDayGuess) > resetDate.getDate()) strDayGuess = resetDate.getDate();
+                }
+            }
+
+            if (isDate(new Number(strDayGuess), new Number(strMonthGuess), new Number(strYearGuess)))
+                dt = new Date(y2k(new Number(strYearGuess)), new Number(strMonthGuess) - 1, new Number(strDayGuess));
+            else
+                dt.value = "";
+        }
+        else // Ok no delimiter
+        {
+            if (strDate.length == 1 || strDate.length == 2) {
+                n1digitDay = new Number(strDate.substring(0, 1));
+                n2digitDay = new Number(strDate.substring(0, 2));
+
+                n1digitMonth = new Number(strDate.substring(1, 2));
+            }
+            else if (strDate.length == 3) {
+                n1digitDay = new Number(strDate.substring(0, 1));
+                n2digitDay = new Number(strDate.substring(0, 2));
+
+                n1digitMonth = new Number(strDate.substring(2, 3));
+                n2digitMonth = new Number(strDate.substring(1, 3));
+
+                n1digitYear = new Number(strDate.substring(2, 3));
+                n2digitYear = new Number(strDate.substring(1, 3));
+                n3digitYear = new Number(strDate.substring(0, 3));
+            }
+            else if (strDate.length >= 4) {
+                // 012345678
+                // 0201
+                n1digitDay = new Number(strDate.substring(0, 1));
+                n2digitDay = new Number(strDate.substring(0, 2));
+
+                n1digitMonth = new Number(strDate.substring(2, 3));
+                n1digitMonth2 = new Number(strDate.substring(1, 2));
+                n2digitMonth = new Number(strDate.substring(2, 4));
+                n2digitMonth2 = new Number(strDate.substring(1, 3));
+
+                n1digitYear = new Number(strDate.substring(strDate.length - 1, strDate.length));
+                n2digitYear = new Number(strDate.substring(strDate.length - 2, strDate.length));
+                n3digitYear = new Number(strDate.substring(strDate.length - 3, strDate.length));
+                n4digitYear = new Number(strDate.substring(strDate.length - 4, strDate.length));
+            }
+
+            //  Work out all the possible dates     
+            if (strDate.length == 1) {
+                if (isDate(n1digitDay)) dt = makeDate(n1digitDay);
+            }
+            else if (strDate.length == 2) {
+                if (isDate(n2digitDay)) {
+                    dt = makeDate(n2digitDay);
+                }
+                else if (isDate(n1digitDay, n1digitMonth)) {
+                    dt = makeDate(n1digitDay, n1digitMonth);
+                }
+            }
+            else if (strDate.length == 3) {
+                if (isDate(n2digitDay, n1digitMonth)) {
+                    dt = makeDate(n2digitDay, n1digitMonth)
+                }
+                else if (isDate(n1digitDay, n2digitMonth)) {
+                    dt = makeDate(n1digitDay, n2digitMonth)
+                }
+            }
+
+            else if (strDate.length == 4) {
+                if (isDate(n2digitDay, n2digitMonth)) {
+                    dt = makeDate(n2digitDay, n2digitMonth)
+                }
+                else if (isDate(n2digitDay, n1digitMonth, n1digitYear)) {
+                    dt = makeDate(n2digitDay, n1digitMonth, n1digitYear);
+                }
+                else if (isDate(n1digitDay, n2digitMonth, n1digitYear)) {
+                    dt = makeDate(n1digitDay, n2digitMonth, n1digitYear)
+                }
+                else if (isDate(n1digitDay, n2digitMonth, n1digitYear)) {
+                    dt = makeDate(n1digitDay, n2digitMonth, n1digitYear)
+                }
+            }
+            else if (strDate.length == 5) {
+                if (isDate(n2digitDay, n2digitMonth, n1digitYear)) {
+                    dt = makeDate(n2digitDay, n2digitMonth, n1digitYear);
+                }
+                else if (isDate(n1digitDay, n2digitMonth, n2digitYear)) {
+                    dt = makeDate(n1digitDay, n2digitMonth, n2digitYear);
+                }
+                else if (isDate(n2digitDay, n1digitMonth, n2digitYear)) {
+                    dt = makeDate(n2digitDay, n1digitMonth, n2digitYear);
+                }
+                else if (isDate(n1digitDay, n1digitMonth, n3digitYear)) {
+                    dt = makeDate(n1digitDay, n1digitMonth, n3digitYear);
+                }
+            }
+            else if (strDate.length == 6) {
+                if (isDate(n2digitDay, n2digitMonth, n2digitYear)) {
+                    dt = makeDate(n2digitDay, n2digitMonth, n2digitYear)
+                }
+                else if (isDate(n1digitDay, n2digitMonth, n3digitYear)) {
+                    dt = makeDate(n1digitDay, n2digitMonth, n3digitYear);
+                }
+                else if (isDate(n2digitDay, n1digitMonth, n3digitYear)) {
+                    dt = makeDate(n2digitDay, n1digitMonth, n3digitYear)
+                }
+                else if (isDate(n1digitDay, n1digitMonth, n4digitYear)) {
+                    dt = makeDate(n1digitDay, n1digitMonth, n4digitYear)
+                }
+            }
+            else if (strDate.length == 7) {
+                if (isDate(n2digitDay, n2digitMonth, n3digitYear)) {
+                    dt = makeDate(n2digitDay, n2digitMonth, n3digitYear)
+                }
+                else if (isDate(n1digitDay, n2digitMonth, n4digitYear)) {
+                    dt = makeDate(n1digitDay, n2digitMonth, n4digitYear);
+                }
+                else if (isDate(n2digitDay, n1digitMonth, n4digitYear)) {
+                    dt = makeDate(n2digitDay, n1digitMonth, n4digitYear)
+                }
+            }
+            else {
+                if (isDate(n2digitDay, n2digitMonth, n4digitYear)) {
+                    dt = makeDate(n2digitDay, n2digitMonth, n4digitYear)
+                }
+            }
+        }
+
+        if ("" + dt != "")
+            return FormatDate(dt, 0);
+
+        return FormatDate(new Date(), 0);
+    }
+
+    function isDate(day, month, year) {
+        // checks if date passed is valid
+        var today = new Date();
+        year = ((!year) ? y2k(today.getFullYear()) : y2k(year));
+        month = ((!month) ? today.getMonth() : month - 1);
+        if (!day) return false
+        var test = new Date(year, month, day);
+        if ((y2k(test.getFullYear()) == year) && (y2k(test.getFullYear()) >= 1753) && (y2k(test.getFullYear()) <= 9999) &&
+            (month == test.getMonth()) &&
+            (day == test.getDate()))
+            return true;
+        else
+            return false
+    }
+
+    function y2k(number) {
+        // Format date into y2k number
+        if (number <= 49) return number + 2000;
+        else if (number > 49 && number < 100) return number + 1900;
+        else return number;
+    }
+
+    function makeDate(day, month, year) {
+        // Makes a new date
+        var today = new Date();
+        year = ((!year) ? y2k(today.getFullYear()) : y2k(year));
+        month = ((!month) ? today.getMonth() : month - 1);
+        if (!day) return false
+        var test = new Date(year, month, day);
+        return test;
+    }
+
+    function FormatDate(strDate, nFormat) {
+        // Very Simple, we support 3 date formats dmy and mdy and ymd.
+        // If you pass in 0 you get dd/mm/yyyy or if you pass in 1 you get mm/dd/yyyy or 2 and get yyyy/mm/dd
+        if (strDate == "" || strDate + "" == "undefined" || strDate == null)
+            return "";
+
+        strDate = "" + strDate; // if strdate is a date object this converts it to a string
+
+        if (strDate.indexOf("UTC") >= 0) // If there is a UTC Timezone offset then this needs to be removed.
+        {
+            strDate = strDate.replace(/[UTC+]+[0-9]*\s/, ""); // match "UTC+0000 " and replace with ""
+        }
+
+        var tDate = new Date(strDate);
+
+        var strNewDate = "";
+        var strDay = "";
+        var strMonth = "";
+        var strYear = "";
+
+        var nDay = tDate.getDate();
+        var nMonth = tDate.getMonth() + 1; // Zero based.
+        var nYear = tDate.getFullYear();
+
+        // DAY
+        if (nDay < 10)
+            strDay = "0";
+        strDay += nDay;
+
+        // Month
+        if (nMonth < 10)
+            strMonth += "0";
+        strMonth += nMonth;
+
+        // YEAR
+        strYear += nYear;
+
+        if (nFormat == 0) strNewDate = strDay + "/" + strMonth + "/" + strYear; // dmy
+        else
+            if (nFormat == 1) strNewDate = strMonth + "/" + strDay + "/" + strYear; // mdy   
+            else
+                if (nFormat == 2) strNewDate = strYear + "/" + strMonth + "/" + strDay; // ymd
+
+        return strNewDate;
+    }
+</script>

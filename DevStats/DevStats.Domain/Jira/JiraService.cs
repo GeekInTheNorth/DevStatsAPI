@@ -43,6 +43,11 @@ namespace DevStats.Domain.Jira
             CreateAndPost(issueId, displayIssueId, SubtaskType.POReview);
         }
 
+        public IEnumerable<JiraAudit> GetJiraAudit(DateTime from, DateTime to)
+        {
+            return loggingRepository.Get(from, to);
+        }
+
         private void CreateAndPost(string issueId, string displayIssueId, SubtaskType taskType)
         {
             var task = convertor.Convert(new Subtask(displayIssueId, taskType));
