@@ -7,7 +7,9 @@ namespace DevStats.Domain.Jira
     {
         void ProcessUpdatedItems();
 
-        void CreateSubTasks(string issueId, string displayIssueId, string sourceDomain, string content);
+        void CreateSubTasks(string issueId, string displayIssueId, string content);
+
+        void ProcessSubTaskUpdate(string issueId, string displayIssueId, string content);
 
         IEnumerable<JiraAudit> GetJiraAudit(DateTime from, DateTime to);
     }

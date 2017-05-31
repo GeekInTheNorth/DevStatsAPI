@@ -35,12 +35,17 @@ namespace DevStats.Domain.Jira
             var defects = jiraIssues.Select(x => x.ToDefect());
         }
 
-        public void CreateSubTasks(string issueId, string displayIssueId, string sourceDomain, string content)
+        public void CreateSubTasks(string issueId, string displayIssueId, string content)
         {
             loggingRepository.LogIncomingHook(issueId, displayIssueId, content);
 
-            CreateAndPost(issueId, displayIssueId, SubtaskType.Merge);
-            CreateAndPost(issueId, displayIssueId, SubtaskType.POReview);
+            CreateSubTaskAndPost(issueId, displayIssueId, SubtaskType.Merge);
+            CreateSubTaskAndPost(issueId, displayIssueId, SubtaskType.POReview);
+        }
+
+        public void ProcessSubTaskUpdate(string issueId, string displayIssueId, string content)
+        {
+            loggingRepository.LogIncomingHook(issueId, displayIssueId, content);
         }
 
         public IEnumerable<JiraAudit> GetJiraAudit(DateTime from, DateTime to)
@@ -48,10 +53,10 @@ namespace DevStats.Domain.Jira
             return loggingRepository.Get(from, to);
         }
 
-        private void CreateAndPost(string issueId, string displayIssueId, SubtaskType taskType)
+        private void CreateSubTaskAndPost(string issueId, string displayIssueId, SubtaskType taskType)
         {
             var task = convertor.Convert(new Subtask(displayIssueId, taskType));
-            Post(issueId, displayIssueId, taskType, task);
+            PostNewSubtask(issueId, displayIssueId, taskType, task);
         }
 
         private IEnumerable<Issue> GetJiraIssues()
@@ -115,7 +120,7 @@ namespace DevStats.Domain.Jira
             return apiRoot;
         }
 
-        private void Post(string issueId, string displayIssueId, SubtaskType subTaskType, string jsonObject)
+        private void PostNewSubtask(string issueId, string displayIssueId, SubtaskType subTaskType, string jsonObject)
         {
             var url = string.Format(JiraCreateTaskPath, GetApiRoot());
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using DevStats.Domain.Jira;
@@ -22,20 +21,14 @@ namespace DevStats.Controllers.API
         public void CreateSubtasks([FromUri]string issueId, [FromUri]string displayIssueId)
         {
             var jsonContent = Request.Content.ReadAsStringAsync().Result;
-            var domain = string.Empty;
 
-            if (Request.Headers.Contains("Origin"))
-            {
-                domain = Request.Headers.GetValues("Origin").FirstOrDefault();
-            }
-
-            service.CreateSubTasks(issueId, displayIssueId, domain, jsonContent);
+            service.CreateSubTasks(issueId, displayIssueId, jsonContent);
         }
 
         [HttpGet]
-        public void Test([FromUri]string issueId, [FromUri]string displayIssueId)
+        public void ForceCreationOfTasks([FromUri]string issueId, [FromUri]string displayIssueId)
         {
-            service.CreateSubTasks(issueId, displayIssueId, string.Empty, string.Empty);
+            service.CreateSubTasks(issueId, displayIssueId, string.Empty);
         }
     }
 }
