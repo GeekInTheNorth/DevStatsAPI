@@ -13,4 +13,5 @@ A WebAPI project for retaining development statistics.  This is currently limite
 
 ## ToDo
 - The date formatting code was lifted from another application for a fast turn around.  This is a mess and needs to be better.
+- Sort out localisation issues with date entries between server and client
 - Require encryption of the JiraUserName and JiraPassword in the web.config
