@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using DevStats.Domain.Jira;
+using DevStats.Filters;
 using DevStats.Models.Jira;
 
 namespace DevStats.Controllers.MVC
@@ -18,6 +19,7 @@ namespace DevStats.Controllers.MVC
         }
 
         [HttpGet]
+        [IPAccess]
         public ActionResult Audit()
         {
             var dateFrom = DateTime.Today;
@@ -34,6 +36,7 @@ namespace DevStats.Controllers.MVC
         }
 
         [HttpPost]
+        [IPAccess]
         public ActionResult Audit(DateTime dateFrom, DateTime dateTo)
         {
             var model = new AuditModel

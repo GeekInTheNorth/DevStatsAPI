@@ -145,6 +145,7 @@
     <Compile Include="Controllers\API\DefectTrackingController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\MVC\JiraController.cs" />
+    <Compile Include="Filters\IPAccessAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -156,7 +157,9 @@
   <ItemGroup>
     <Content Include="Views\Shared\Shared.cshtml" />
     <Content Include="Views\DefectSummary\Index.cshtml" />
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="packages.config" />
     <Content Include="Views\Jira\Audit.cshtml" />

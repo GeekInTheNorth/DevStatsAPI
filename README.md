@@ -2,12 +2,15 @@
 A WebAPI project for retaining development statistics.  This is currently limited to handling the WorkRemaining for an external burndown chart.  This may be expanded upon later.
 
 ## Azure Webapp Settings that need setting up
-- Connection String: "DevStatSQL".
-- Application Setting: "JiraApiRoot".
-- Application Setting: "JiraUserName"
-- Application Setting: "JiraPassword"
 
-Values are either left intentionally blank or set to the local SQL instance with integrated security so that secure information is not included in source control.
+| Setting Type | Name | Notes |
+| ------ | ------ | ------ |
+| Connection String | DevStatSQL | Set to local SQL Instance with integrated security in source control |
+| Application Setting | JiraApiRoot | Blank in source control |
+| Application Setting | JiraUserName | Blank in source control, currently handled as unencrypted in web.config |
+| Application Setting | JiraPassword | Blank in source control, currently handled as unencrypted in web.config |
+| Application Setting | AllowedIPAddresses | N/A in source control, Can be comma separated to secure specific controller actions |
 
 ## ToDo
 - The date formatting code was lifted from another application for a fast turn around.  This is a mess and needs to be better.
+- Require encryption of the JiraUserName and JiraPassword in the web.config

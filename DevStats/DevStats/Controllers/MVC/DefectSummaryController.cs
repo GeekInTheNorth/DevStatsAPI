@@ -1,6 +1,7 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
 using DevStats.Domain.DefectAnalysis;
+using DevStats.Filters;
 using DevStats.Models.DefectSummary;
 
 namespace DevStats.Controllers.MVC
@@ -14,7 +15,7 @@ namespace DevStats.Controllers.MVC
             this.service = service;
         }
 
-        // GET: DefectSummary
+        [IPAccess]
         public ActionResult Index([FromUri]bool showTotals = false)
         {
             var model = new DefectSummaryModel(service.GetSummary(), showTotals);
