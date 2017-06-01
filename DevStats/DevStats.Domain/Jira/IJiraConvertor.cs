@@ -1,14 +1,13 @@
-﻿using DevStats.Domain.Jira.JsonModels;
-using DevStats.Domain.Jira.JsonModels.Create;
+﻿using DevStats.Domain.Jira.JsonModels.Create;
 
 namespace DevStats.Domain.Jira
 {
     public interface IJiraConvertor
     {
-        JiraIssues Convert(byte[] jsonData);
+        T Deserialize<T>(byte[] jsonData);
 
-        JiraIssues Convert(string jsonData);
+        T Deserialize<T>(string jsonData);
 
-        string Convert(Subtask subtask);
+        string Serialize<T>(T subtask);
     }
 }

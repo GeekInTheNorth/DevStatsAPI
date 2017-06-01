@@ -57,6 +57,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Resources\JiraBugs.json" />
+    <None Include="Resources\JiraTransitions.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DevStats.Domain\DevStats.Domain.csproj">

@@ -69,5 +69,15 @@ namespace DevStats.Domain.Test.Resources {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] JiraTransitions {
+            get {
+                object obj = ResourceManager.GetObject("JiraTransitions", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

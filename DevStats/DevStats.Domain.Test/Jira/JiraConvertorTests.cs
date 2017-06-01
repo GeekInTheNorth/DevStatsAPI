@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using DevStats.Domain.Jira;
+using DevStats.Domain.Jira.JsonModels;
+using DevStats.Domain.Jira.Transitions.Models;
 using DevStats.Domain.Test.Resources;
 using NUnit.Framework;
 
@@ -14,9 +17,20 @@ namespace DevStats.Domain.Test.Jira
             var jsonFile = TestFiles.JiraBugs;
             var convertor = new JiraConvertor();
 
-            var model = convertor.Convert(jsonFile);
+            var model = convertor.Deserialize<JiraIssues>(jsonFile);
 
             Assert.That(model.Issues.Count(), Is.EqualTo(3));
+        }
+
+        [Test]
+        public void GivenAValidTransitionJsonResult_WhenIConvert_ThenIShouldGetAValidModel()
+        {
+            var jsonFile = TestFiles.JiraTransitions;
+            var convertor = new JiraConvertor();
+
+            var model = convertor.Deserialize<List<Transition>>(jsonFile);
+
+            Assert.That(model.Count(), Is.EqualTo(5));
         }
     }
 }

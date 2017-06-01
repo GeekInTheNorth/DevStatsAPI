@@ -18,6 +18,8 @@ namespace DevStats.Data
 
         public DbSet<JiraLog> JiraLogs { get; set; }
 
+        public DbSet<JiraTransistion> JiraTransitions { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
