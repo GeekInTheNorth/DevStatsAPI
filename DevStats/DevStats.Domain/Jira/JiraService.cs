@@ -7,7 +7,6 @@ using DevStats.Domain.Jira.JsonModels;
 using DevStats.Domain.Jira.JsonModels.Create;
 using DevStats.Domain.Jira.JsonModels.WebHook;
 using DevStats.Domain.Jira.Logging;
-using DevStats.Domain.Jira.Transitions;
 
 namespace DevStats.Domain.Jira
 {
@@ -15,7 +14,6 @@ namespace DevStats.Domain.Jira
     {
         private readonly IJiraConvertor convertor;
         private readonly IJiraLogRepository loggingRepository;
-        private readonly IJiraTransitionRepository transitionRepository;
         private readonly IJiraSender jiraSender;
         private const string JiraCreateTaskPath = @"{0}/rest/api/2/issue/";
         private const string JiraTransitionPath = @"{0}/rest/api/latest/issue/{1}/transitions";
@@ -24,17 +22,14 @@ namespace DevStats.Domain.Jira
         public JiraService(
             IJiraConvertor convertor, 
             IJiraLogRepository loggingRepository,
-            IJiraTransitionRepository transitionRepository,
             IJiraSender jiraSender)
         {
             if (convertor == null) throw new ArgumentNullException(nameof(convertor));
             if (loggingRepository == null) throw new ArgumentNullException(nameof(loggingRepository));
-            if (transitionRepository == null) throw new ArgumentNullException(nameof(transitionRepository));
             if (jiraSender == null) throw new ArgumentNullException(nameof(jiraSender));
 
             this.convertor = convertor;
             this.loggingRepository = loggingRepository;
-            this.transitionRepository = transitionRepository;
             this.jiraSender = jiraSender;
         }
 

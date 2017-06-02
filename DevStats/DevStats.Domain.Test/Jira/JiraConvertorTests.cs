@@ -20,16 +20,5 @@ namespace DevStats.Domain.Test.Jira
 
             Assert.That(model.Issues.Count(), Is.EqualTo(3));
         }
-
-        [Test]
-        public void GivenAValidTransitionJsonResult_WhenIConvert_ThenIShouldGetAValidModel()
-        {
-            var jsonFile = TestFiles.JiraTransitions;
-            var convertor = new JiraConvertor();
-
-            var model = convertor.Deserialize<List<TransitionType>>(jsonFile);
-
-            Assert.That(model.Count(), Is.EqualTo(5));
-        }
     }
 }

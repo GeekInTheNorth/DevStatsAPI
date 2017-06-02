@@ -142,7 +142,6 @@
     <Compile Include="Controllers\API\BurndownController.cs" />
     <Compile Include="Controllers\API\JiraCreateSubtasksController.cs" />
     <Compile Include="Controllers\API\JiraSubtaskUpdatedController.cs" />
-    <Compile Include="Controllers\API\JiraTransitionController.cs" />
     <Compile Include="Controllers\API\SprintController.cs" />
     <Compile Include="Controllers\MVC\DefectSummaryController.cs" />
     <Compile Include="Controllers\API\DefectTrackingController.cs" />

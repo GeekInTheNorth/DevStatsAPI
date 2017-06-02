@@ -17,3 +17,11 @@ Current functionality includes:
 ## ToDo
 - The date formatting code was lifted from another application for a fast turn around.  This is a mess and needs to be better.
 - Require encryption of the JiraUserName and JiraPassword in the web.config
+
+## API: JiraCreateSubtasks
+This should be set up as a webhook in a Jira Cloud instance that targets the create event for new stories.  At the moment this does set custom fields.  Ideally i will make this more generic.
+This creates two subtasks against a Story or Bug, one for a Product Owner Review and one for a Merge to Develop task.
+
+## API: JiraSubtaskUpdated
+This is a webhook that is added to a state transition.  The idea being that the parent will have it's state moved from To Do to In Progress when a subtask moves to In Progress.
+

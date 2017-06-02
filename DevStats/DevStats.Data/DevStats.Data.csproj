@@ -51,7 +51,6 @@
     <Compile Include="Entities\BurndownDay.cs" />
     <Compile Include="DevStatContext.cs" />
     <Compile Include="Entities\JiraLog.cs" />
-    <Compile Include="Entities\JiraTransistion.cs" />
     <Compile Include="Entities\Sprint.cs" />
     <Compile Include="Migrations\201607260714400_InitialCreate.cs" />
     <Compile Include="Migrations\201607260714400_InitialCreate.Designer.cs">
@@ -81,10 +80,6 @@
     <Compile Include="Migrations\201705251226592_StoreMoreInJiraLog.Designer.cs">
       <DependentUpon>201705251226592_StoreMoreInJiraLog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201706011022075_StoreJiraTransitions.cs" />
-    <Compile Include="Migrations\201706011022075_StoreJiraTransitions.Designer.cs">
-      <DependentUpon>201706011022075_StoreJiraTransitions.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -92,7 +87,6 @@
     <Compile Include="Repositories\BurndownRepository.cs" />
     <Compile Include="Repositories\DefectRepository.cs" />
     <Compile Include="Repositories\JiraLogRepository.cs" />
-    <Compile Include="Repositories\JiraTransitionRepository.cs" />
     <Compile Include="Repositories\SprintRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -126,9 +120,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705251226592_StoreMoreInJiraLog.resx">
       <DependentUpon>201705251226592_StoreMoreInJiraLog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201706011022075_StoreJiraTransitions.resx">
-      <DependentUpon>201706011022075_StoreJiraTransitions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

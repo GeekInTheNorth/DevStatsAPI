@@ -15,8 +15,7 @@ namespace DevStats.Models.Jira
             ApiRoots = new List<SelectListItem>
             {
                 new SelectListItem { Value = "/api/JiraCreateSubtasks?issueId=@@id@@&displayIssueId=@@id@@", Text = "Jira WebHook: Create Subtasks" },
-                new SelectListItem { Value = "/api/JiraSubtaskUpdated?issueId=@@id@@&displayIssueId=@@id@@", Text = "Jira WebHook: Subtask update" },
-                new SelectListItem { Value = "/api/JiraTransition?refreshAll=true", Text = "Jira Util: Get Transitions" }
+                new SelectListItem { Value = "/api/JiraSubtaskUpdated?issueId=@@id@@&displayIssueId=@@id@@", Text = "Jira WebHook: Subtask update" }
             }; 
         }
     }

@@ -92,10 +92,6 @@
     <Compile Include="Jira\JsonModels\User.cs" />
     <Compile Include="Jira\JsonModels\Votes.cs" />
     <Compile Include="Jira\PostResult.cs" />
-    <Compile Include="Jira\Transitions\IJiraTransitionRepository.cs" />
-    <Compile Include="Jira\Transitions\IJiraTransitionService.cs" />
-    <Compile Include="Jira\Transitions\JiraTransitionService.cs" />
-    <Compile Include="Jira\JsonModels\TransitionType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprints\ISprintRepository.cs" />
     <Compile Include="Sprints\ISprintService.cs" />
