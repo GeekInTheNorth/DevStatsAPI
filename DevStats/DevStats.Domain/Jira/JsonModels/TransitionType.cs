@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace DevStats.Domain.Jira.Transitions.Models
+namespace DevStats.Domain.Jira.JsonModels
 {
-    public class Transition
+    public class TransitionType
     {
         [JsonProperty("name")]
         public string IssueType { get; set; }
 
-        public List<Status> Statuses { get; set; }
+        public List<TransitionTypeStatus> Statuses { get; set; }
     }
 
-    public class Status
+    public class TransitionTypeStatus
     {
         [JsonProperty("name")]
         public string Name { get; set; }

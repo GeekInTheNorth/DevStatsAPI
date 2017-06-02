@@ -68,8 +68,10 @@
     <Compile Include="Jira\JsonModels\Create\SubtaskType.cs" />
     <Compile Include="Jira\JsonModels\Create\TaskType.cs" />
     <Compile Include="Jira\JsonModels\Create\TimeTracking.cs" />
+    <Compile Include="Jira\JsonModels\IssueTransition.cs" />
     <Compile Include="Jira\JsonModels\Parent.cs" />
     <Compile Include="Jira\JsonModels\Create\Subtask.cs" />
+    <Compile Include="Jira\JsonModels\WebHook\WebHookData.cs" />
     <Compile Include="Jira\Logging\IJiraLogRepository.cs" />
     <Compile Include="Jira\FilterBuilder.cs" />
     <Compile Include="Jira\IJiraConvertor.cs" />
@@ -93,7 +95,7 @@
     <Compile Include="Jira\Transitions\IJiraTransitionRepository.cs" />
     <Compile Include="Jira\Transitions\IJiraTransitionService.cs" />
     <Compile Include="Jira\Transitions\JiraTransitionService.cs" />
-    <Compile Include="Jira\Transitions\Models\Transition.cs" />
+    <Compile Include="Jira\JsonModels\TransitionType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprints\ISprintRepository.cs" />
     <Compile Include="Sprints\ISprintService.cs" />

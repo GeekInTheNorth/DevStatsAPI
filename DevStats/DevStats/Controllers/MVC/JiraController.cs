@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using DevStats.Domain.Jira;
@@ -7,6 +8,7 @@ using DevStats.Models.Jira;
 
 namespace DevStats.Controllers.MVC
 {
+    [IPAccess]
     public class JiraController : Controller
     {
         private readonly IJiraService service;
@@ -19,7 +21,6 @@ namespace DevStats.Controllers.MVC
         }
 
         [HttpGet]
-        [IPAccess]
         public ActionResult Audit()
         {
             var dateFrom = DateTime.Today;
@@ -36,7 +37,6 @@ namespace DevStats.Controllers.MVC
         }
 
         [HttpPost]
-        [IPAccess]
         public ActionResult Audit(DateTime dateFrom, DateTime dateTo)
         {
             var model = new AuditModel
@@ -45,6 +45,24 @@ namespace DevStats.Controllers.MVC
                 FilterTo = dateTo,
                 AuditItems = service.GetJiraAudit(dateFrom, dateTo.AddDays(1)).ToList()
             };
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult ApiTest()
+        {
+            return View(new ApiTestModel());
+        }
+
+        [HttpPost]
+        public ActionResult ApiTest(string apiUrl, string jiraId, string package)
+        {
+            var url = Request.Url.AbsoluteUri.Replace(Request.Url.LocalPath, apiUrl).Replace("@@id@@", jiraId.ToUpper());
+
+            var jiraSender = new JiraSender(new JiraConvertor());
+            var model = new ApiTestModel();
+            model.PostResult = jiraSender.Post(url, package);
 
             return View(model);
         }

@@ -40,3 +40,12 @@ span.filter-label {
     margin-left: 10px;
     margin-right: 5px;
 }
+
+textarea.free-text {
+    width: 100%;
+    height: 200px;
+}
+
+input.jira-id {
+    text-transform: uppercase;
+}

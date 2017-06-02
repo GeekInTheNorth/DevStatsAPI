@@ -10,7 +10,6 @@ namespace DevStats.Domain.Jira
     {
         private readonly IJiraConvertor convertor;
         private string jiraKey;
-        private string apiRoot;
 
         public JiraSender(IJiraConvertor convertor)
         {
@@ -38,8 +37,23 @@ namespace DevStats.Domain.Jira
 
         public PostResult Post<T>(string url, T objectToSend)
         {
-            var postResult = new PostResult();
             var objectJson = convertor.Serialize<T>(objectToSend);
+
+            return Post(url, objectJson);
+        }
+
+        public PostResult Post(string url, string jsonPackage)
+        {
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                return new PostResult
+                {
+                    WasSuccessful = false,
+                    Response = string.Format("Invalid Url: {0}", url)
+                };
+            }
+
+            var postResult = new PostResult();
 
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             request.ContentType = "application/json";
@@ -48,7 +62,7 @@ namespace DevStats.Domain.Jira
 
             using (StreamWriter writer = new StreamWriter(request.GetRequestStream()))
             {
-                writer.Write(objectJson);
+                writer.Write(jsonPackage);
             }
 
             WebResponse response;
@@ -65,7 +79,8 @@ namespace DevStats.Domain.Jira
 
             using (StreamReader reader = new StreamReader(response.GetResponseStream()))
             {
-                postResult.Response = reader.ReadToEnd();
+                if (!reader.EndOfStream)
+                    postResult.Response = reader.ReadToEnd();
             }
 
             return postResult;

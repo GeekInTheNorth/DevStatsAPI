@@ -6,6 +6,8 @@ namespace DevStats.Domain.Jira.Logging
 {
     public interface IJiraLogRepository
     {
+        void Log(string issueId, string displayIssueId, string action, string content, bool wasSuccessful);
+
         void LogIncomingHook(string issueId, string displayIssueId, string content);
 
         void LogTaskCreateEvent(string issueId, string displayIssueId, SubtaskType taskType, bool successful, string content);

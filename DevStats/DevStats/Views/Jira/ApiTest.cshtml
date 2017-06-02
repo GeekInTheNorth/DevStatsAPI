@@ -1,0 +1,39 @@
+﻿@model DevStats.Models.Jira.ApiTestModel
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <span>Select a service</span>
+    <br />
+    @Html.DropDownList("apiUrl", Model.ApiRoots)
+    <br />
+    <span>Enter a Jira Id</span>
+    <br />
+    @Html.TextBox("jiraId", "", new { @class = "jira-id" })
+    <br />
+    <span>Enter Json here</span>
+    <br />
+    @Html.TextArea("package", "", new { @class = "free-text" })
+    <br />
+    <button type="submit">Submit</button>
+}
+
+@if (Model.PostResult != null)
+{
+    <br />
+    <br />
+    if (Model.PostResult.WasSuccessful)
+    {
+        <span>Success</span>
+    }
+    else
+    {
+        <span>Failed</span>
+    }
+    <div>
+        @Model.PostResult.Response
+    </div>
+}

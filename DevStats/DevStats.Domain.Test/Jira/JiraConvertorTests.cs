@@ -2,7 +2,6 @@
 using System.Linq;
 using DevStats.Domain.Jira;
 using DevStats.Domain.Jira.JsonModels;
-using DevStats.Domain.Jira.Transitions.Models;
 using DevStats.Domain.Test.Resources;
 using NUnit.Framework;
 
@@ -28,7 +27,7 @@ namespace DevStats.Domain.Test.Jira
             var jsonFile = TestFiles.JiraTransitions;
             var convertor = new JiraConvertor();
 
-            var model = convertor.Deserialize<List<Transition>>(jsonFile);
+            var model = convertor.Deserialize<List<TransitionType>>(jsonFile);
 
             Assert.That(model.Count(), Is.EqualTo(5));
         }

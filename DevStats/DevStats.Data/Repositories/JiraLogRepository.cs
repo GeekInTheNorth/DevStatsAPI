@@ -10,7 +10,7 @@ namespace DevStats.Data.Repositories
 {
     public class JiraLogRepository : BaseRepository, IJiraLogRepository
     {
-        public void LogIncomingHook(string issueId, string displayIssueId, string content)
+        public void Log(string issueId, string displayIssueId, string action, string content, bool wasSuccessful)
         {
             var log = new JiraLog
             {
@@ -18,28 +18,24 @@ namespace DevStats.Data.Repositories
                 IssueKey = displayIssueId,
                 Content = content,
                 Triggered = DateTime.Now,
-                Action = "Incoming Web Hook",
-                Success = true
+                Action = action,
+                Success = wasSuccessful
             };
 
             Context.JiraLogs.Add(log);
             Context.SaveChanges();
         }
 
+        public void LogIncomingHook(string issueId, string displayIssueId, string content)
+        {
+            Log(issueId, displayIssueId, "Incoming Web Hook", content, true);
+        }
+
         public void LogTaskCreateEvent(string issueId, string displayIssueId, SubtaskType taskType, bool wasSuccessful, string content)
         {
-            var log = new JiraLog
-            {
-                IssueIdentity = issueId,
-                IssueKey = displayIssueId,
-                Content = content,
-                Triggered = DateTime.Now,
-                Action = string.Format("Create {0} Task", taskType),
-                Success = wasSuccessful
-            };
+            var action = string.Format("Create {0} Task", taskType);
 
-            Context.JiraLogs.Add(log);
-            Context.SaveChanges();
+            Log(issueId, displayIssueId, action, content, wasSuccessful);
         }
 
         public IEnumerable<JiraAudit> Get(DateTime fromDate, DateTime toDate)

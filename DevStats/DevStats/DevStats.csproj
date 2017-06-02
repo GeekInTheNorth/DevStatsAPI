@@ -152,6 +152,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Jira\ApiTestModel.cs" />
     <Compile Include="Models\DefectSummary\DefectSummaryModel.cs" />
     <Compile Include="Models\DefectTracking\DefectModel.cs" />
     <Compile Include="Models\Jira\AuditModel.cs" />
@@ -166,6 +167,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="packages.config" />
     <Content Include="Views\Jira\Audit.cshtml" />
+    <Content Include="Views\Jira\ApiTest.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using DevStats.Domain.Jira.JsonModels.Create;
 
 namespace DevStats.Domain.Jira
 {

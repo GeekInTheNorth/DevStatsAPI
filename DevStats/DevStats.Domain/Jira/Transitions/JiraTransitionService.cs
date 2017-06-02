@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using DevStats.Domain.Jira.Transitions.Models;
+using DevStats.Domain.Jira.JsonModels;
 
 namespace DevStats.Domain.Jira.Transitions
 {
@@ -24,7 +24,7 @@ namespace DevStats.Domain.Jira.Transitions
         public void UpdateTransitions(string project, bool fullRefresh)
         {
             var url = string.Format(JiraTransitionApi, GetApiRoot(), project);
-            var transitions = jiraSender.Get<List<Transition>>(url);
+            var transitions = jiraSender.Get<List<TransitionType>>(url);
 
             if (fullRefresh) repository.RemoveAllTransitions(project);
 
