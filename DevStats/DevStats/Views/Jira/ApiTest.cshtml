@@ -23,15 +23,13 @@
 
 @if (Model.PostResult != null)
 {
-    <br />
-    <br />
     if (Model.PostResult.WasSuccessful)
     {
-        <span>Success</span>
+        <div class="success-message">Success</div>
     }
     else
     {
-        <span>Failed</span>
+        <div class="error-message">Failed</div>
     }
     <div>
         @Model.PostResult.Response

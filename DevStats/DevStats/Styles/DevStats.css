@@ -50,12 +50,20 @@ input.jira-id {
     text-transform: uppercase;
 }
 
-div.error {
+div.error-message, div.success-message {
     padding: 3px;
-    border: 1px solid red;
-    background-color: pink;
     color: black;
     width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+div.error-message {
+    border: 1px solid red;
+    background-color: pink;
+}
+
+div.success-message {
+    border: 1px solid green;
+    background-color: #AAFFAA;
 }
