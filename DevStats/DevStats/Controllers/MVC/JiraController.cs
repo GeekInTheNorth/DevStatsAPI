@@ -75,10 +75,16 @@ namespace DevStats.Controllers.MVC
         [HttpPost]
         public ActionResult StateChecker(string stateRequestData)
         {
-            var model = new StateCheckerModel
+            var model = new StateCheckerModel();
+
+            try
             {
-                Summaries = service.GetStateSummaries(stateRequestData.ToUpper()).ToList()
-            };
+                model.Summaries = service.GetStateSummaries(stateRequestData.ToUpper()).ToList();
+            }
+            catch(Exception ex)
+            {
+                model.ErrorMessage = "An error has occured.";
+            }
 
             return View(model);
         }

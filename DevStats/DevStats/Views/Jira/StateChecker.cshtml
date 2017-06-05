@@ -13,6 +13,11 @@
     <button type="submit">Submit</button>
 }
 
+@if (Model.HasError)
+{
+    <div class="error">@Model.ErrorMessage</div>
+}
+
 @if (Model.Summaries != null)
 {
     <table class="defectdata" style="margin-top: 10px;">

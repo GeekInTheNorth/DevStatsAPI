@@ -49,3 +49,13 @@ textarea.free-text {
 input.jira-id {
     text-transform: uppercase;
 }
+
+div.error {
+    padding: 3px;
+    border: 1px solid red;
+    background-color: pink;
+    color: black;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
