@@ -92,6 +92,7 @@
     <Compile Include="Jira\JsonModels\User.cs" />
     <Compile Include="Jira\JsonModels\Votes.cs" />
     <Compile Include="Jira\PostResult.cs" />
+    <Compile Include="Jira\JiraStateSummary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprints\ISprintRepository.cs" />
     <Compile Include="Sprints\ISprintService.cs" />

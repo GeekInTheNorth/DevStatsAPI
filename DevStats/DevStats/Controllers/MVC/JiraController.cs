@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using DevStats.Domain.Jira;
@@ -63,6 +62,23 @@ namespace DevStats.Controllers.MVC
             var jiraSender = new JiraSender(new JiraConvertor());
             var model = new ApiTestModel();
             model.PostResult = jiraSender.Post(url, package);
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult StateChecker()
+        {
+            return View(new StateCheckerModel());
+        }
+
+        [HttpPost]
+        public ActionResult StateChecker(string stateRequestData)
+        {
+            var model = new StateCheckerModel
+            {
+                Summaries = service.GetStateSummaries(stateRequestData.ToUpper()).ToList()
+            };
 
             return View(model);
         }

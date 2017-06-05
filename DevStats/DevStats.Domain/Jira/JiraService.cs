@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using DevStats.Domain.Jira.JsonModels;
 using DevStats.Domain.Jira.JsonModels.Create;
@@ -17,7 +19,8 @@ namespace DevStats.Domain.Jira
         private readonly IJiraSender jiraSender;
         private const string JiraCreateTaskPath = @"{0}/rest/api/2/issue/";
         private const string JiraTransitionPath = @"{0}/rest/api/latest/issue/{1}/transitions";
-        private string apiRoot;
+        private const string CoreIssueIdRegex = "({0})[-][0-9]{{1,6}}";
+        private const string JiraSearchPath = @"{0}/rest/api/2/search?jql={1}";
 
         public JiraService(
             IJiraConvertor convertor, 
@@ -97,6 +100,23 @@ namespace DevStats.Domain.Jira
             return loggingRepository.Get(from, to);
         }
 
+        public IEnumerable<JiraStateSummary> GetStateSummaries(string requestData)
+        {
+            var projects = GetAllowedProjects();
+            var regExStr = string.Format(CoreIssueIdRegex, string.Join("|", projects));
+            var matches = Regex.Matches(requestData, regExStr);
+
+            if (matches.Count == 0) return new List<JiraStateSummary>();
+
+            var jql = string.Format("issueKey in ({0})", string.Join(",", matches.OfType<Match>().Select(x => x.Value)));
+            var url = string.Format(JiraSearchPath, GetApiRoot(), WebUtility.UrlEncode(jql));
+
+            var response = jiraSender.Get<JiraIssues>(url);
+
+            return (from issue in response.Issues
+                    select new JiraStateSummary(issue)).ToList();
+        }
+
         private void CreateSubTask(string issueId, string displayIssueId, SubtaskType taskType)
         {
             var task = new Subtask(displayIssueId, taskType);
@@ -108,12 +128,16 @@ namespace DevStats.Domain.Jira
 
         private string GetApiRoot()
         {
-            if (string.IsNullOrWhiteSpace(apiRoot))
-            {
-                apiRoot = ConfigurationManager.AppSettings.Get("JiraApiRoot") ?? string.Empty;
-            }
+            return ConfigurationManager.AppSettings.Get("JiraApiRoot") ?? string.Empty;
+        }
 
-            return apiRoot;
+        private List<string> GetAllowedProjects()
+        {
+            var allowedProjects = ConfigurationManager.AppSettings.Get("JiraProjects") ?? string.Empty;
+
+            if (string.IsNullOrWhiteSpace(allowedProjects)) return new List<string>();
+
+            return allowedProjects.Split(',').ToList();
         }
     }
 }

@@ -1,0 +1,39 @@
+﻿@model DevStats.Models.Jira.StateCheckerModel
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <span>Enter Jira Ids here, branch names are also accepted as Ids are evaluted using regular expressions</span>
+    <br />
+    @Html.TextArea("stateRequestData", "", new { @class = "free-text" })
+    <br />
+    <button type="submit">Submit</button>
+}
+
+@if (Model.Summaries != null)
+{
+    <table class="defectdata" style="margin-top: 10px;">
+        <thead>
+            <tr>
+                <th>Jira Id</th>
+                <th>Type</th>
+                <th>Title</th>
+                <th>State</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var summary in Model.Summaries)
+            {
+                <tr>
+                    <td>@summary.Id</td>
+                    <td>@summary.Type</td>
+                    <td>@summary.Title</td>
+                    <td>@summary.State</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
