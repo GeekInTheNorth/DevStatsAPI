@@ -17,23 +17,28 @@ namespace DevStats.Domain.Jira
         private readonly IJiraConvertor convertor;
         private readonly IJiraLogRepository loggingRepository;
         private readonly IJiraSender jiraSender;
+        private readonly IProjectsRepository projectsRepository;
         private const string JiraCreateTaskPath = @"{0}/rest/api/2/issue/";
         private const string JiraTransitionPath = @"{0}/rest/api/latest/issue/{1}/transitions";
         private const string CoreIssueIdRegex = "({0})[-][0-9]{{1,6}}";
-        private const string JiraSearchPath = @"{0}/rest/api/2/search?jql={1}";
+        private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}";
+        private const string JiraUserGroupSearchPath = @"{0}/rest/api/2/group?groupname={1}&expand=users";
 
         public JiraService(
             IJiraConvertor convertor, 
             IJiraLogRepository loggingRepository,
-            IJiraSender jiraSender)
+            IJiraSender jiraSender,
+            IProjectsRepository projectsRepository)
         {
             if (convertor == null) throw new ArgumentNullException(nameof(convertor));
             if (loggingRepository == null) throw new ArgumentNullException(nameof(loggingRepository));
             if (jiraSender == null) throw new ArgumentNullException(nameof(jiraSender));
+            if (projectsRepository == null) throw new ArgumentNullException(nameof(projectsRepository));
 
             this.convertor = convertor;
             this.loggingRepository = loggingRepository;
             this.jiraSender = jiraSender;
+            this.projectsRepository = projectsRepository;
         }
 
         public void CreateSubTasks(string issueId, string displayIssueId, string content)
@@ -102,19 +107,43 @@ namespace DevStats.Domain.Jira
 
         public IEnumerable<JiraStateSummary> GetStateSummaries(string requestData)
         {
-            var projects = GetAllowedProjects();
+            var projects = projectsRepository.Get();
             var regExStr = string.Format(CoreIssueIdRegex, string.Join("|", projects));
             var matches = Regex.Matches(requestData, regExStr);
 
             if (matches.Count == 0) return new List<JiraStateSummary>();
 
             var jql = string.Format("issueKey in ({0})", string.Join(",", matches.OfType<Match>().Select(x => x.Value)));
-            var url = string.Format(JiraSearchPath, GetApiRoot(), WebUtility.UrlEncode(jql));
+            var url = string.Format(JiraIssueSearchPath, GetApiRoot(), WebUtility.UrlEncode(jql));
 
             var response = jiraSender.Get<JiraIssues>(url);
 
             return (from issue in response.Issues
-                    select new JiraStateSummary(issue)).ToList();
+                    select new JiraStateSummary(issue));
+        }
+
+        public IEnumerable<JiraDefect> GetDefects()
+        {
+            var supportUserNames = GetUserNames(GetServiceDeskGroup());
+            var jql = FilterBuilder.Create()
+                                   .WithProjects(projectsRepository.Get())
+                                   .WithIssueTypesOf(JiraIssueType.Bugs)
+                                   .WithIssueStatesOf(JiraState.UnResolved)
+                                   .Build();
+
+            var url = string.Format(JiraIssueSearchPath, GetApiRoot(), WebUtility.UrlEncode(jql));
+            var response = jiraSender.Get<JiraIssues>(url);
+
+            return (from issue in response.Issues
+                    select new JiraDefect(issue, supportUserNames));
+        }
+
+        private IEnumerable<string> GetUserNames(string groupName)
+        {
+            var url = string.Format(JiraUserGroupSearchPath, GetApiRoot(), WebUtility.UrlEncode(groupName));
+            var response = jiraSender.Get<UserGroup>(url);
+
+            return response.Users.Users.Select(x => x.Name);
         }
 
         private void CreateSubTask(string issueId, string displayIssueId, SubtaskType taskType)
@@ -131,13 +160,9 @@ namespace DevStats.Domain.Jira
             return ConfigurationManager.AppSettings.Get("JiraApiRoot") ?? string.Empty;
         }
 
-        private List<string> GetAllowedProjects()
+        private string GetServiceDeskGroup()
         {
-            var allowedProjects = ConfigurationManager.AppSettings.Get("JiraProjects") ?? string.Empty;
-
-            if (string.IsNullOrWhiteSpace(allowedProjects)) return new List<string>();
-
-            return allowedProjects.Split(',').ToList();
+            return ConfigurationManager.AppSettings.Get("JiraServiceDeskGroup") ?? string.Empty;
         }
     }
 }

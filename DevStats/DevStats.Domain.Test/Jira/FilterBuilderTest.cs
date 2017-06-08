@@ -1,4 +1,5 @@
-﻿using DevStats.Domain.Jira;
+﻿using System.Collections.Generic;
+using DevStats.Domain.Jira;
 using NUnit.Framework;
 
 namespace DevStats.Domain.Test.Jira
@@ -16,41 +17,26 @@ namespace DevStats.Domain.Test.Jira
         }
 
         [Test]
-        [TestCase(JiraProject.CascadePayroll, "project in (CPR)")]
-        [TestCase(JiraProject.CascadeHR, "project in (CHR)")]
-        [TestCase(JiraProject.CascadeGo, "project in (OCT)")]
-        public void GivenIFilterJustOneProject_WhenIBuild_ThenIShouldGetJustOneInTheFilter(JiraProject project, string expectedFilter)
+        [TestCase("CPR", "project in (CPR)")]
+        [TestCase("CHR", "project in (CHR)")]
+        [TestCase("OCT", "project in (OCT)")]
+        public void GivenIFilterJustOneProject_WhenIBuild_ThenIShouldGetJustOneInTheFilter(string project, string expectedFilter)
         {
             var filter = FilterBuilder.Create()
-                                      .WithAProject(project)
+                                      .WithProjects(new List<string> { project })
                                       .Build();
 
             Assert.That(filter, Is.EqualTo(expectedFilter));
         }
 
         [Test]
-        [TestCase(JiraProject.CascadePayroll, JiraProject.CascadeHR, "project in (CPR,CHR)")]
-        [TestCase(JiraProject.CascadeHR, JiraProject.CascadePayroll, "project in (CHR,CPR)")]
-        [TestCase(JiraProject.CascadeHR, JiraProject.CascadeGo, "project in (CHR,OCT)")]
-        public void GivenIFilterMoreThanOneProject_WhenIBuild_ThenIShouldGetAllRequestedProjects(JiraProject project1, JiraProject project2, string expectedFilter)
+        [TestCase("CPR", "CHR", "project in (CPR,CHR)")]
+        [TestCase("CHR", "CPR", "project in (CHR,CPR)")]
+        [TestCase("CHR", "OCT", "project in (CHR,OCT)")]
+        public void GivenIFilterMoreThanOneProject_WhenIBuild_ThenIShouldGetAllRequestedProjects(string project1, string project2, string expectedFilter)
         {
             var filter = FilterBuilder.Create()
-                                      .WithAProject(project1)
-                                      .WithAProject(project2)
-                                      .Build();
-
-            Assert.That(filter, Is.EqualTo(expectedFilter));
-        }
-
-        [Test]
-        [TestCase(JiraProject.CascadePayroll, "project in (CPR)")]
-        [TestCase(JiraProject.CascadeHR, "project in (CHR)")]
-        [TestCase(JiraProject.CascadeGo, "project in (OCT)")]
-        public void GivenIAddAProjectTwice_WhenIBuild_ThenTheFilterShouldNotIncludeDuplicateProjects(JiraProject project, string expectedFilter)
-        {
-            var filter = FilterBuilder.Create()
-                                      .WithAProject(project)
-                                      .WithAProject(project)
+                                      .WithProjects(new List<string> { project1, project2 })
                                       .Build();
 
             Assert.That(filter, Is.EqualTo(expectedFilter));
@@ -70,12 +56,12 @@ namespace DevStats.Domain.Test.Jira
         }
 
         [Test]
-        [TestCase(JiraProject.CascadePayroll, JiraState.Todo, "project in (CPR) AND status = \"To Do\"")]
-        [TestCase(JiraProject.CascadeHR, JiraState.Done, "project in (CHR) AND status = \"Done\"")]
-        public void GivenIAddAStateAndProject_WhenIBuild_ThenTheFilterShouldSpecifyBothOptions(JiraProject project, JiraState status, string expectedFilter)
+        [TestCase("CPR", JiraState.Todo, "project in (CPR) AND status = \"To Do\"")]
+        [TestCase("CHR", JiraState.Done, "project in (CHR) AND status = \"Done\"")]
+        public void GivenIAddAStateAndProject_WhenIBuild_ThenTheFilterShouldSpecifyBothOptions(string project, JiraState status, string expectedFilter)
         {
             var filter = FilterBuilder.Create()
-                                      .WithAProject(project)
+                                      .WithProjects(new List<string> { project })
                                       .WithIssueStatesOf(status)
                                       .Build();
 

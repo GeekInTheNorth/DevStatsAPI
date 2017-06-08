@@ -1,0 +1,28 @@
+﻿@model DevStats.Models.Jira.DefectAnalysisModel
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+}
+
+@foreach (var report in Model.Reports)
+{
+    <h1>@report.Key</h1>
+
+    <table class="defectdata">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+
+        @foreach (var reportItem in report.Value)
+        {
+            <tr>
+                <td>@reportItem.Category</td>
+                <td>@reportItem.Items</td>
+            </tr>
+        }
+
+    </table>
+}

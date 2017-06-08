@@ -20,26 +20,5 @@ namespace DevStats.Domain.Jira.JsonModels
 
         [JsonProperty("fields")]
         public Fields Fields { get; set; }
-
-        public Defect ToDefect()
-        {
-            var project = (Fields.Project == null || Fields.Project.Key == null) ? "UNKNOWN" : Fields.Project.Key;
-            var module = string.Empty;
-
-            switch (module)
-            {
-                case "OCT":
-                    module = Fields.OctopusModule.Value;
-                    break;
-                case "CPR":
-                    module = Fields.PayrollModule.Value;
-                    break;
-                case "CHR":
-                    module = Fields.HRModule.Value;
-                    break;
-            }
-
-            return new Defect(Id, module, DefectType.External.ToString(), Fields.Created, Fields.Resolutiondate);
-        }
     }
 }

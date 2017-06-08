@@ -12,5 +12,7 @@ namespace DevStats.Domain.Jira
         IEnumerable<JiraAudit> GetJiraAudit(DateTime from, DateTime to);
 
         IEnumerable<JiraStateSummary> GetStateSummaries(string requestData);
+
+        IEnumerable<JiraDefect> GetDefects();
     }
 }

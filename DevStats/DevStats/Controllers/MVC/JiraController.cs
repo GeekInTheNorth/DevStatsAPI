@@ -81,10 +81,19 @@ namespace DevStats.Controllers.MVC
             {
                 model.Summaries = service.GetStateSummaries(stateRequestData.ToUpper()).ToList();
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 model.ErrorMessage = "An error has occured.";
             }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult DefectAnalysis()
+        {
+            var defects = service.GetDefects();
+            var model = new DefectAnalysisModel(defects);
 
             return View(model);
         }

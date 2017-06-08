@@ -22,28 +22,9 @@ namespace DevStats.Domain.Jira
             return new FilterBuilder();
         }
 
-        public FilterBuilder WithAProject(JiraProject project)
+        public FilterBuilder WithProjects(IEnumerable<string> projects)
         {
-            var projectName = string.Empty;
-
-            switch (project)
-            {
-                case JiraProject.CascadeHR:
-                    projectName = "CHR";
-                    break;
-                case JiraProject.CascadePayroll:
-                    projectName = "CPR";
-                    break;
-                case JiraProject.CascadeGo:
-                    projectName = "OCT";
-                    break;
-                default:
-                    projectName = string.Empty;
-                    break;
-            }
-
-            if (!string.IsNullOrWhiteSpace(projectName) && projects != null && !projects.Contains(projectName))
-                projects.Add(projectName);
+            this.projects = projects.Distinct().ToList();
 
             return this;
         }
@@ -71,52 +52,52 @@ namespace DevStats.Domain.Jira
 
         public string Build()
         {
-            var filter = string.Empty;
+            var filters = new List<string>();
 
             if (projects.Any())
+                filters.Add(string.Format("project in ({0})", string.Join(",", projects)));
+
+            switch (issueTypes)
             {
-                filter += string.Format("project in ({0})", string.Join(",", projects));
+                case JiraIssueType.Tasks:
+                    filters.Add("issuetype in standardIssueTypes()");
+                    break;
+                case JiraIssueType.Subtasks:
+                    filters.Add("issuetype in subTaskIssueTypes()");
+                    break;
+                case JiraIssueType.Bugs:
+                    filters.Add("issuetype = \"Bug\"");
+                    break;
             }
 
-            if (issueTypes != JiraIssueType.All)
+            switch (issueStates)
             {
-                if (!string.IsNullOrWhiteSpace(filter))
-                    filter += " AND ";
-
-                filter += issueTypes == JiraIssueType.Stories ? "issuetype in standardIssueTypes()" : "issuetype in subTaskIssueTypes()";
-            }
-
-            if (issueStates != JiraState.All)
-            {
-                if (!string.IsNullOrWhiteSpace(filter))
-                    filter += " AND ";
-
-                filter += issueStates == JiraState.Todo ? "status = \"To Do\"" : "status = \"Done\"";
+                case JiraState.Todo:
+                    filters.Add("status = \"To Do\"");
+                    break;
+                case JiraState.InProgress:
+                    filters.Add("status = \"In Progress\"");
+                    break;
+                case JiraState.Done:
+                    filters.Add("status = \"Done\"");
+                    break;
+                case JiraState.UnResolved:
+                    filters.Add("status in (\"To Do\",\"In Progress\")");
+                    break;
             }
 
             if (updatedItemsOnly)
-            {
-                if (!string.IsNullOrWhiteSpace(filter))
-                    filter += " AND ";
+                filters.Add("updatedDate >= startOfDay() and updatedDate<endOfDay()");
 
-                filter += "updatedDate >= startOfDay() and updatedDate<endOfDay()";
-            }
-
-            return filter;
+            return string.Join(" AND ", filters);
         }
-    }
-
-    public enum JiraProject
-    {
-        CascadeHR,
-        CascadePayroll,
-        CascadeGo
     }
 
     public enum JiraIssueType
     {
         All,
-        Stories,
+        Bugs,
+        Tasks,
         Subtasks
     }
 
@@ -124,6 +105,8 @@ namespace DevStats.Domain.Jira
     {
         All,
         Todo,
-        Done
+        InProgress,
+        Done,
+        UnResolved
     }
 }

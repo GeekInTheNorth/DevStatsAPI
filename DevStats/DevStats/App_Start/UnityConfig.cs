@@ -21,6 +21,7 @@ namespace DevStats
             container.RegisterType<IDefectRepository, DefectRepository>();
             container.RegisterType<ISprintRepository, SprintRepository>();
             container.RegisterType<IJiraLogRepository, JiraLogRepository>();
+            container.RegisterType<IProjectsRepository, ProjectsRepository>();
 
             // Utilities
             container.RegisterType<IJiraConvertor, JiraConvertor>();
