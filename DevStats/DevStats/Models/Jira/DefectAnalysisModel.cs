@@ -48,6 +48,28 @@ namespace DevStats.Models.Jira
     {
         public DefectCategory Category { get; set; }
 
+        public string DisplayCategory
+        {
+            get
+            {
+                switch (Category)
+                {
+                    case DefectCategory.InternalRecruitment:
+                        return "Recruitment";
+                    case DefectCategory.RecruitmentPlus:
+                        return "Recruitment+";
+                    case DefectCategory.OnlineRecruitment:
+                        return "Online Recruitment";
+                    case DefectCategory.AutoEnrolment:
+                        return "Auto Enrolment";
+                    case DefectCategory.QueryBuilder:
+                        return "Query Builder";
+                    default:
+                        return Category.ToString();
+                }
+            }
+        }
+
         public int Items { get; set; }
     }
 }
