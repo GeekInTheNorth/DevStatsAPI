@@ -141,6 +141,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\BurndownController.cs" />
     <Compile Include="Controllers\API\JiraCreateSubtasksController.cs" />
+    <Compile Include="Controllers\API\JiraStateCheckerController.cs" />
     <Compile Include="Controllers\API\JiraSubtaskUpdatedController.cs" />
     <Compile Include="Controllers\API\SprintController.cs" />
     <Compile Include="Controllers\MVC\DefectSummaryController.cs" />
