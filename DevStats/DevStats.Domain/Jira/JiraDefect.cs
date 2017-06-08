@@ -54,15 +54,15 @@ namespace DevStats.Domain.Jira
     public enum DefectCategory
     {
         Unknown,
+        HR,
         Workflow,
         InternalRecruitment,
         RecruitmentPlus,
         OnlineRecruitment,
         AutoEnrolment,
         QueryBuilder,
+        Payroll,
         Legislation,
-        Octopus,
-        HR,
-        Payroll
+        Octopus
     }
 }

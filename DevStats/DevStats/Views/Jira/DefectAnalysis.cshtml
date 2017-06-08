@@ -4,25 +4,92 @@
     Layout = "~/Views/Shared/Shared.cshtml";
 }
 
-@foreach (var report in Model.Reports)
-{
-    <h1>@report.Key</h1>
+<div id="div-broken-down">
+    <a onclick="javascript:showInline();" style="cursor: pointer">Show Inline</a>
+    @{
+        var total = 0;
+    }
+    @foreach (var report in Model.Reports)
+    {
+        
+        <h1>@report.Key</h1>
 
+        <table class="defectdata">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reportItem in report.Value)
+                {
+                    total += reportItem.Items;
+                    <tr>
+                        <td>@reportItem.DisplayCategory</td>
+                        <td>@reportItem.Items</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <th>total</th>
+                <th>@total</th>
+            </tfoot>
+        </table>
+    }
+</div>
+
+@{ 
+    var totalInternal = 0;
+    var totalExternal = 0;
+    var totalAll = 0;
+}
+
+<div id="div-inline-report" style="display: none;">
+    <a onclick="javascript:showBrokenDown();" style="cursor: pointer">Show Broken Down</a>
+    <br />
     <table class="defectdata">
         <thead>
             <tr>
                 <th>Category</th>
-                <th>Count</th>
+                <th>Internal</th>
+                <th>External</th>
+                <th>Total</th>
             </tr>
         </thead>
-
-        @foreach (var reportItem in report.Value)
-        {
+        <tbody>
+            @foreach (var reportItem in Model.InlineReport)
+            {
+                totalInternal += reportItem.InternallyReported;
+                totalExternal += reportItem.ExternallyReported;
+                totalAll += reportItem.AllReported;
+                <tr>
+                    <td>@reportItem.DisplayCategory</td>
+                    <td>@reportItem.InternallyReported</td>
+                    <td>@reportItem.ExternallyReported</td>
+                    <td>@reportItem.AllReported</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
             <tr>
-                <td>@reportItem.Category</td>
-                <td>@reportItem.Items</td>
+                <th>Total</th>
+                <th>@totalInternal</th>
+                <th>@totalExternal</th>
+                <th>@totalAll</th>
             </tr>
-        }
-
+        </tfoot>
     </table>
-}
+</div>
+
+<script type="text/javascript">
+    function showInline() {
+        document.getElementById('div-broken-down').style.display = 'none';
+        document.getElementById('div-inline-report').style.display = 'block';
+    }
+
+    function showBrokenDown() {
+        document.getElementById('div-broken-down').style.display = 'block';
+        document.getElementById('div-inline-report').style.display = 'none';
+    }
+</script>
