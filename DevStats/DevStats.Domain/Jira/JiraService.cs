@@ -43,7 +43,7 @@ namespace DevStats.Domain.Jira
 
         public void CreateSubTasks(string issueId, string displayIssueId, string content)
         {
-            loggingRepository.LogIncomingHook(issueId, displayIssueId, content);
+            loggingRepository.LogIncomingHook(JiraHook.StoryCreated, issueId, displayIssueId, content);
 
             CreateSubTask(issueId, displayIssueId, SubtaskType.Merge);
             CreateSubTask(issueId, displayIssueId, SubtaskType.POReview);
@@ -51,7 +51,7 @@ namespace DevStats.Domain.Jira
 
         public void ProcessSubTaskUpdate(string issueId, string displayIssueId, string content)
         {
-            loggingRepository.LogIncomingHook(issueId, displayIssueId, content);
+            loggingRepository.LogIncomingHook(JiraHook.SubtaskUpdate, issueId, displayIssueId, content);
 
             if (string.IsNullOrWhiteSpace(content))
             {
@@ -98,6 +98,11 @@ namespace DevStats.Domain.Jira
             {
                 loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update: Update Parent", string.Format("Unexpected Error: {0}", ex.Message), false);
             }
+        }
+
+        public void ProcessStoryUpdate(string issueId, string displayIssueId, string content)
+        {
+            loggingRepository.LogIncomingHook(JiraHook.StoryUpdate, issueId, displayIssueId, content);
         }
 
         public IEnumerable<JiraAudit> GetJiraAudit(DateTime from, DateTime to)

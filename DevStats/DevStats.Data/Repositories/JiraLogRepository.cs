@@ -28,7 +28,16 @@ namespace DevStats.Data.Repositories
 
         public void LogIncomingHook(string issueId, string displayIssueId, string content)
         {
-            Log(issueId, displayIssueId, "Incoming Web Hook", content, true);
+            LogIncomingHook(JiraHook.Unknown, issueId, displayIssueId, content);
+        }
+
+        public void LogIncomingHook(JiraHook hook, string issueId, string displayIssueId, string content)
+        {
+            var message = "Incoming Web Hook";
+            if (hook != JiraHook.Unknown)
+                message = string.Format("{0}: {1}", message, GetHookName(hook));
+
+            Log(issueId, displayIssueId, message, content, true);
         }
 
         public void LogTaskCreateEvent(string issueId, string displayIssueId, SubtaskType taskType, bool wasSuccessful, string content)
@@ -44,6 +53,21 @@ namespace DevStats.Data.Repositories
                           .Where(x => x.Triggered >= fromDate && x.Triggered <= toDate)
                           .AsEnumerable()
                           .Select(x => new JiraAudit(x.IssueKey, x.Action, x.Content, x.Success, x.Triggered));
+        }
+
+        private string GetHookName(JiraHook hook)
+        {
+            switch (hook)
+            {
+                case JiraHook.StoryCreated:
+                    return "Story Created";
+                case JiraHook.StoryUpdate:
+                    return "Story Updated";
+                case JiraHook.SubtaskUpdate:
+                    return "Subtask Updated";
+                default:
+                    return string.Empty;
+            }
         }
     }
 }

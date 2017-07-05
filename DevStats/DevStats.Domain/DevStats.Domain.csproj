@@ -95,6 +95,7 @@
     <Compile Include="Jira\JsonModels\StatusCategory.cs" />
     <Compile Include="Jira\JsonModels\User.cs" />
     <Compile Include="Jira\JsonModels\Votes.cs" />
+    <Compile Include="Jira\Logging\JiraHook.cs" />
     <Compile Include="Jira\PostResult.cs" />
     <Compile Include="Jira\JiraStateSummary.cs" />
     <Compile Include="Jira\ProjectsRepository.cs" />

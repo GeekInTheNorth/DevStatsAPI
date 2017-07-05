@@ -10,6 +10,8 @@ namespace DevStats.Domain.Jira.Logging
 
         void LogIncomingHook(string issueId, string displayIssueId, string content);
 
+        void LogIncomingHook(JiraHook hook, string issueId, string displayIssueId, string content);
+
         void LogTaskCreateEvent(string issueId, string displayIssueId, SubtaskType taskType, bool successful, string content);
 
         IEnumerable<JiraAudit> Get(DateTime from, DateTime to);
