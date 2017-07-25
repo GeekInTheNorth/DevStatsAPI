@@ -7,5 +7,7 @@
         PostResult Post<T>(string url, T objectToSend);
 
         PostResult Post(string url, string package);
+
+        PostResult Put(string url, string package);
     }
 }

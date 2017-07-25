@@ -44,6 +44,16 @@ namespace DevStats.Domain.Jira
 
         public PostResult Post(string url, string jsonPackage)
         {
+            return Send(url, jsonPackage, "POST");
+        }
+
+        public PostResult Put(string url, string jsonPackage)
+        {
+            return Send(url, jsonPackage, "PUT");
+        }
+
+        private PostResult Send(string url, string jsonPackage, string method)
+        {
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
                 return new PostResult
@@ -57,7 +67,7 @@ namespace DevStats.Domain.Jira
 
             HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
             request.ContentType = "application/json";
-            request.Method = "POST";
+            request.Method = method;
             request.Headers.Add("Authorization", "Basic " + GetEncryptedCredentials());
 
             using (StreamWriter writer = new StreamWriter(request.GetRequestStream()))

@@ -19,6 +19,7 @@ namespace DevStats.Domain.Jira
         private readonly IJiraSender jiraSender;
         private readonly IProjectsRepository projectsRepository;
         private const string JiraCreateTaskPath = @"{0}/rest/api/2/issue/";
+        private const string JiraUpdateTaskPath = @"{0}/rest/api/2/issue/{1}";
         private const string JiraTransitionPath = @"{0}/rest/api/latest/issue/{1}/transitions";
         private const string CoreIssueIdRegex = "({0})[-][0-9]{{1,6}}";
         private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}";
@@ -103,6 +104,39 @@ namespace DevStats.Domain.Jira
         public void ProcessStoryUpdate(string issueId, string displayIssueId, string content)
         {
             loggingRepository.LogIncomingHook(JiraHook.StoryUpdate, issueId, displayIssueId, content);
+
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                loggingRepository.Log(issueId, displayIssueId, "Process Story Update", "No issue content recieved from Jira", false);
+                return;
+            }
+
+            try
+            {
+                var webHookData = convertor.Deserialize<WebHookData>(content);
+                var task = webHookData.Issue;
+                var subtasks = task.Fields.Subtasks;
+
+                if (subtasks == null || !subtasks.Any())
+                {
+                    loggingRepository.Log(issueId, displayIssueId, "Process Story Update", "No Sub-Tasks to update", false);
+                    return;
+                }
+
+                foreach(var subtask in subtasks)
+                {
+                    var json = "{ \"update\" : { \"@@fieldName@@\" : [{\"set\" : {\"value\" : \"@@FieldValue@@\"} }] }}";
+                    json = json.Replace("@@fieldName@@", "customfield_13700")
+                               .Replace("@@FieldValue@@", task.Fields.CascadeTeam.Value);
+                    var url = string.Format(JiraUpdateTaskPath, GetApiRoot(), subtask.Key);
+                    var putResult = jiraSender.Put(url, json);
+                    loggingRepository.Log(subtask.Id, subtask.Key, "Process Story Update: Update Sub-Tasks", putResult.Response, putResult.WasSuccessful);
+                }
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log(issueId, displayIssueId, "Process Story Update: Update Sub-Tasks", string.Format("Unexpected Error: {0}", ex.Message), false);
+            }
         }
 
         public IEnumerable<JiraAudit> GetJiraAudit(DateTime from, DateTime to)
