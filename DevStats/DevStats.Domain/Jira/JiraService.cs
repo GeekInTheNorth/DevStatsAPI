@@ -115,22 +115,35 @@ namespace DevStats.Domain.Jira
             {
                 var webHookData = convertor.Deserialize<WebHookData>(content);
                 var task = webHookData.Issue;
+                var changes = webHookData.Changes ?? new ChangeLog();
                 var subtasks = task.Fields.Subtasks;
+                var fieldsToUpdate = new List<string> { "customfield_13700" };
 
                 if (subtasks == null || !subtasks.Any())
                 {
-                    loggingRepository.Log(issueId, displayIssueId, "Process Story Update", "No Sub-Tasks to update", false);
+                    loggingRepository.Log(issueId, displayIssueId, "Process Story Update", "No Sub-Tasks to update", true);
                     return;
                 }
 
-                foreach(var subtask in subtasks)
+                var matchingFields = changes.Items.Where(x => fieldsToUpdate.Contains(x.Name, StringComparer.OrdinalIgnoreCase));
+                if (matchingFields == null || !matchingFields.Any())
                 {
-                    var json = "{ \"update\" : { \"@@fieldName@@\" : [{\"set\" : {\"value\" : \"@@FieldValue@@\"} }] }}";
-                    json = json.Replace("@@fieldName@@", "customfield_13700")
-                               .Replace("@@FieldValue@@", task.Fields.CascadeTeam.Value);
-                    var url = string.Format(JiraUpdateTaskPath, GetApiRoot(), subtask.Key);
-                    var putResult = jiraSender.Put(url, json);
-                    loggingRepository.Log(subtask.Id, subtask.Key, "Process Story Update: Update Sub-Tasks", putResult.Response, putResult.WasSuccessful);
+                    loggingRepository.Log(issueId, displayIssueId, "Process Story Update", "No changes to targetted fields", true);
+                    return;
+                }
+
+                foreach (var matchingField in matchingFields)
+                {
+                    foreach (var subtask in subtasks)
+                    {
+                        var json = "{ \"update\" : { \"@@fieldName@@\" : [{\"set\" : {\"value\" : \"@@FieldValue@@\"} }] }}";
+                        json = json.Replace("@@fieldName@@", matchingField.Name)
+                                   .Replace("@@FieldValue@@", matchingField.NewValue);
+                        var url = string.Format(JiraUpdateTaskPath, GetApiRoot(), subtask.Key);
+                        var putResult = jiraSender.Put(url, json);
+                        var action = string.Format("Process Story Update: Update {0} on Sub-Task", matchingField.DisplayName);
+                        loggingRepository.Log(subtask.Id, subtask.Key, action, putResult.Response, putResult.WasSuccessful);
+                    }
                 }
             }
             catch (Exception ex)
