@@ -70,6 +70,7 @@
     <Compile Include="Jira\JsonModels\Create\SubtaskType.cs" />
     <Compile Include="Jira\JsonModels\Create\TaskType.cs" />
     <Compile Include="Jira\JsonModels\Create\TimeTracking.cs" />
+    <Compile Include="Jira\JsonModels\Create\ValueField.cs" />
     <Compile Include="Jira\JsonModels\IssueTransition.cs" />
     <Compile Include="Jira\JsonModels\Parent.cs" />
     <Compile Include="Jira\JsonModels\Create\Subtask.cs" />

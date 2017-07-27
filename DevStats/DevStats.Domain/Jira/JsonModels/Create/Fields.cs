@@ -11,6 +11,9 @@ namespace DevStats.Domain.Jira.JsonModels.Create
         [JsonProperty("customfield_13701")]
         public TaskType TaskType { get; set; }
 
+        [JsonProperty("customfield_13703")]
+        public ValueField Complexity { get; set; }
+
         [JsonProperty("issuetype")]
         public IssueType IssueType { get; set; }
 
@@ -31,6 +34,7 @@ namespace DevStats.Domain.Jira.JsonModels.Create
             IssueType = new IssueType(5);
             TimeTracking = subtaskType == SubtaskType.Merge ? new TimeTracking(15) : new TimeTracking(15);
             TaskType = new TaskType(subtaskType);
+            Complexity = new ValueField("N/A");
         }
 
         private string GetSummary(SubtaskType subtaskType)
