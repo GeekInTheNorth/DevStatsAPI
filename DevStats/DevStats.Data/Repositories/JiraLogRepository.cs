@@ -50,6 +50,8 @@ namespace DevStats.Data.Repositories
                     return "Story Created";
                 case JiraHook.StoryUpdate:
                     return "Story Updated";
+                case JiraHook.StoryCompleted:
+                    return "Story Completed";
                 case JiraHook.SubtaskUpdate:
                     return "Subtask Updated";
                 default:

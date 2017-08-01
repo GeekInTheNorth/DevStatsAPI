@@ -151,6 +151,17 @@ namespace DevStats.Domain.Jira
             }
         }
 
+        public void ProcessStoryCompletion(string issueId, string displayIssueId, string content)
+        {
+            loggingRepository.LogIncomingHook(JiraHook.StoryCompleted, issueId, displayIssueId, content);
+
+            if (string.IsNullOrWhiteSpace(content))
+            {
+                loggingRepository.Log(issueId, displayIssueId, "Process Story Update", "No issue content recieved from Jira", false);
+                return;
+            }
+        }
+
         public IEnumerable<JiraAudit> GetJiraAudit(DateTime from, DateTime to)
         {
             return loggingRepository.Get(from, to);

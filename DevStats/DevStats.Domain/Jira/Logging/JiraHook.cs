@@ -5,6 +5,7 @@
         Unknown,
         SubtaskUpdate,
         StoryCreated,
-        StoryUpdate
+        StoryUpdate,
+        StoryCompleted
     }
 }
