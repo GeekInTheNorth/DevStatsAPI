@@ -64,16 +64,8 @@
     <Compile Include="Jira\JiraAudit.cs" />
     <Compile Include="Jira\JiraDefect.cs" />
     <Compile Include="Jira\JiraSender.cs" />
-    <Compile Include="Jira\JsonModels\Create\Fields.cs" />
-    <Compile Include="Jira\JsonModels\Create\IssueType.cs" />
-    <Compile Include="Jira\JsonModels\Create\SimpleField.cs" />
-    <Compile Include="Jira\JsonModels\Create\SubtaskType.cs" />
-    <Compile Include="Jira\JsonModels\Create\TaskType.cs" />
-    <Compile Include="Jira\JsonModels\Create\TimeTracking.cs" />
-    <Compile Include="Jira\JsonModels\Create\ValueField.cs" />
     <Compile Include="Jira\JsonModels\IssueTransition.cs" />
     <Compile Include="Jira\JsonModels\Parent.cs" />
-    <Compile Include="Jira\JsonModels\Create\Subtask.cs" />
     <Compile Include="Jira\JsonModels\UserCollection.cs" />
     <Compile Include="Jira\JsonModels\UserGroup.cs" />
     <Compile Include="Jira\JsonModels\WebHook\WebHookData.cs" />
@@ -100,6 +92,11 @@
     <Compile Include="Jira\PostResult.cs" />
     <Compile Include="Jira\JiraStateSummary.cs" />
     <Compile Include="Jira\ProjectsRepository.cs" />
+    <Compile Include="JsonFiles.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>JsonFiles.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprints\ISprintRepository.cs" />
     <Compile Include="Sprints\ISprintService.cs" />
@@ -108,6 +105,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\CreateSubTask.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="JsonFiles.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>JsonFiles.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,28 @@
+{
+  "fields": {
+    "parent": {
+      "key": "@@ID@@"
+    },
+    "customfield_13701": {
+      "id": "@@TASKID@@",
+      "value": "@@TASKNAME@@"
+    },
+    "customfield_13703": {
+      "value": "N/A"
+    },
+    "customfield_13702": {
+      "value": "Not Applicable"
+    },
+    "issuetype": {
+      "id": "5"
+    },
+    "project": {
+      "key": "@@PROJECT@@"
+    },
+    "timetracking": {
+      "originalEstimate": "15m",
+      "remainingEstimate": "15m"
+    },
+    "summary": "@@DESCRIPTION@@"
+  }
+}

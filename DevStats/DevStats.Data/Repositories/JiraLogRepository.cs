@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DevStats.Data.Entities;
 using DevStats.Domain.Jira;
-using DevStats.Domain.Jira.JsonModels.Create;
 using DevStats.Domain.Jira.Logging;
 
 namespace DevStats.Data.Repositories
@@ -26,11 +25,6 @@ namespace DevStats.Data.Repositories
             Context.SaveChanges();
         }
 
-        public void LogIncomingHook(string issueId, string displayIssueId, string content)
-        {
-            LogIncomingHook(JiraHook.Unknown, issueId, displayIssueId, content);
-        }
-
         public void LogIncomingHook(JiraHook hook, string issueId, string displayIssueId, string content)
         {
             var message = "Incoming Web Hook";
@@ -38,13 +32,6 @@ namespace DevStats.Data.Repositories
                 message = string.Format("{0}: {1}", message, GetHookName(hook));
 
             Log(issueId, displayIssueId, message, content, true);
-        }
-
-        public void LogTaskCreateEvent(string issueId, string displayIssueId, SubtaskType taskType, bool wasSuccessful, string content)
-        {
-            var action = string.Format("Create {0} Task", taskType);
-
-            Log(issueId, displayIssueId, action, content, wasSuccessful);
         }
 
         public IEnumerable<JiraAudit> Get(DateTime fromDate, DateTime toDate)

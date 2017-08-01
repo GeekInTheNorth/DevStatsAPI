@@ -35,13 +35,6 @@ namespace DevStats.Domain.Jira
             return convertor.Deserialize<T>(response);
         }
 
-        public PostResult Post<T>(string url, T objectToSend)
-        {
-            var objectJson = convertor.Serialize<T>(objectToSend);
-
-            return Post(url, objectJson);
-        }
-
         public PostResult Post(string url, string jsonPackage)
         {
             return Send(url, jsonPackage, "POST");

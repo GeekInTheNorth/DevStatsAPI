@@ -6,7 +6,6 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
 using DevStats.Domain.Jira.JsonModels;
-using DevStats.Domain.Jira.JsonModels.Create;
 using DevStats.Domain.Jira.JsonModels.WebHook;
 using DevStats.Domain.Jira.Logging;
 
@@ -46,8 +45,8 @@ namespace DevStats.Domain.Jira
         {
             loggingRepository.LogIncomingHook(JiraHook.StoryCreated, issueId, displayIssueId, content);
 
-            CreateSubTask(issueId, displayIssueId, SubtaskType.Merge);
-            CreateSubTask(issueId, displayIssueId, SubtaskType.POReview);
+            CreateProductOwnerTask(issueId, displayIssueId);
+            CreateMergeTask(issueId, displayIssueId);
         }
 
         public void ProcessSubTaskUpdate(string issueId, string displayIssueId, string content)
@@ -198,13 +197,38 @@ namespace DevStats.Domain.Jira
             return response.Users.Users.Select(x => x.Name);
         }
 
-        private void CreateSubTask(string issueId, string displayIssueId, SubtaskType taskType)
+        private void CreateProductOwnerTask(string issueId, string displayIssueId)
         {
-            var task = new Subtask(displayIssueId, taskType);
-            var url = string.Format(JiraCreateTaskPath, GetApiRoot());
-            var postResult = jiraSender.Post(url, task);
+            var project = issueId.Split('-')[0];
+            var buffer = JsonFiles.CreateSubTask;
+            var json = System.Text.Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+            json = json.Replace("@@ID@@", displayIssueId)
+                       .Replace("@@TASKID@@", "11508")
+                       .Replace("@@TASKNAME@@", "PO Review")
+                       .Replace("@@PROJECT@@", project)
+                       .Replace("@@DESCRIPTION@@", "Product Owner Review");
 
-            loggingRepository.LogTaskCreateEvent(issueId, displayIssueId, taskType, postResult.WasSuccessful, postResult.Response);
+            var url = string.Format(JiraCreateTaskPath, GetApiRoot());
+            var postResult = jiraSender.Post(url, json);
+
+            loggingRepository.Log(issueId, displayIssueId, "Create Product Owner Review Task", postResult.Response, postResult.WasSuccessful);
+        }
+
+        private void CreateMergeTask(string issueId, string displayIssueId)
+        {
+            var project = issueId.Split('-')[0];
+            var buffer = JsonFiles.CreateSubTask;
+            var json = System.Text.Encoding.UTF8.GetString(buffer, 0, buffer.Length);
+            json = json.Replace("@@ID@@", displayIssueId)
+                       .Replace("@@TASKID@@", "11510")
+                       .Replace("@@TASKNAME@@", "Merge")
+                       .Replace("@@PROJECT@@", project)
+                       .Replace("@@DESCRIPTION@@", "Merge to Develop");
+
+            var url = string.Format(JiraCreateTaskPath, GetApiRoot());
+            var postResult = jiraSender.Post(url, json);
+
+            loggingRepository.Log(issueId, displayIssueId, "Create Merge Task", postResult.Response, postResult.WasSuccessful);
         }
 
         private string GetApiRoot()
