@@ -157,8 +157,32 @@ namespace DevStats.Domain.Jira
 
             if (string.IsNullOrWhiteSpace(content))
             {
-                loggingRepository.Log(issueId, displayIssueId, "Process Story Update", "No issue content recieved from Jira", false);
+                loggingRepository.Log(issueId, displayIssueId, "Process Story Completion", "No issue content recieved from Jira", false);
                 return;
+            }
+
+            try
+            {
+                var webHookData = convertor.Deserialize<WebHookData>(content);
+                var story = webHookData.Issue;
+                var taskSummaries = story.Fields.Subtasks ?? new Issue[] { };
+
+                if (taskSummaries == null || !taskSummaries.Any())
+                {
+                    loggingRepository.Log(issueId, displayIssueId, "Process Story Completion", "No Sub-Tasks to process", true);
+                    return;
+                }
+
+                var jql = string.Format("issueKey in ({0})", string.Join(",", taskSummaries.Select(x => x.Key)));
+                var url = string.Format(JiraIssueSearchPath, GetApiRoot(), WebUtility.UrlEncode(jql));
+
+                var tasks = jiraSender.Get<JiraIssues>(url);
+
+
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log(issueId, displayIssueId, "Process Story Completion: Calculate Actuals vs Estimates", string.Format("Unexpected Error: {0}", ex.Message), false);
             }
         }
 
