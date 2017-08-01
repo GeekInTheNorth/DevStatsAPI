@@ -29,7 +29,7 @@ namespace DevStats.Controllers.MVC
             {
                 FilterFrom = dateFrom,
                 FilterTo = dateFrom,
-                AuditItems = service.GetJiraAudit(dateFrom, dateTo.AddDays(1)).ToList()
+                AuditItems = service.GetJiraAudit(dateFrom, dateTo.AddDays(1)).Select(x => new AuditModelItem(x)).ToList()
             };
 
             return View(model);
@@ -42,7 +42,7 @@ namespace DevStats.Controllers.MVC
             {
                 FilterFrom = dateFrom,
                 FilterTo = dateTo,
-                AuditItems = service.GetJiraAudit(dateFrom, dateTo.AddDays(1)).ToList()
+                AuditItems = service.GetJiraAudit(dateFrom, dateTo.AddDays(1)).Select(x => new AuditModelItem(x)).ToList()
             };
 
             return View(model);

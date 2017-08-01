@@ -10,6 +10,32 @@ namespace DevStats.Models.Jira
 
         public DateTime FilterTo { get; set; }
 
-        public List<JiraAudit> AuditItems { get; set; }
+        public List<AuditModelItem> AuditItems { get; set; }
+    }
+
+    public class AuditModelItem
+    {
+        public string JiraId { get; private set; }
+
+        public string Action { get; private set; }
+
+        public string Content { get; private set; }
+
+        public bool WasSuccessful { get; private set; }
+
+        public DateTime AuditDate { get; private set; }
+
+        public AuditModelItem(JiraAudit auditItem)
+        {
+            JiraId = auditItem.JiraId;
+            Action = auditItem.Action;
+            WasSuccessful = auditItem.WasSuccessful;
+            AuditDate = auditItem.AuditDate;
+
+            if (auditItem.Content.StartsWith("{"))
+                Content = "Json file was retrieved and stored.";
+            else
+                Content = auditItem.Content;
+        }
     }
 }
