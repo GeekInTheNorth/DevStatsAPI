@@ -199,7 +199,7 @@ namespace DevStats.Domain.Jira
 
         private void CreateProductOwnerTask(string issueId, string displayIssueId)
         {
-            var project = issueId.Split('-')[0];
+            var project = displayIssueId.Split('-')[0];
             var buffer = JsonFiles.CreateSubTask;
             var json = System.Text.Encoding.UTF8.GetString(buffer, 0, buffer.Length);
             json = json.Replace("@@ID@@", displayIssueId)
@@ -216,7 +216,7 @@ namespace DevStats.Domain.Jira
 
         private void CreateMergeTask(string issueId, string displayIssueId)
         {
-            var project = issueId.Split('-')[0];
+            var project = displayIssueId.Split('-')[0];
             var buffer = JsonFiles.CreateSubTask;
             var json = System.Text.Encoding.UTF8.GetString(buffer, 0, buffer.Length);
             json = json.Replace("@@ID@@", displayIssueId)
