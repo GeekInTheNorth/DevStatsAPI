@@ -18,6 +18,12 @@ namespace DevStats.Data
 
         public DbSet<JiraLog> JiraLogs { get; set; }
 
+        public DbSet<WorkLogStory> WorkLogStories { get; set; }
+
+        public DbSet<WorkLogTask> WorkLogTasks { get; set; }
+
+        public DbSet<WorkLogEntry> WorkLogEntries { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

@@ -52,6 +52,9 @@
     <Compile Include="DevStatContext.cs" />
     <Compile Include="Entities\JiraLog.cs" />
     <Compile Include="Entities\Sprint.cs" />
+    <Compile Include="Entities\WorkLogEntry.cs" />
+    <Compile Include="Entities\WorkLogStory.cs" />
+    <Compile Include="Entities\WorkLogTask.cs" />
     <Compile Include="Migrations\201607260714400_InitialCreate.cs" />
     <Compile Include="Migrations\201607260714400_InitialCreate.Designer.cs">
       <DependentUpon>201607260714400_InitialCreate.cs</DependentUpon>
