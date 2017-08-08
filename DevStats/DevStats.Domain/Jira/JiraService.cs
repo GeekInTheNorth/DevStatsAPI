@@ -178,10 +178,11 @@ namespace DevStats.Domain.Jira
                 var storyEffort = new StoryEffort(story, tasks, workLogs);
 
                 workLogRepository.Save(storyEffort);
+                loggingRepository.Log(issueId, displayIssueId, "Process Story Completion: Record Work Logs", string.Empty, true);
             }
             catch (Exception ex)
             {
-                loggingRepository.Log(issueId, displayIssueId, "Process Story Completion: Calculate Actuals vs Estimates", string.Format("Unexpected Error: {0}", ex.Message), false);
+                loggingRepository.Log(issueId, displayIssueId, "Process Story Completion: Record Work Logs", string.Format("Unexpected Error: {0}", ex.Message), false);
             }
         }
 
