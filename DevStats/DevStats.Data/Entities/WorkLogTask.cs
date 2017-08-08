@@ -12,6 +12,8 @@ namespace DevStats.Data.Entities
 
         public string Owner { get; set; }
 
+        public string Activity { get; set; }
+
         public string Complexity { get; set; }
 
         public int EstimateInSeconds { get; set; }

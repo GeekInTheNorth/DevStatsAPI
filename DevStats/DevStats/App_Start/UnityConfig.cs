@@ -22,6 +22,7 @@ namespace DevStats
             container.RegisterType<ISprintRepository, SprintRepository>();
             container.RegisterType<IJiraLogRepository, JiraLogRepository>();
             container.RegisterType<IProjectsRepository, ProjectsRepository>();
+            container.RegisterType<IWorkLogRepository, WorkLogRepository>();
 
             // Utilities
             container.RegisterType<IJiraConvertor, JiraConvertor>();

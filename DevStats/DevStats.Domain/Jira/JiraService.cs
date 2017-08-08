@@ -17,8 +17,9 @@ namespace DevStats.Domain.Jira
         private readonly IJiraLogRepository loggingRepository;
         private readonly IJiraSender jiraSender;
         private readonly IProjectsRepository projectsRepository;
-        private const string JiraCreateTaskPath = @"{0}/rest/api/2/issue/";
-        private const string JiraUpdateTaskPath = @"{0}/rest/api/2/issue/{1}";
+        private readonly IWorkLogRepository workLogRepository;
+        private const string JiraIssuePath = @"{0}/rest/api/2/issue/{1}";
+        private const string JiraCreatePath = @"{0}/rest/api/2/issue/";
         private const string JiraTransitionPath = @"{0}/rest/api/latest/issue/{1}/transitions";
         private const string CoreIssueIdRegex = "({0})[-][0-9]{{1,6}}";
         private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}";
@@ -29,17 +30,20 @@ namespace DevStats.Domain.Jira
             IJiraConvertor convertor, 
             IJiraLogRepository loggingRepository,
             IJiraSender jiraSender,
-            IProjectsRepository projectsRepository)
+            IProjectsRepository projectsRepository,
+            IWorkLogRepository workLogRepository)
         {
             if (convertor == null) throw new ArgumentNullException(nameof(convertor));
             if (loggingRepository == null) throw new ArgumentNullException(nameof(loggingRepository));
             if (jiraSender == null) throw new ArgumentNullException(nameof(jiraSender));
             if (projectsRepository == null) throw new ArgumentNullException(nameof(projectsRepository));
+            if (workLogRepository == null) throw new ArgumentNullException(nameof(workLogRepository));
 
             this.convertor = convertor;
             this.loggingRepository = loggingRepository;
             this.jiraSender = jiraSender;
             this.projectsRepository = projectsRepository;
+            this.workLogRepository = workLogRepository;
         }
 
         public void CreateSubTasks(string issueId, string displayIssueId, string content)
@@ -139,7 +143,7 @@ namespace DevStats.Domain.Jira
                         var json = "{ \"update\" : { \"@@fieldName@@\" : [{\"set\" : {\"value\" : \"@@FieldValue@@\"} }] }}";
                         json = json.Replace("@@fieldName@@", matchingField.Name)
                                    .Replace("@@FieldValue@@", matchingField.NewValue);
-                        var url = string.Format(JiraUpdateTaskPath, GetApiRoot(), subtask.Key);
+                        var url = string.Format(JiraIssuePath, GetApiRoot(), subtask.Key);
                         var putResult = jiraSender.Put(url, json);
                         var action = string.Format("Process Story Update: Update {0} on Sub-Task", matchingField.DisplayName);
                         loggingRepository.Log(subtask.Id, subtask.Key, action, putResult.Response, putResult.WasSuccessful);
@@ -156,58 +160,24 @@ namespace DevStats.Domain.Jira
         {
             loggingRepository.LogIncomingHook(JiraHook.StoryCompleted, issueId, displayIssueId, content);
 
-            if (string.IsNullOrWhiteSpace(content))
-            {
-                loggingRepository.Log(issueId, displayIssueId, "Process Story Completion", "No issue content recieved from Jira", false);
-                return;
-            }
-
             try
             {
-                var webHookData = convertor.Deserialize<WebHookData>(content);
-                var story = webHookData.Issue;
+                var storyUrl = string.Format(JiraIssuePath, GetApiRoot(), displayIssueId);
+                var story = jiraSender.Get<Issue>(storyUrl);
                 var taskSummaries = story.Fields.Subtasks ?? new Issue[] { };
 
-                if (taskSummaries == null || !taskSummaries.Any())
-                {
-                    loggingRepository.Log(issueId, displayIssueId, "Process Story Completion", "No Sub-Tasks to process", true);
-                    return;
-                }
+                var taskSearch = string.Format("issueKey in ({0})", string.Join(",", taskSummaries.Select(x => x.Key)));
+                var taskUrl = string.Format(JiraIssueSearchPath, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
+                var tasks = jiraSender.Get<JiraIssues>(taskUrl).Issues ?? new Issue[] { };
 
                 var tempoParams = new TempoSearchParameters(taskSummaries);
                 var url = string.Format(TempoSearchPath, GetApiRoot());
                 var tempoResult = jiraSender.Post(url, tempoParams);
                 var workLogs = convertor.Deserialize<List<WorkLog>>(tempoResult.Response);
 
-                if (workLogs == null || !workLogs.Any())
-                {
-                    loggingRepository.Log(issueId, displayIssueId, "Process Story Completion", "No work logs to process", true);
-                    return;
-                }
+                var storyEffort = new StoryEffort(story, tasks, workLogs);
 
-                var taskTimeTotals = (from log in workLogs
-                                      group log by new { log.Issue.Key, log.Issue.Id } into logGrp
-                                      select new
-                                      {
-                                          IssueId = logGrp.Key.Id,
-                                          IssueKey = logGrp.Key.Key,
-                                          TotalSeconds = logGrp.Sum(x => x.TimeSpentSeconds)
-                                      }).ToList();
-
-                foreach(var timeTotal in taskTimeTotals)
-                {
-                    var json = "{ \"update\" : { \"@@fieldName@@\" : [{\"set\" : {\"value\" : \"@@FieldValue@@\"} }] }}";
-                    json = json.Replace("@@fieldName@@", "timespent")
-                               .Replace("@@FieldValue@@", timeTotal.TotalSeconds.ToString());
-                    url = string.Format(JiraUpdateTaskPath, GetApiRoot(), timeTotal.IssueId);
-
-                    var putResult = jiraSender.Put(url, json);
-                    var action = string.Format("Process Story Completion: Update Actual Time on Sub-Task", timeTotal.IssueId);
-                    loggingRepository.Log(timeTotal.IssueId, timeTotal.IssueKey, action, putResult.Response, putResult.WasSuccessful);
-                }
-
-                var storyTimeTotal = workLogs.Sum(x => x.TimeSpentSeconds);
-
+                workLogRepository.Save(storyEffort);
             }
             catch (Exception ex)
             {
@@ -272,7 +242,7 @@ namespace DevStats.Domain.Jira
                        .Replace("@@PROJECT@@", project)
                        .Replace("@@DESCRIPTION@@", "Product Owner Review");
 
-            var url = string.Format(JiraCreateTaskPath, GetApiRoot());
+            var url = string.Format(JiraCreatePath, GetApiRoot());
             var postResult = jiraSender.Post(url, json);
 
             loggingRepository.Log(issueId, displayIssueId, "Create Product Owner Review Task", postResult.Response, postResult.WasSuccessful);
@@ -289,7 +259,7 @@ namespace DevStats.Domain.Jira
                        .Replace("@@PROJECT@@", project)
                        .Replace("@@DESCRIPTION@@", "Merge to Develop");
 
-            var url = string.Format(JiraCreateTaskPath, GetApiRoot());
+            var url = string.Format(JiraCreatePath, GetApiRoot());
             var postResult = jiraSender.Post(url, json);
 
             loggingRepository.Log(issueId, displayIssueId, "Create Merge Task", postResult.Response, postResult.WasSuccessful);

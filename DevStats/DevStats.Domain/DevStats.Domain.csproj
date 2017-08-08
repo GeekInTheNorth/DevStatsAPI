@@ -61,6 +61,7 @@
     <Compile Include="DefectAnalysis\IDefectService.cs" />
     <Compile Include="Jira\IJiraSender.cs" />
     <Compile Include="Jira\IProjectsRepository.cs" />
+    <Compile Include="Jira\IWorkLogRepository.cs" />
     <Compile Include="Jira\JiraAudit.cs" />
     <Compile Include="Jira\JiraDefect.cs" />
     <Compile Include="Jira\JiraSender.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Jira\PostResult.cs" />
     <Compile Include="Jira\JiraStateSummary.cs" />
     <Compile Include="Jira\ProjectsRepository.cs" />
+    <Compile Include="Jira\StoryEffort.cs" />
     <Compile Include="JsonFiles.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

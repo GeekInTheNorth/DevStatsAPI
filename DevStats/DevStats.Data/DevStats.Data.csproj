@@ -91,6 +91,7 @@
     <Compile Include="Repositories\DefectRepository.cs" />
     <Compile Include="Repositories\JiraLogRepository.cs" />
     <Compile Include="Repositories\SprintRepository.cs" />
+    <Compile Include="Repositories\WorkLogRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
