@@ -91,6 +91,10 @@
     <Compile Include="Migrations\201708080728052_JiraWorkLogDescriptions.Designer.cs">
       <DependentUpon>201708080728052_JiraWorkLogDescriptions.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708080755177_JiraWorkLogDates.cs" />
+    <Compile Include="Migrations\201708080755177_JiraWorkLogDates.Designer.cs">
+      <DependentUpon>201708080755177_JiraWorkLogDates.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -138,6 +142,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708080728052_JiraWorkLogDescriptions.resx">
       <DependentUpon>201708080728052_JiraWorkLogDescriptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708080755177_JiraWorkLogDates.resx">
+      <DependentUpon>201708080755177_JiraWorkLogDates.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

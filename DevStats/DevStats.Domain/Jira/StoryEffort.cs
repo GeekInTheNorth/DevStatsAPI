@@ -23,6 +23,8 @@ namespace DevStats.Domain.Jira
 
         public List<TaskEffort> Tasks { get; private set; }
 
+        public DateTime? LastWorkedOn { get; private set; }
+
         public StoryEffort(Issue story, IEnumerable<Issue> tasks, IEnumerable<WorkLog> logs)
         {
             Key = story.Key;
@@ -33,8 +35,16 @@ namespace DevStats.Domain.Jira
 
             Tasks = tasks.Select(x => new TaskEffort(x, logs)).ToList();
 
-            Estimate = Tasks.Sum(x => x.Estimate);
-            ActualTime = Tasks.Sum(x => x.ActualTime);
+            if (Tasks.Any())
+            {
+                Estimate = Tasks.Sum(x => x.Estimate);
+                ActualTime = Tasks.Sum(x => x.ActualTime);
+            }
+
+            if (Tasks.Any(x => x.LastWorkedOn.HasValue))
+            {
+                LastWorkedOn = Tasks.Where(x => x.LastWorkedOn.HasValue).Max(x => x.LastWorkedOn);
+            }
         }
 
         private string GetValue(ComplexField field)
@@ -64,6 +74,8 @@ namespace DevStats.Domain.Jira
 
         public List<TaskEffortLog> Logs { get; private set; }
 
+        public DateTime? LastWorkedOn { get; private set; }
+
         public TaskEffort(Issue task, IEnumerable<WorkLog> logs)
         {
             Key = task.Key;
@@ -74,7 +86,23 @@ namespace DevStats.Domain.Jira
             Activity = GetValue(task.Fields.TaskType);
 
             Logs = logs.Where(x => x.Issue.Key == task.Key).Select(x => new TaskEffortLog(x)).ToList();
-            ActualTime = Logs.Sum(x => x.Duration);
+
+            if (Logs.Any())
+            {
+                ActualTime = Logs.Sum(x => x.Duration);
+                LastWorkedOn = Logs.Max(x => x.Logged);
+                if (string.IsNullOrWhiteSpace(Owner))
+                {
+                    var totals = (from log in Logs
+                                  group log by log.Worker into logGrp
+                                  select new
+                                  {
+                                      Worker = logGrp.Key,
+                                      TotalTime = logGrp.Sum(x => x.Duration)
+                                  });
+                    Owner = totals.OrderByDescending(x => x.TotalTime).First().Worker;
+                }
+            }
         }
 
         private string GetValue(ComplexField field)
@@ -88,14 +116,20 @@ namespace DevStats.Domain.Jira
 
     public class TaskEffortLog
     {
-        public string Worker { get; set; }
+        public string Worker { get; private set; }
 
-        public int Duration { get; set; }
+        public int Duration { get; private set; }
+
+        public DateTime Logged { get; private set; }
+
+        public string Description { get; private set; }
 
         public TaskEffortLog(WorkLog log)
         {
             Worker = log.Worker;
             Duration = log.TimeSpentSeconds;
+            Logged = log.Created;
+            Description = log.Comment;
         }
     }
 }

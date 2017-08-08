@@ -1,4 +1,6 @@
-﻿namespace DevStats.Data.Entities
+﻿using System;
+
+namespace DevStats.Data.Entities
 {
     public class WorkLogEntry
     {
@@ -9,6 +11,10 @@
         public string Worker { get; set; }
 
         public int EffortInSeconds { get; set; }
+
+        public string Description { get; set; }
+
+        public DateTime Logged { get; set; }
 
         public virtual WorkLogTask WorkLogTask { get; set; }
     }

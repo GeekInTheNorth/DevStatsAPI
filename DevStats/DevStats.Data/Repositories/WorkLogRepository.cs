@@ -23,6 +23,7 @@ namespace DevStats.Data.Repositories
                 Complexity = storyEffort.Complexity,
                 Description = storyEffort.Description,
                 EstimateInSeconds = storyEffort.Estimate,
+                LastWorkedOn = storyEffort.LastWorkedOn,
                 LooseEstimateInHours = storyEffort.LooseEstimate,
                 StoryKey = storyEffort.Key,
                 TShirtSize = storyEffort.TShirtSize,
@@ -33,11 +34,14 @@ namespace DevStats.Data.Repositories
                     Complexity = x.Complexity,
                     Description = x.Description,
                     EstimateInSeconds = x.Estimate,
+                    LastWorkedOn = x.LastWorkedOn,
                     Owner = x.Owner,
                     TaskKey = x.Key,
                     WorkLogEntries = x.Logs.Select(y => new WorkLogEntry
                     {
+                        Description = y.Description,
                         EffortInSeconds = y.Duration,
+                        Logged = y.Logged,
                         Worker = y.Worker
                     }).ToList()
                 }).ToList()

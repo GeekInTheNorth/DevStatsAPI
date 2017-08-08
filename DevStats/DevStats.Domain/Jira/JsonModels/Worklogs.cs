@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace DevStats.Domain.Jira.JsonModels
@@ -17,6 +18,9 @@ namespace DevStats.Domain.Jira.JsonModels
     {
         [JsonProperty("comment")]
         public string Comment { get; set; }
+
+        [JsonProperty("dateCreated")]
+        public DateTime Created { get; set; }
 
         [JsonProperty("timeSpent")]
         public string TimeSpent { get; set; }
