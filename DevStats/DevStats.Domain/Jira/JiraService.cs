@@ -164,8 +164,11 @@ namespace DevStats.Domain.Jira
             {
                 var storyUrl = string.Format(JiraIssuePath, GetApiRoot(), displayIssueId);
                 var story = jiraSender.Get<Issue>(storyUrl);
-                var taskSummaries = story.Fields.Subtasks ?? new Issue[] { };
 
+                // If a story has subtasks, then times are logged against the subtasks, otherwise they are logged against the story
+                var taskSummaries = story.Fields.Subtasks;
+                taskSummaries = taskSummaries != null && taskSummaries.Any() ? taskSummaries : new Issue[] { story };
+                
                 var taskSearch = string.Format("issueKey in ({0})", string.Join(",", taskSummaries.Select(x => x.Key)));
                 var taskUrl = string.Format(JiraIssueSearchPath, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
                 var tasks = jiraSender.Get<JiraIssues>(taskUrl).Issues ?? new Issue[] { };
