@@ -83,17 +83,9 @@
     <Compile Include="Migrations\201705251226592_StoreMoreInJiraLog.Designer.cs">
       <DependentUpon>201705251226592_StoreMoreInJiraLog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201708080707233_JiraWorkLogs.cs" />
-    <Compile Include="Migrations\201708080707233_JiraWorkLogs.Designer.cs">
-      <DependentUpon>201708080707233_JiraWorkLogs.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708080728052_JiraWorkLogDescriptions.cs" />
-    <Compile Include="Migrations\201708080728052_JiraWorkLogDescriptions.Designer.cs">
-      <DependentUpon>201708080728052_JiraWorkLogDescriptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201708080755177_JiraWorkLogDates.cs" />
-    <Compile Include="Migrations\201708080755177_JiraWorkLogDates.Designer.cs">
-      <DependentUpon>201708080755177_JiraWorkLogDates.cs</DependentUpon>
+    <Compile Include="Migrations\201708080839181_JiraWorkLogs.cs" />
+    <Compile Include="Migrations\201708080839181_JiraWorkLogs.Designer.cs">
+      <DependentUpon>201708080839181_JiraWorkLogs.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
@@ -137,14 +129,8 @@
     <EmbeddedResource Include="Migrations\201705251226592_StoreMoreInJiraLog.resx">
       <DependentUpon>201705251226592_StoreMoreInJiraLog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708080707233_JiraWorkLogs.resx">
-      <DependentUpon>201708080707233_JiraWorkLogs.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708080728052_JiraWorkLogDescriptions.resx">
-      <DependentUpon>201708080728052_JiraWorkLogDescriptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201708080755177_JiraWorkLogDates.resx">
-      <DependentUpon>201708080755177_JiraWorkLogDates.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201708080839181_JiraWorkLogs.resx">
+      <DependentUpon>201708080839181_JiraWorkLogs.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

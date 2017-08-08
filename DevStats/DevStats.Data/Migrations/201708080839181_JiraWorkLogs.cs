@@ -15,6 +15,8 @@ namespace DevStats.Data.Migrations
                         WorkLogTaskID = c.Int(nullable: false),
                         Worker = c.String(),
                         EffortInSeconds = c.Int(nullable: false),
+                        Description = c.String(),
+                        Logged = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.ID)
                 .ForeignKey("dbo.WorkLogTask", t => t.WorkLogTaskID, cascadeDelete: true)
@@ -28,10 +30,12 @@ namespace DevStats.Data.Migrations
                         WorkLogStoryID = c.Int(nullable: false),
                         TaskKey = c.String(),
                         Owner = c.String(),
+                        Description = c.String(),
                         Activity = c.String(),
                         Complexity = c.String(),
                         EstimateInSeconds = c.Int(nullable: false),
                         ActualTimeInSeconds = c.Int(nullable: false),
+                        LastWorkedOn = c.DateTime(),
                     })
                 .PrimaryKey(t => t.ID)
                 .ForeignKey("dbo.WorkLogStory", t => t.WorkLogStoryID, cascadeDelete: true)
@@ -43,11 +47,13 @@ namespace DevStats.Data.Migrations
                     {
                         ID = c.Int(nullable: false, identity: true),
                         StoryKey = c.String(),
+                        Description = c.String(),
                         TShirtSize = c.String(),
                         Complexity = c.String(),
                         LooseEstimateInHours = c.Int(nullable: false),
                         EstimateInSeconds = c.Int(nullable: false),
                         ActualTimeInSeconds = c.Int(nullable: false),
+                        LastWorkedOn = c.DateTime(),
                     })
                 .PrimaryKey(t => t.ID);
             

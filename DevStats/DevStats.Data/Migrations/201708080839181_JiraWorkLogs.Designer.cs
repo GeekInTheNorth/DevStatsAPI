@@ -7,13 +7,13 @@ namespace DevStats.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class JiraWorkLogDescriptions : IMigrationMetadata
+    public sealed partial class JiraWorkLogs : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(JiraWorkLogDescriptions));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(JiraWorkLogs));
         
         string IMigrationMetadata.Id
         {
-            get { return "201708080728052_JiraWorkLogDescriptions"; }
+            get { return "201708080839181_JiraWorkLogs"; }
         }
         
         string IMigrationMetadata.Source
