@@ -8,6 +8,8 @@ namespace DevStats.Data.Entities
 
         public string StoryKey { get; set; }
 
+        public string Description { get; set; }
+
         public string TShirtSize { get; set; }
 
         public string Complexity { get; set; }

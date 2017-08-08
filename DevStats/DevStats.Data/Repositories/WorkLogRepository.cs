@@ -11,10 +11,17 @@ namespace DevStats.Data.Repositories
         {
             if (storyEffort == null) throw new ArgumentNullException(nameof(storyEffort));
 
+            var existingStory = Context.WorkLogStories.FirstOrDefault(x => x.StoryKey == storyEffort.Key);
+            if (existingStory != null)
+            {
+                Context.WorkLogStories.Remove(existingStory);
+            }
+
             var workLogStory = new WorkLogStory
             {
                 ActualTimeInSeconds = storyEffort.ActualTime,
                 Complexity = storyEffort.Complexity,
+                Description = storyEffort.Description,
                 EstimateInSeconds = storyEffort.Estimate,
                 LooseEstimateInHours = storyEffort.LooseEstimate,
                 StoryKey = storyEffort.Key,
@@ -24,6 +31,7 @@ namespace DevStats.Data.Repositories
                     Activity = x.Activity,
                     ActualTimeInSeconds = x.ActualTime,
                     Complexity = x.Complexity,
+                    Description = x.Description,
                     EstimateInSeconds = x.Estimate,
                     Owner = x.Owner,
                     TaskKey = x.Key,

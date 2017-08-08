@@ -9,6 +9,8 @@ namespace DevStats.Domain.Jira
     {
         public string Key { get; private set; }
 
+        public string Description { get; private set; }
+
         public string TShirtSize { get; private set; }
 
         public string Complexity { get; private set; }
@@ -24,6 +26,7 @@ namespace DevStats.Domain.Jira
         public StoryEffort(Issue story, IEnumerable<Issue> tasks, IEnumerable<WorkLog> logs)
         {
             Key = story.Key;
+            Description = story.Fields.Summary ?? string.Empty;
             TShirtSize = GetValue(story.Fields.TShirtSize);
             Complexity = GetValue(story.Fields.Complexity);
             LooseEstimate = story.Fields.StoryPoints.HasValue ? (int)Math.Truncate(story.Fields.StoryPoints.Value) : 0;
@@ -47,6 +50,8 @@ namespace DevStats.Domain.Jira
     {
         public string Key { get; private set; }
 
+        public string Description { get; private set; }
+
         public string Owner { get; private set; }
 
         public string Activity { get; set; }
@@ -62,6 +67,7 @@ namespace DevStats.Domain.Jira
         public TaskEffort(Issue task, IEnumerable<WorkLog> logs)
         {
             Key = task.Key;
+            Description = task.Fields.Summary ?? string.Empty;
             Complexity = GetValue(task.Fields.Complexity);
             Estimate = task.Fields.Timeoriginalestimate ?? 0;
             Owner = task.Fields.Assignee == null ? string.Empty : task.Fields.Assignee.Name;
