@@ -66,9 +66,11 @@
     <Compile Include="Jira\JiraSender.cs" />
     <Compile Include="Jira\JsonModels\IssueTransition.cs" />
     <Compile Include="Jira\JsonModels\Parent.cs" />
+    <Compile Include="Jira\JsonModels\TempoSearchParameters.cs" />
     <Compile Include="Jira\JsonModels\UserCollection.cs" />
     <Compile Include="Jira\JsonModels\UserGroup.cs" />
     <Compile Include="Jira\JsonModels\WebHook\WebHookData.cs" />
+    <Compile Include="Jira\JsonModels\Worklogs.cs" />
     <Compile Include="Jira\Logging\IJiraLogRepository.cs" />
     <Compile Include="Jira\FilterBuilder.cs" />
     <Compile Include="Jira\IJiraConvertor.cs" />

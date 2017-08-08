@@ -15,5 +15,10 @@ namespace DevStats.Domain.Jira
         {
             return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(jsonData);
         }
+
+        public string Serialize<T>(T obj)
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+        }
     }
 }

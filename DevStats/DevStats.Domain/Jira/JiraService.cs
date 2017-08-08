@@ -23,6 +23,7 @@ namespace DevStats.Domain.Jira
         private const string CoreIssueIdRegex = "({0})[-][0-9]{{1,6}}";
         private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}";
         private const string JiraUserGroupSearchPath = @"{0}/rest/api/2/group?groupname={1}&expand=users";
+        private const string TempoSearchPath = @"{0}/rest/tempo-timesheets/4/worklogs/search";
 
         public JiraService(
             IJiraConvertor convertor, 
@@ -173,11 +174,39 @@ namespace DevStats.Domain.Jira
                     return;
                 }
 
-                var jql = string.Format("issueKey in ({0})", string.Join(",", taskSummaries.Select(x => x.Key)));
-                var url = string.Format(JiraIssueSearchPath, GetApiRoot(), WebUtility.UrlEncode(jql));
+                var tempoParams = new TempoSearchParameters(taskSummaries);
+                var url = string.Format(TempoSearchPath, GetApiRoot());
+                var tempoResult = jiraSender.Post(url, tempoParams);
+                var workLogs = convertor.Deserialize<List<WorkLog>>(tempoResult.Response);
 
-                var tasks = jiraSender.Get<JiraIssues>(url);
+                if (workLogs == null || !workLogs.Any())
+                {
+                    loggingRepository.Log(issueId, displayIssueId, "Process Story Completion", "No work logs to process", true);
+                    return;
+                }
 
+                var taskTimeTotals = (from log in workLogs
+                                      group log by new { log.Issue.Key, log.Issue.Id } into logGrp
+                                      select new
+                                      {
+                                          IssueId = logGrp.Key.Id,
+                                          IssueKey = logGrp.Key.Key,
+                                          TotalSeconds = logGrp.Sum(x => x.TimeSpentSeconds)
+                                      }).ToList();
+
+                foreach(var timeTotal in taskTimeTotals)
+                {
+                    var json = "{ \"update\" : { \"@@fieldName@@\" : [{\"set\" : {\"value\" : \"@@FieldValue@@\"} }] }}";
+                    json = json.Replace("@@fieldName@@", "timespent")
+                               .Replace("@@FieldValue@@", timeTotal.TotalSeconds.ToString());
+                    url = string.Format(JiraUpdateTaskPath, GetApiRoot(), timeTotal.IssueId);
+
+                    var putResult = jiraSender.Put(url, json);
+                    var action = string.Format("Process Story Completion: Update Actual Time on Sub-Task", timeTotal.IssueId);
+                    loggingRepository.Log(timeTotal.IssueId, timeTotal.IssueKey, action, putResult.Response, putResult.WasSuccessful);
+                }
+
+                var storyTimeTotal = workLogs.Sum(x => x.TimeSpentSeconds);
 
             }
             catch (Exception ex)
