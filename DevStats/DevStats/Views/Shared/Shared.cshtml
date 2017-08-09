@@ -7,6 +7,13 @@
     <link href="../Styles/DevStats.css" rel="stylesheet" />
 </head>
 <body>
+    <div class="header">
+        @Html.ActionLink("Home", "Index", "Home", null, new { @class = "header-button" })
+        @Html.ActionLink("Defect Analysis", "DefectAnalysis", "Jira", null, new { @class = "header-button" })
+        @Html.ActionLink("State Checker", "StateChecker", "Jira", null, new { @class = "header-button" })
+        @Html.ActionLink("API Test", "ApiTest", "Jira", null, new { @class = "header-button" })
+        @Html.ActionLink("API Audit", "Audit", "Jira", null, new { @class = "header-button" })
+    </div>
     <div>
         @RenderBody()
     </div>
