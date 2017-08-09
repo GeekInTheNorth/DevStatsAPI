@@ -17,18 +17,10 @@ namespace DevStats.Controllers.API
         }
 
         [EnableCors("*", "*", "*")]
-        [HttpPost]
+        [AcceptVerbs("GET", "POST")]
         public void CreateSubtasks([FromUri]string issueId, [FromUri]string displayIssueId)
         {
-            var jsonContent = Request.Content.ReadAsStringAsync().Result;
-
-            service.CreateSubTasks(issueId, displayIssueId, jsonContent);
-        }
-
-        [HttpGet]
-        public void ForceCreationOfTasks([FromUri]string issueId, [FromUri]string displayIssueId)
-        {
-            service.CreateSubTasks(issueId, displayIssueId, string.Empty);
+            service.CreateSubTasks(issueId, displayIssueId);
         }
     }
 }

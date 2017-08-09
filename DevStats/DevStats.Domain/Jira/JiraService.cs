@@ -46,12 +46,34 @@ namespace DevStats.Domain.Jira
             this.workLogRepository = workLogRepository;
         }
 
-        public void CreateSubTasks(string issueId, string displayIssueId, string content)
+        public void CreateSubTasks(string issueId, string displayIssueId)
         {
-            loggingRepository.LogIncomingHook(JiraHook.StoryCreated, issueId, displayIssueId, content);
+            loggingRepository.LogIncomingHook(JiraHook.StoryCreated, issueId, displayIssueId, string.Empty);
 
-            CreateProductOwnerTask(issueId, displayIssueId);
-            CreateMergeTask(issueId, displayIssueId);
+            try
+            {
+                var storyUrl = string.Format(JiraIssuePath, GetApiRoot(), displayIssueId);
+                var story = jiraSender.Get<Issue>(storyUrl);
+                var taskSummaries = story.Fields.Subtasks ?? new Issue[] { };
+                var tasks = new Issue[] { };
+
+                if (taskSummaries.Any())
+                {
+                    var taskSearch = string.Format("issueKey in ({0})", string.Join(",", taskSummaries.Select(x => x.Key)));
+                    var taskUrl = string.Format(JiraIssueSearchPath, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
+                    tasks = jiraSender.Get<JiraIssues>(taskUrl).Issues ?? new Issue[] { };
+                }
+
+                var hasPOTask = tasks.Any(x => x.Fields.TaskType != null && x.Fields.TaskType.Value == "PO Review");
+                var hasMergeTask = tasks.Any(x => x.Fields.TaskType != null && x.Fields.TaskType.Value == "Merge");
+
+                if (!hasPOTask) CreateProductOwnerTask(issueId, displayIssueId);
+                if (!hasMergeTask) CreateMergeTask(issueId, displayIssueId);
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log(issueId, displayIssueId, "Process Create Sub-Tasks", ex.Message, false);
+            }
         }
 
         public void ProcessSubTaskUpdate(string issueId, string displayIssueId, string content)
