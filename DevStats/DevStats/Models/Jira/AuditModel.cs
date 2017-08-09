@@ -32,7 +32,7 @@ namespace DevStats.Models.Jira
             WasSuccessful = auditItem.WasSuccessful;
             AuditDate = auditItem.AuditDate;
 
-            if (auditItem.Content.StartsWith("{"))
+            if (!string.IsNullOrWhiteSpace(auditItem.Content) && auditItem.Content.StartsWith("{"))
                 Content = "Json file was retrieved and stored.";
             else
                 Content = auditItem.Content;
