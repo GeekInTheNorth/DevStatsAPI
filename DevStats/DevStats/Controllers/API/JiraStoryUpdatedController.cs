@@ -20,9 +20,7 @@ namespace DevStats.Controllers.API
         [HttpPost]
         public void StoryUpdated([FromUri]string issueId, [FromUri]string displayIssueId)
         {
-            var jsonContent = Request.Content.ReadAsStringAsync().Result;
-
-            service.ProcessStoryUpdate(issueId, displayIssueId, jsonContent);
+            service.ProcessStoryUpdate(issueId, displayIssueId);
         }
     }
 }

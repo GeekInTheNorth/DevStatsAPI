@@ -105,87 +105,26 @@ namespace DevStats.Domain.Jira
             }
         }
 
-        public void ProcessStoryUpdate(string issueId, string displayIssueId, string content)
+        public void ProcessStoryUpdate(string issueId, string displayIssueId)
         {
-            loggingRepository.LogIncomingHook(JiraHook.StoryUpdate, issueId, displayIssueId, content);
-
-            if (string.IsNullOrWhiteSpace(content))
-            {
-                loggingRepository.Log(issueId, displayIssueId, "Process Story Update", "No issue content recieved from Jira", false);
-                return;
-            }
-
-            try
-            {
-                var webHookData = convertor.Deserialize<WebHookData>(content);
-                var task = webHookData.Issue;
-                var changes = webHookData.Changes ?? new ChangeLog();
-                var subtasks = task.Fields.Subtasks;
-                var fieldsToUpdate = new List<string> { "customfield_13700" };
-
-                if (subtasks == null || !subtasks.Any())
-                {
-                    loggingRepository.Log(issueId, displayIssueId, "Process Story Update", "No Sub-Tasks to update", true);
-                    return;
-                }
-
-                var matchingFields = changes.Items.Where(x => fieldsToUpdate.Contains(x.Name, StringComparer.OrdinalIgnoreCase));
-                if (matchingFields == null || !matchingFields.Any())
-                {
-                    loggingRepository.Log(issueId, displayIssueId, "Process Story Update", "No changes to targetted fields", true);
-                    return;
-                }
-
-                foreach (var matchingField in matchingFields)
-                {
-                    foreach (var subtask in subtasks)
-                    {
-                        var json = "{ \"update\" : { \"@@fieldName@@\" : [{\"set\" : {\"value\" : \"@@FieldValue@@\"} }] }}";
-                        json = json.Replace("@@fieldName@@", matchingField.Name)
-                                   .Replace("@@FieldValue@@", matchingField.NewValue);
-                        var url = string.Format(JiraIssuePath, GetApiRoot(), subtask.Key);
-                        var putResult = jiraSender.Put(url, json);
-                        var action = string.Format("Process Story Update: Update {0} on Sub-Task", matchingField.DisplayName);
-                        loggingRepository.Log(subtask.Id, subtask.Key, action, putResult.Response, putResult.WasSuccessful);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                loggingRepository.Log(issueId, displayIssueId, "Process Story Update: Update Sub-Tasks", string.Format("Unexpected Error: {0}", ex.Message), false);
-            }
-        }
-
-        public void ProcessStoryCompletion(string issueId, string displayIssueId, string content)
-        {
-            loggingRepository.LogIncomingHook(JiraHook.StoryCompleted, issueId, displayIssueId, content);
+            loggingRepository.LogIncomingHook(JiraHook.StoryUpdate, issueId, displayIssueId, string.Empty);
 
             try
             {
                 var storyUrl = string.Format(JiraIssuePath, GetApiRoot(), displayIssueId);
                 var story = jiraSender.Get<Issue>(storyUrl);
-
-                // If a story has subtasks, then times are logged against the subtasks, otherwise they are logged against the story
                 var taskSummaries = story.Fields.Subtasks;
-                taskSummaries = taskSummaries != null && taskSummaries.Any() ? taskSummaries : new Issue[] { story };
-                
+
                 var taskSearch = string.Format("issueKey in ({0})", string.Join(",", taskSummaries.Select(x => x.Key)));
                 var taskUrl = string.Format(JiraIssueSearchPath, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
                 var tasks = jiraSender.Get<JiraIssues>(taskUrl).Issues ?? new Issue[] { };
 
-                var tempoParams = new TempoSearchParameters(taskSummaries);
-                var url = string.Format(TempoSearchPath, GetApiRoot());
-                var tempoResult = jiraSender.Post(url, tempoParams);
-                var workLogs = convertor.Deserialize<List<WorkLog>>(tempoResult.Response);
-
-                var storyEffort = new StoryEffort(story, tasks, workLogs);
-
-                workLogRepository.Save(storyEffort);
-                loggingRepository.Log(issueId, displayIssueId, "Process Story Completion: Record Work Logs", string.Empty, true);
+                CopyTeamFromStoryToTask(story, tasks);
+                ProcessWorkLogs(story, tasks);
             }
             catch (Exception ex)
             {
-                loggingRepository.Log(issueId, displayIssueId, "Process Story Completion: Record Work Logs", string.Format("Unexpected Error: {0}", ex.Message), false);
+                loggingRepository.Log(issueId, displayIssueId, "Process Story Update", string.Format("Unexpected Error: {0}", ex.Message), false);
             }
         }
 
@@ -267,6 +206,61 @@ namespace DevStats.Domain.Jira
             var postResult = jiraSender.Post(url, json);
 
             loggingRepository.Log(issueId, displayIssueId, "Create Merge Task", postResult.Response, postResult.WasSuccessful);
+        }
+
+        private void CopyTeamFromStoryToTask(Issue story, IEnumerable<Issue> tasks)
+        {
+            if (tasks == null || !tasks.Any())
+            {
+                loggingRepository.Log(story.Id, story.Key, "Process Story Update", "No Sub-Tasks to update", true);
+                return;
+            }
+
+            foreach (var task in tasks)
+            {
+                var storyTeam = story.Fields.CascadeTeam != null ? story.Fields.CascadeTeam.Value : string.Empty;
+                var taskTeam = task.Fields.CascadeTeam != null ? task.Fields.CascadeTeam.Value : string.Empty;
+
+                if (storyTeam != taskTeam)
+                {
+                    var json = "{ \"update\" : { \"@@fieldName@@\" : [{\"set\" : {\"value\" : \"@@FieldValue@@\"} }] }}";
+                    json = json.Replace("@@fieldName@@", "customfield_13700")
+                               .Replace("@@FieldValue@@", storyTeam);
+
+                    var url = string.Format(JiraIssuePath, GetApiRoot(), task.Key);
+                    var action = string.Format("Process Story Update: Update Cascade Team on Sub-Task {0}", task.Key);
+                    var putResult = jiraSender.Put(url, json);
+
+                    loggingRepository.Log(task.Id, task.Key, action, putResult.Response, putResult.WasSuccessful);
+                }
+            }
+        }
+
+        private void ProcessWorkLogs(Issue story, IEnumerable<Issue> tasks)
+        {
+            if (story.Fields.Status.Name != "Done") return;
+
+            // Worklogs are stored against subtasks, however Stories without tasks have worklogs against the story
+            var tasksToCheck = tasks != null && tasks.Any() ? tasks : new Issue[] { story };
+            var action = "Process Story Completion: Record Work Logs";
+
+            try
+            {
+                var tempoParams = new TempoSearchParameters(tasksToCheck);
+                var url = string.Format(TempoSearchPath, GetApiRoot());
+                var tempoResult = jiraSender.Post(url, tempoParams);
+                var workLogs = convertor.Deserialize<List<WorkLog>>(tempoResult.Response);
+
+                var storyEffort = new StoryEffort(story, tasks, workLogs);
+
+                workLogRepository.Save(storyEffort);
+                loggingRepository.Log(story.Id, story.Key, action, string.Empty, true);
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log(story.Id, story.Key, action, ex.Message, false);
+            }
+
         }
 
         private string GetApiRoot()

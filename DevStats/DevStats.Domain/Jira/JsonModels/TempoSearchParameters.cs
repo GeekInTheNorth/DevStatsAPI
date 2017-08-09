@@ -20,8 +20,8 @@ namespace DevStats.Domain.Jira.JsonModels
         {
             if (issues == null) throw new ArgumentNullException("issues");
 
-            DateFrom = new DateTime(2017, 1, 1);
             DateTo = DateTime.Today;
+            DateFrom = DateTo.AddYears(-1);
             TaskIds = issues.Select(x => x.Id).ToList();
         }
     }
