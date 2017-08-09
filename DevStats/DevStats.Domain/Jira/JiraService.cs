@@ -113,11 +113,15 @@ namespace DevStats.Domain.Jira
             {
                 var storyUrl = string.Format(JiraIssuePath, GetApiRoot(), displayIssueId);
                 var story = jiraSender.Get<Issue>(storyUrl);
-                var taskSummaries = story.Fields.Subtasks;
+                var taskSummaries = story.Fields.Subtasks ?? new Issue[] { };
+                var tasks = new Issue[] { };
 
-                var taskSearch = string.Format("issueKey in ({0})", string.Join(",", taskSummaries.Select(x => x.Key)));
-                var taskUrl = string.Format(JiraIssueSearchPath, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
-                var tasks = jiraSender.Get<JiraIssues>(taskUrl).Issues ?? new Issue[] { };
+                if (taskSummaries.Any())
+                {
+                    var taskSearch = string.Format("issueKey in ({0})", string.Join(",", taskSummaries.Select(x => x.Key)));
+                    var taskUrl = string.Format(JiraIssueSearchPath, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
+                    tasks = jiraSender.Get<JiraIssues>(taskUrl).Issues ?? new Issue[] { };
+                }
 
                 CopyTeamFromStoryToTask(story, tasks);
                 ProcessWorkLogs(story, tasks);
