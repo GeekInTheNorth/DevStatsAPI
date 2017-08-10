@@ -23,6 +23,11 @@ namespace DevStats.Models.Jira
 
         public bool WasSuccessful { get; private set; }
 
+        public string WasSuccessfulString
+        {
+            get { return WasSuccessful ? "Yes" : "No"; }
+        }
+
         public DateTime AuditDate { get; private set; }
 
         public AuditModelItem(JiraAudit auditItem)
