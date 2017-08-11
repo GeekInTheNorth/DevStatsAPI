@@ -25,13 +25,13 @@ namespace DevStats.Data.Repositories
             Context.SaveChanges();
         }
 
-        public void LogIncomingHook(JiraHook hook, string issueId, string displayIssueId, string content)
+        public void LogIncomingHook(JiraHook hook, string issueId, string displayIssueId)
         {
             var message = "Incoming Web Hook";
             if (hook != JiraHook.Unknown)
                 message = string.Format("{0}: {1}", message, GetHookName(hook));
 
-            Log(issueId, displayIssueId, message, content, true);
+            Log(issueId, displayIssueId, message, string.Empty, true);
         }
 
         public IEnumerable<JiraAudit> Get(DateTime fromDate, DateTime toDate)
@@ -50,8 +50,6 @@ namespace DevStats.Data.Repositories
                     return "Story Created";
                 case JiraHook.StoryUpdate:
                     return "Story Updated";
-                case JiraHook.StoryCompleted:
-                    return "Story Completed";
                 case JiraHook.SubtaskUpdate:
                     return "Subtask Updated";
                 default:

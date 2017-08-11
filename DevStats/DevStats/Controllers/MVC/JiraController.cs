@@ -11,12 +11,15 @@ namespace DevStats.Controllers.MVC
     public class JiraController : Controller
     {
         private readonly IJiraService service;
+        private readonly IJiraSender sender;
 
-        public JiraController(IJiraService service)
+        public JiraController(IJiraService service, IJiraSender sender)
         {
             if (service == null) throw new ArgumentNullException(nameof(service));
+            if (sender == null) throw new ArgumentNullException(nameof(sender));
 
             this.service = service;
+            this.sender = sender;
         }
 
         [HttpGet]
@@ -55,13 +58,13 @@ namespace DevStats.Controllers.MVC
         }
 
         [HttpPost]
-        public ActionResult ApiTest(string apiUrl, string jiraId, string package)
+        public ActionResult ApiTest(string apiUrl, string jiraId)
         {
             var url = Request.Url.AbsoluteUri.Replace(Request.Url.LocalPath, apiUrl).Replace("@@id@@", jiraId.ToUpper());
-
-            var jiraSender = new JiraSender(new JiraConvertor());
-            var model = new ApiTestModel();
-            model.PostResult = jiraSender.Post(url, package);
+            var model = new ApiTestModel
+            {
+                PostResult = sender.Post(url, string.Empty)
+            };
 
             return View(model);
         }

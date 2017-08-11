@@ -6,7 +6,6 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
 using DevStats.Domain.Jira.JsonModels;
-using DevStats.Domain.Jira.JsonModels.WebHook;
 using DevStats.Domain.Jira.Logging;
 
 namespace DevStats.Domain.Jira
@@ -48,7 +47,7 @@ namespace DevStats.Domain.Jira
 
         public void CreateSubTasks(string issueId, string displayIssueId)
         {
-            loggingRepository.LogIncomingHook(JiraHook.StoryCreated, issueId, displayIssueId, string.Empty);
+            loggingRepository.LogIncomingHook(JiraHook.StoryCreated, issueId, displayIssueId);
 
             try
             {
@@ -76,60 +75,54 @@ namespace DevStats.Domain.Jira
             }
         }
 
-        public void ProcessSubTaskUpdate(string issueId, string displayIssueId, string content)
+        public void ProcessSubTaskUpdate(string issueId, string displayIssueId)
         {
-            loggingRepository.LogIncomingHook(JiraHook.SubtaskUpdate, issueId, displayIssueId, content);
-
-            if (string.IsNullOrWhiteSpace(content))
-            {
-                loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update", "No issue content recieved from Jira", false);
-                return;
-            }
+            loggingRepository.LogIncomingHook(JiraHook.SubtaskUpdate, issueId, displayIssueId);
 
             try
             {
-                var webHookData = convertor.Deserialize<WebHookData>(content);
-                var task = webHookData.Issue;
-                var taskState = task.Fields.Status.Name;
-                var parentId = task.Fields.Parent.Key;
-                var parentType = task.Fields.Parent.Fields.Issuetype.Name;
-                var parentState = task.Fields.Parent.Fields.Status.Name;
-                var project = task.Fields.Project.Key;
-                var url = string.Format(JiraTransitionPath, GetApiRoot(), parentId);
+                var taskUrl = string.Format(JiraIssuePath, GetApiRoot(), displayIssueId);
+                var task = jiraSender.Get<Issue>(taskUrl);
 
-                if (!taskState.Equals("In Progress") || parentState.Equals("In Progress"))
+                if (task.Fields.Parent == null)
                 {
-                    loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update: Update Parent", "No updates to apply", true);
+                    loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update", "No parent to update", false);
                     return;
                 }
 
-                var transitions = jiraSender.Get<IssueTransitions>(url);
-                
-                if (transitions == null || transitions.Transitions == null || !transitions.Transitions.Any(x => x.Name == taskState))
+                if (task.Fields.Parent.Fields.Status.Name.Equals("In Progress") || !task.Fields.Status.Name.Equals("In Progress"))
                 {
-                    loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update: Update Parent", "No known transitions", false);
+                    loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update", "No updates to apply to parent", true);
                     return;
                 }
 
-                var transition = transitions.Transitions.First(x => x.Name == taskState);
+                var transistionUrl = string.Format(JiraTransitionPath, GetApiRoot(), task.Fields.Parent.Key);
+                var transitions = jiraSender.Get<IssueTransitions>(transistionUrl);
 
+                if (transitions == null || transitions.Transitions == null || !transitions.Transitions.Any(x => x.Name == task.Fields.Status.Name))
+                {
+                    loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update", "No known transitions for updating the parent", false);
+                    return;
+                }
+
+                var transition = transitions.Transitions.First(x => x.Name == task.Fields.Status.Name);
                 var json = "{ \"update\": { \"comment\": [{ \"add\": { \"body\": \"@@COMMENT@@\" } } ] }, \"transition\": { \"id\": \"@@ID@@\" } }";
-                var comment = string.Format("Moved to {0} to match subtask: {1}", taskState, displayIssueId);
+                var comment = string.Format("Moved to {0} to match subtask: {1}", task.Fields.Status.Name, displayIssueId);
                 json = json.Replace("@@ID@@", transition.Id.ToString())
                            .Replace("@@COMMENT@@", HttpUtility.JavaScriptStringEncode(comment));
 
-                var postResult = jiraSender.Post(url, json);
+                var postResult = jiraSender.Post(transistionUrl, json);
                 loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update: Update Parent", postResult.Response, postResult.WasSuccessful);
             }
             catch (Exception ex)
             {
-                loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update: Update Parent", string.Format("Unexpected Error: {0}", ex.Message), false);
+                loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update", string.Format("Unexpected Error: {0}", ex.Message), false);
             }
         }
 
         public void ProcessStoryUpdate(string issueId, string displayIssueId)
         {
-            loggingRepository.LogIncomingHook(JiraHook.StoryUpdate, issueId, displayIssueId, string.Empty);
+            loggingRepository.LogIncomingHook(JiraHook.StoryUpdate, issueId, displayIssueId);
 
             try
             {

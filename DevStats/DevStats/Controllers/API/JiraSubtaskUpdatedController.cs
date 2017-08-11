@@ -20,9 +20,7 @@ namespace DevStats.Controllers.API
         [HttpPost]
         public void SubtaskUpdated([FromUri]string issueId, [FromUri]string displayIssueId)
         {
-            var jsonContent = Request.Content.ReadAsStringAsync().Result;
-
-            service.ProcessSubTaskUpdate(issueId, displayIssueId, jsonContent);
+            service.ProcessSubTaskUpdate(issueId, displayIssueId);
         }
     }
 }

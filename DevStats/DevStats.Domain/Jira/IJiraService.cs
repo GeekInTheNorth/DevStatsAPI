@@ -7,7 +7,7 @@ namespace DevStats.Domain.Jira
     {
         void CreateSubTasks(string issueId, string displayIssueId);
 
-        void ProcessSubTaskUpdate(string issueId, string displayIssueId, string content);
+        void ProcessSubTaskUpdate(string issueId, string displayIssueId);
 
         void ProcessStoryUpdate(string issueId, string displayIssueId);
 

@@ -7,7 +7,7 @@ namespace DevStats.Domain.Jira.Logging
     {
         void Log(string issueId, string displayIssueId, string action, string content, bool wasSuccessful);
 
-        void LogIncomingHook(JiraHook hook, string issueId, string displayIssueId, string content);
+        void LogIncomingHook(JiraHook hook, string issueId, string displayIssueId);
 
         IEnumerable<JiraAudit> Get(DateTime from, DateTime to);
     }
