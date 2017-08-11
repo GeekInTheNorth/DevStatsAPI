@@ -266,8 +266,10 @@ namespace DevStats.Domain.Jira
         {
             if (story.Fields.Status.Name != "Done") return;
 
-            // Worklogs are stored against subtasks, however Stories without tasks have worklogs against the story
-            var tasksToCheck = tasks != null && tasks.Any() ? tasks : new Issue[] { story };
+            // Worklogs may also be saved against stories
+            var tasksToCheck = tasks == null ? new List<Issue>() : tasks.ToList();
+            tasksToCheck.Add(story);
+
             var action = "Process Story Completion: Record Work Logs";
 
             try
@@ -277,7 +279,7 @@ namespace DevStats.Domain.Jira
                 var tempoResult = jiraSender.Post(url, tempoParams);
                 var workLogs = convertor.Deserialize<List<WorkLog>>(tempoResult.Response);
 
-                var storyEffort = new StoryEffort(story, tasks, workLogs);
+                var storyEffort = new StoryEffort(story, tasksToCheck, workLogs);
 
                 workLogRepository.Save(storyEffort);
                 loggingRepository.Log(story.Id, story.Key, action, string.Empty, true);

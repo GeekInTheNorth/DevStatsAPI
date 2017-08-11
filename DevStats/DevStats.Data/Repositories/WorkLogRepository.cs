@@ -29,7 +29,7 @@ namespace DevStats.Data.Repositories
                 TShirtSize = storyEffort.TShirtSize,
                 WorkLogTasks = storyEffort.Tasks.Select(x => new WorkLogTask
                 {
-                    Activity = x.Activity,
+                    Activity = storyEffort.Key == x.Key ? "Dev" : x.Activity,
                     ActualTimeInSeconds = x.ActualTime,
                     Complexity = x.Complexity,
                     Description = x.Description,
