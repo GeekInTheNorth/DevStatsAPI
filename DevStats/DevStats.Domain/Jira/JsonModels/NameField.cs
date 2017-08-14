@@ -2,15 +2,20 @@
 
 namespace DevStats.Domain.Jira.JsonModels
 {
-    public class Parent
+    public class NameField
     {
         [JsonProperty("id")]
         public string Id { get; set; }
 
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
         [JsonProperty("key")]
         public string Key { get; set; }
 
-        [JsonProperty("fields")]
-        public Fields Fields { get; set; }
+        public override string ToString()
+        {
+            return Name ?? string.Empty;
+        }
     }
 }

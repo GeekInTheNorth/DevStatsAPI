@@ -47,7 +47,7 @@ namespace DevStats.Domain.Jira
             }
         }
 
-        private string GetValue(ComplexField field)
+        private string GetValue(ValueField field)
         {
             if (field == null)
                 return string.Empty;
@@ -105,7 +105,7 @@ namespace DevStats.Domain.Jira
             }
         }
 
-        private string GetValue(ComplexField field)
+        private string GetValue(ValueField field)
         {
             if (field == null)
                 return string.Empty;

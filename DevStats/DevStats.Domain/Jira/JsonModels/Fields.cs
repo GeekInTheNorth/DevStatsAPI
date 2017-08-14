@@ -6,13 +6,13 @@ namespace DevStats.Domain.Jira.JsonModels
     public class Fields
     {
         [JsonProperty("parent")]
-        public Parent Parent { get; set; }
+        public Issue Parent { get; set; }
 
         [JsonProperty("fixVersions")]
         public FixVersion[] FixVersions { get; set; }
 
         [JsonProperty("priority")]
-        public Priority Priority { get; set; }
+        public NameField Priority { get; set; }
 
         [JsonProperty("customfield_10100")]
         public object EpicLink { get; set; }
@@ -24,7 +24,7 @@ namespace DevStats.Domain.Jira.JsonModels
         public User Assignee { get; set; }
 
         [JsonProperty("status")]
-        public Status Status { get; set; }
+        public NameField Status { get; set; }
 
         [JsonProperty("components")]
         public object[] Components { get; set; }
@@ -36,7 +36,7 @@ namespace DevStats.Domain.Jira.JsonModels
         public double? BusinessValue { get; set; }
 
         [JsonProperty("customfield_13716")]
-        public ComplexField OctopusModule { get; set; }
+        public ValueField OctopusModule { get; set; }
 
         [JsonProperty("creator")]
         public User Creator { get; set; }
@@ -54,19 +54,19 @@ namespace DevStats.Domain.Jira.JsonModels
         public string AcceptanceCriteria { get; set; }
 
         [JsonProperty("customfield_13702")]
-        public ComplexField ReviewOutcome { get; set; }
+        public ValueField ReviewOutcome { get; set; }
 
         [JsonProperty("customfield_13701")]
-        public ComplexField TaskType { get; set; }
+        public ValueField TaskType { get; set; }
 
         [JsonProperty("customfield_13704")]
-        public ComplexField TShirtSize { get; set; }
+        public ValueField TShirtSize { get; set; }
 
         [JsonProperty("customfield_13703")]
-        public ComplexField Complexity { get; set; }
+        public ValueField Complexity { get; set; }
 
         [JsonProperty("customfield_13709")]
-        public ComplexField Refinement { get; set; }
+        public ValueField Refinement { get; set; }
 
         [JsonProperty("progress")]
         public Progress Progress { get; set; }
@@ -81,10 +81,10 @@ namespace DevStats.Domain.Jira.JsonModels
         public object Timespent { get; set; }
 
         [JsonProperty("project")]
-        public Project Project { get; set; }
+        public NameField Project { get; set; }
 
         [JsonProperty("customfield_13700")]
-        public ComplexField CascadeTeam { get; set; }
+        public ValueField CascadeTeam { get; set; }
 
         [JsonProperty("resolutiondate")]
         public DateTime? Resolutiondate { get; set; }
@@ -117,9 +117,12 @@ namespace DevStats.Domain.Jira.JsonModels
         public DateTime? Duedate { get; set; }
 
         [JsonProperty("customfield_13715")]
-        public ComplexField PayrollModule { get; set; }
+        public ValueField PayrollModule { get; set; }
 
         [JsonProperty("customfield_13714")]
-        public ComplexField HRModule { get; set; }
+        public ValueField HRModule { get; set; }
+
+        [JsonProperty("timetracking")]
+        public TimeTracking TimeTracking { get; set; }
     }
 }
