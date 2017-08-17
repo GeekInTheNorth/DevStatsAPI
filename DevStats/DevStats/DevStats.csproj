@@ -151,7 +151,6 @@
     <Compile Include="Controllers\API\JiraStateCheckerController.cs" />
     <Compile Include="Controllers\API\JiraStoryUpdatedController.cs" />
     <Compile Include="Controllers\API\JiraSubtaskUpdatedController.cs" />
-    <Compile Include="Controllers\API\SprintController.cs" />
     <Compile Include="Controllers\MVC\DefectSummaryController.cs" />
     <Compile Include="Controllers\API\DefectTrackingController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />

@@ -14,8 +14,6 @@ namespace DevStats.Data
 
         public DbSet<Defect> Defects { get; set; }
 
-        public DbSet<Sprint> Sprints { get; set; }
-
         public DbSet<JiraLog> JiraLogs { get; set; }
 
         public DbSet<WorkLogStory> WorkLogStories { get; set; }

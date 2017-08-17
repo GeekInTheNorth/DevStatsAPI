@@ -19,7 +19,6 @@ namespace DevStats
             // Repositories
             container.RegisterType<IBurndownRepository, BurndownRepository>();
             container.RegisterType<IDefectRepository, DefectRepository>();
-            container.RegisterType<ISprintRepository, SprintRepository>();
             container.RegisterType<IJiraLogRepository, JiraLogRepository>();
             container.RegisterType<IProjectsRepository, ProjectsRepository>();
             container.RegisterType<IWorkLogRepository, WorkLogRepository>();
@@ -30,7 +29,6 @@ namespace DevStats
 
             // Services
             container.RegisterType<IDefectService, DefectService>();
-            container.RegisterType<ISprintService, SprintService>();
             container.RegisterType<IJiraService, JiraService>();
             container.RegisterType<ISprintPlannerService, SprintPlannerService>();
 

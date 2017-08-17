@@ -100,12 +100,8 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sprints\ISprintPlannerService.cs" />
-    <Compile Include="Sprints\ISprintRepository.cs" />
-    <Compile Include="Sprints\ISprintService.cs" />
-    <Compile Include="Sprints\Sprint.cs" />
     <Compile Include="Sprints\SprintInformation.cs" />
     <Compile Include="Sprints\SprintPlannerService.cs" />
-    <Compile Include="Sprints\SprintService.cs" />
     <Compile Include="Sprints\SprintStory.cs" />
   </ItemGroup>
   <ItemGroup>
