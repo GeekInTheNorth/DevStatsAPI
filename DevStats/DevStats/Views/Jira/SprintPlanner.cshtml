@@ -1,0 +1,27 @@
+﻿@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+    Page.Title = "Jira Sprint Planner";
+}
+
+<div class="filter">
+    <span class="filter-label">Team:</span>
+    <select id="ddlTeam">
+        <option value="Cobra">Cobra</option>
+        <option value="Rocket">Rocket</option>
+        <option value="Wolf">Wolf</option>
+    </select>
+    <span class="filter-label">Sprints:</span>
+    <select id="ddlSprints"></select>
+</div>
+
+<div class="please-wait">Please Wait ... querying data ...</div>
+
+<div id="sprint-content">
+
+</div>
+<br />
+<div id="refined-items">
+
+</div>
+
+<script src="../Scripts/SprintPlanner.js"></script>

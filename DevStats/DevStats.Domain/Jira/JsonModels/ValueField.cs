@@ -5,7 +5,7 @@ namespace DevStats.Domain.Jira.JsonModels
     public class ValueField
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("value")]
         public string Value { get; set; }

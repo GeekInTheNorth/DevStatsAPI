@@ -131,6 +131,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <None Include="Scripts\jquery-3.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-3.1.1.js" />
+    <Content Include="Scripts\jquery-3.1.1.min.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.js" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.js" />
+    <Content Include="Scripts\SprintPlanner.js" />
     <Content Include="Styles\DevStats.css" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -141,6 +147,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\BurndownController.cs" />
     <Compile Include="Controllers\API\JiraCreateSubtasksController.cs" />
+    <Compile Include="Controllers\API\JiraSprintPlanningController.cs" />
     <Compile Include="Controllers\API\JiraStateCheckerController.cs" />
     <Compile Include="Controllers\API\JiraStoryUpdatedController.cs" />
     <Compile Include="Controllers\API\JiraSubtaskUpdatedController.cs" />
@@ -173,6 +180,9 @@
     <Content Include="Views\Jira\ApiTest.cshtml" />
     <Content Include="Views\Jira\StateChecker.cshtml" />
     <Content Include="Views\Jira\DefectAnalysis.cshtml" />
+    <Content Include="Views\Jira\SprintPlanner.cshtml" />
+    <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.1.1.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

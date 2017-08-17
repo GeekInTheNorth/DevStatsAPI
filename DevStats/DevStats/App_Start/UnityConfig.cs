@@ -32,6 +32,7 @@ namespace DevStats
             container.RegisterType<IDefectService, DefectService>();
             container.RegisterType<ISprintService, SprintService>();
             container.RegisterType<IJiraService, JiraService>();
+            container.RegisterType<ISprintPlannerService, SprintPlannerService>();
 
             DependencyResolver.SetResolver(new Unity.Mvc5.UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);

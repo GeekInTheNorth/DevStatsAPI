@@ -100,5 +100,11 @@ namespace DevStats.Controllers.MVC
 
             return View(model);
         }
+
+        [HttpGet]
+        public ActionResult SprintPlanner()
+        {
+            return View();
+        }
     }
 }

@@ -50,10 +50,9 @@ input.jira-id {
     text-transform: uppercase;
 }
 
-div.error-message, div.success-message {
+div.error-message, div.success-message, div.please-wait {
     padding: 3px;
     color: black;
-    width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -66,6 +65,11 @@ div.error-message {
 div.success-message {
     border: 1px solid green;
     background-color: #AAFFAA;
+}
+
+div.please-wait {
+    border: 1px solid orange;
+    background-color: goldenrod;
 }
 
 div.header {

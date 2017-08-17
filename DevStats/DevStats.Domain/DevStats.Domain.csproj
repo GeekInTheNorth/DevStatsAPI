@@ -66,6 +66,7 @@
     <Compile Include="Jira\JiraDefect.cs" />
     <Compile Include="Jira\JiraSender.cs" />
     <Compile Include="Jira\JsonModels\IssueTransition.cs" />
+    <Compile Include="Jira\JsonModels\NameCollection.cs" />
     <Compile Include="Jira\JsonModels\NameField.cs" />
     <Compile Include="Jira\JsonModels\TempoSearchParameters.cs" />
     <Compile Include="Jira\JsonModels\TimeTracking.cs" />
@@ -98,10 +99,14 @@
       <DependentUpon>JsonFiles.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sprints\ISprintPlannerService.cs" />
     <Compile Include="Sprints\ISprintRepository.cs" />
     <Compile Include="Sprints\ISprintService.cs" />
     <Compile Include="Sprints\Sprint.cs" />
+    <Compile Include="Sprints\SprintInformation.cs" />
+    <Compile Include="Sprints\SprintPlannerService.cs" />
     <Compile Include="Sprints\SprintService.cs" />
+    <Compile Include="Sprints\SprintStory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
