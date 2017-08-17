@@ -86,6 +86,10 @@
     <Compile Include="Migrations\201708080839181_JiraWorkLogs.Designer.cs">
       <DependentUpon>201708080839181_JiraWorkLogs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708171219555_RemoveDefunctSprintData.cs" />
+    <Compile Include="Migrations\201708171219555_RemoveDefunctSprintData.Designer.cs">
+      <DependentUpon>201708171219555_RemoveDefunctSprintData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -129,6 +133,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708080839181_JiraWorkLogs.resx">
       <DependentUpon>201708080839181_JiraWorkLogs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708171219555_RemoveDefunctSprintData.resx">
+      <DependentUpon>201708171219555_RemoveDefunctSprintData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
