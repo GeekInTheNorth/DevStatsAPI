@@ -15,6 +15,8 @@ namespace DevStats.Domain.Sprints
 
         public string Type { get; private set; }
 
+        public string Refinement { get; private set; }
+
         public string State { get; private set; }
 
         public int DevelopmentRemainingInSeconds { get; private set; }
@@ -44,6 +46,7 @@ namespace DevStats.Domain.Sprints
             Description = story.Fields.Summary;
             Type = story.Fields.Issuetype.Name;
             State = story.Fields.Status.Name;
+            Refinement = story.Fields.Refinement.Value;
             DevelopmentRemainingInSeconds = tasksForStory.Where(x => !testingTaskTypes.Contains(x.Fields.TaskType.Value))
                                                          .Sum(x => x.Fields.TimeTracking.TimeRemainingInSeconds);
             TestingRemainingInSeconds = tasksForStory.Where(x => testingTaskTypes.Contains(x.Fields.TaskType.Value))
@@ -52,7 +55,7 @@ namespace DevStats.Domain.Sprints
 
         private decimal SecondsToHours(decimal seconds)
         {
-            var hours = seconds / (60.0M * 60.0M * 6.1M);
+            var hours = seconds / (60.0M * 60.0M);
             return Math.Round(hours, 2);
         }
     }

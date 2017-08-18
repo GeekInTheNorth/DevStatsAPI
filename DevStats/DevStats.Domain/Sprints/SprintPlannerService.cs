@@ -14,7 +14,7 @@ namespace DevStats.Domain.Sprints
         private readonly IJiraLogRepository loggingRepository;
         private readonly IJiraSender jiraSender;
         private readonly IProjectsRepository projectsRepository;
-        private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,customfield_13701";
+        private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,customfield_13701,customfield_13709";
 
         public SprintPlannerService(IJiraLogRepository loggingRepository, IJiraSender jiraSender, IProjectsRepository projectsRepository)
         {
@@ -86,7 +86,7 @@ namespace DevStats.Domain.Sprints
             {
                 var apiRoot = GetApiRoot();
                 var projects = projectsRepository.Get();
-                var jql = "project in ({0}) AND issuetype in standardIssueTypes() AND \"Cascade Team\" = {1} AND Refinement = \"Ready\" AND Status = \"To Do\" AND Sprint != {2}";
+                var jql = "project in ({0}) AND issuetype in standardIssueTypes() AND \"Cascade Team\" = {1} AND Status = \"To Do\" AND Sprint != {2}";
                 jql = string.Format(jql, string.Join(",", projects), owningTeam, currentSprint);
 
                 var url = string.Format(JiraIssueSearchPath, apiRoot, WebUtility.UrlEncode(jql));

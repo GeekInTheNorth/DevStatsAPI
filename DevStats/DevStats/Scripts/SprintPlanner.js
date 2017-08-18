@@ -70,12 +70,14 @@ function getSprintStories(boardid, sprintid) {
 }
 
 function fillSprintStories(data) {
-    $("div#sprint-content").html("<table id='tblsprintstories' class='defectdata'><thead><tr><th>Key</th><th>Description</th><th>Type</th><th>State</th><th class='numeric'>Dev Remaining</th><th class='numeric'>QA Remaining</th></tr></thead><tbody></tbody></table>");
+    $("div#sprint-content").html("<table id='tblsprintstories' class='defectdata'><thead><tr><th>Key</th><th>Description</th><th>Type</th><th>Refinement</th><th>State</th><th class='numeric'>Dev Remaining</th><th class='numeric'>QA Remaining</th></tr></thead><tbody></tbody></table>");
 
     $.each(data, function (dataIndex) {
         var dataItem = data[dataIndex];
         $("#tblsprintstories > tbody").append(getRowMarkUp(dataItem));
     });
+
+    addTotalRow("tblsprintstories");
 }
 
 function getRefinedStories(team, sprintid) {
@@ -87,12 +89,14 @@ function getRefinedStories(team, sprintid) {
 }
 
 function fillRefinedStories(data) {
-    $("div#refined-items").html("<table id='tblrefinedstories' class='defectdata'><thead><tr><th>Key</th><th>Description</th><th>Type</th><th>State</th><th class='numeric'>Dev Remaining</th><th class='numeric'>QA Remaining</th></tr></thead><tbody></tbody></table>");
+    $("div#refined-items").html("<table id='tblrefinedstories' class='defectdata'><thead><tr><th>Key</th><th>Description</th><th>Type</th><th>Refinement</th><th>State</th><th class='numeric'>Dev Remaining</th><th class='numeric'>QA Remaining</th></tr></thead><tbody></tbody></table>");
 
     $.each(data, function (dataIndex) {
         var dataItem = data[dataIndex];
         $("#tblrefinedstories > tbody").append(getRowMarkUp(dataItem));
     });
+
+    addTotalRow("tblrefinedstories");
 }
 
 function clearContainers() {
@@ -105,10 +109,36 @@ function getRowMarkUp(story) {
     markUp += "<td><a href='" + story.Url + "' target='_blank'>" + story.Key + "</a></td>";
     markUp += "<td>" + story.Description + "</td>";
     markUp += "<td>" + story.Type + "</td>";
+    markUp += "<td>" + story.Refinement + "</td>";
     markUp += "<td>" + story.State + "</td>";
     markUp += "<td class='numeric'>" + story.DevelopmentRemainingInHours + "</td>";
     markUp += "<td class='numeric'>" + story.TestingRemainingInHours + "</td>";
-    markUp += "<tr>";
+    markUp += "</tr>";
 
     return markUp;
+}
+
+function addTotalRow(tableName) {
+    var dataRows = $("#" + tableName).find("tbody>tr");
+    var firstRow = dataRows[0];
+    var totalDevRemaining = 0;
+    var totalQARemaining = 0;
+
+    $.each(dataRows, function (index) {
+        var dataRow = dataRows[index];
+        totalDevRemaining += parseFloat(dataRow.cells[5].innerText);
+        totalQARemaining += parseFloat(dataRow.cells[6].innerText);
+    });
+
+    var markUp = "<tfoot><tr>";
+    markUp += "<th>Total</th>";
+    markUp += "<th>&nbsp;</th>";
+    markUp += "<th>&nbsp;</th>";
+    markUp += "<th>&nbsp;</th>";
+    markUp += "<th>&nbsp;</th>";
+    markUp += "<th class='numeric'>" + totalDevRemaining.toFixed(2) + "</th>";
+    markUp += "<th class='numeric'>" + totalQARemaining.toFixed(2) + "</th>";
+    markUp += "</tr></tfoot>";
+
+    $("#" + tableName).append(markUp);
 }
