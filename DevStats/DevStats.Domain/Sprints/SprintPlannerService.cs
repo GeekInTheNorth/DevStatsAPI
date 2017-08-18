@@ -86,7 +86,7 @@ namespace DevStats.Domain.Sprints
             {
                 var apiRoot = GetApiRoot();
                 var projects = projectsRepository.Get();
-                var jql = "project in ({0}) AND issuetype in standardIssueTypes() AND \"Cascade Team\" = {1} AND Status = \"To Do\" AND Sprint != {2}";
+                var jql = "project in ({0}) AND issuetype in standardIssueTypes() AND \"Cascade Team\" = {1} AND Status = \"To Do\"AND (Sprint = NULL OR Sprint != {2})";
                 jql = string.Format(jql, string.Join(",", projects), owningTeam, currentSprint);
 
                 var url = string.Format(JiraIssueSearchPath, apiRoot, WebUtility.UrlEncode(jql));
