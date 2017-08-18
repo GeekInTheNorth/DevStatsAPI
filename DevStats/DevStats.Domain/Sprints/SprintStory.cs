@@ -51,6 +51,9 @@ namespace DevStats.Domain.Sprints
                                                          .Sum(x => x.Fields.TimeTracking.TimeRemainingInSeconds);
             TestingRemainingInSeconds = tasksForStory.Where(x => testingTaskTypes.Contains(x.Fields.TaskType.Value))
                                                      .Sum(x => x.Fields.TimeTracking.TimeRemainingInSeconds);
+
+            if (Type == "Task" && DevelopmentRemainingInHours == 0 && story.Fields.TimeTracking != null)
+                DevelopmentRemainingInSeconds = story.Fields.TimeTracking.TimeRemainingInSeconds;
         }
 
         private decimal SecondsToHours(decimal seconds)
