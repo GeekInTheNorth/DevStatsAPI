@@ -21,11 +21,11 @@ table.defectdata td, table.defectdata th {
     padding: 2px;
 }
 
-table.defectdata td.text {
+table.defectdata td.text, table.defectdata th.numeric {
     text-align: left;
 }
 
-table.defectdata td.numeric {
+table.defectdata td.numeric, table.defectdata th.numeric {
     text-align: right;
 }
 
@@ -93,4 +93,18 @@ a.header-button {
 
 tr.audit-fail {
     background-color: salmon !important;
+}
+
+a.delete-button {
+    color: red;
+    cursor: pointer;
+}
+
+a.add-button {
+    color: green;
+    cursor: pointer;
+}
+
+a.delete-button:hover, a.add-button:hover {
+    text-decoration: underline;
 }
