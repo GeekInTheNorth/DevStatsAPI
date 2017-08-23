@@ -54,7 +54,7 @@ namespace DevStats.Domain.Sprints
             catch (Exception ex)
             {
                 loggingRepository.Log("n/a", "n/a", "Sprint Planning: Get Sprints", ex.Message, false);
-                throw ex;
+                throw new Exception("Failed to get sprints", ex);
             }
 
             return sprintInfos.OrderBy(x => x.SprintName);
@@ -76,7 +76,7 @@ namespace DevStats.Domain.Sprints
             catch (Exception ex)
             {
                 loggingRepository.Log("n/a", "n/a", "Sprint Planning: Get Sprint Items", ex.Message, false);
-                throw ex;
+                throw new Exception("Failed to get sprint items", ex);
             }
         }
 
@@ -105,7 +105,7 @@ namespace DevStats.Domain.Sprints
             catch(Exception ex)
             {
                 loggingRepository.Log("n/a", "n/a", "Sprint Planning: Get Refined Items", ex.Message, false);
-                throw ex;
+                throw new Exception("Failed to get backlog items", ex);
             }
         }
 
