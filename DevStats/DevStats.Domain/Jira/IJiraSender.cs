@@ -8,6 +8,8 @@
 
         PostResult Post(string url, string package);
 
+        PostResult Put<T>(string url, T objectToSend);
+
         PostResult Put(string url, string package);
     }
 }

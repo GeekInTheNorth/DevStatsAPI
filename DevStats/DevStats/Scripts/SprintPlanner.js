@@ -18,7 +18,7 @@ $(document).ready(function () {
 function onSprintChange() {
     completedSprintStories = false;
     completedBacklogStories = false;
-    $("#btnRefresh").attr('disabled', 'disabled');
+    setButtonState(false);
     
     clearContainers();
 
@@ -75,7 +75,7 @@ function getSprintStories(boardid, sprintid) {
         completedSprintStories = true;
 
         if (completedSprintStories && completedBacklogStories)
-            $("#btnRefresh").removeAttr('disabled', 'disabled');
+            setButtonState(true);
     });
 }
 
@@ -99,7 +99,7 @@ function getRefinedStories(team, sprintid) {
         completedBacklogStories = true;
 
         if (completedSprintStories && completedBacklogStories)
-            $("#btnRefresh").removeAttr('disabled', 'disabled');
+            setButtonState(true);
     });
 }
 
@@ -117,6 +117,9 @@ function fillRefinedStories(data) {
 function clearContainers() {
     $("div#sprint-content").empty();
     $("div#refined-items").empty();
+
+    $("div#sprint-content").text("Please Wait: Loading sprint data from Jira...");
+    $("div#refined-items").text("Please Wait: Loading backlog data from Jira...");
 }
 
 function getHeaderRowMarkUp(tableName) {
@@ -265,4 +268,60 @@ function onQaCapacityChange() {
     var qaRemainingCapacity = qaCapacity - totalQaRemaining;
 
     $("#qaRemainingCapacity").text(qaRemainingCapacity.toFixed(2));
+}
+
+function onSprintUpdate() {
+    var sprintOption = $("#ddlSprints").find(":selected");
+    var boardid = sprintOption.data("boardid");
+    var sprintid = sprintOption.data("sprintid");
+
+    var package = new Object();
+    package.Keys = [];
+    var $actionButtons = $("#tblsprintstories a.delete-button");
+
+    $.each($actionButtons, function (index) {
+        var button = $actionButtons[index];
+        var key = $(button).data("key");
+
+        package.Keys.push(key);
+    });
+
+    var commitSprintUrl = document.location.origin + '/api/sprintplanning/sprintstories/' + boardid + '/' + sprintid;   
+
+    $.post(commitSprintUrl, package)
+        .done(function (data, textStatus, jqXHR) { showSprintUpdateSuccess(data, textStatus, jqXHR); })
+        .fail(function (data, textStatus, jqXHR) { showSprintUpdateFail(data, textStatus, jqXHR); });
+}
+
+function setButtonState(newState) {
+    if (newState) {
+        $("#btnRefresh").removeAttr('disabled', 'disabled');
+        $("#btnCommit").removeAttr('disabled', 'disabled');
+    }
+    else {
+        $("#btnRefresh").attr('disabled', 'disabled');
+        $("#btnCommit").attr('disabled', 'disabled');
+    }
+}
+
+function showSprintUpdateSuccess(data, textStatus, jqXHR) {
+    $("#divFeedBack").removeClass("feedback-error");
+    $("#divFeedBack").removeClass("feedback-none");
+    $("#divFeedBack").addClass("feedback-success");
+
+    $("#feedback-label").text("Sprint successfully updated");
+}
+
+function showSprintUpdateFail(data, textStatus, jqXHR) {
+    $("#divFeedBack").removeClass("feedback-success");
+    $("#divFeedBack").removeClass("feedback-none");
+    $("#divFeedBack").addClass("feedback-error");
+
+    $("#feedback-label").text(textStatus + " : " + jqXHR);
+}
+
+function hideFeedback() {
+    $("#divFeedBack").removeClass("feedback-success");
+    $("#divFeedBack").removeClass("feedback-error");
+    $("#divFeedBack").addClass("feedback-none");
 }

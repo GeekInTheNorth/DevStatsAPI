@@ -146,6 +146,7 @@
     <Compile Include="Sprints\SprintInformation.cs" />
     <Compile Include="Sprints\SprintPlannerService.cs" />
     <Compile Include="Sprints\SprintStory.cs" />
+    <Compile Include="Sprints\StoryKeys.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

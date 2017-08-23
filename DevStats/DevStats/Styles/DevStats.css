@@ -126,3 +126,35 @@ a.menu-button {
 a.menu-button:hover {
     opacity: 1;
 }
+
+div.feedback-none, div.feedback-success, div.feedback-error {
+    width: 100%;
+}
+
+div.feedback-none {
+    display: none;
+}
+
+div.feedback-success {
+    background-color: green;
+    color: white;
+    display: inline-block;
+    padding: 3px;
+}
+
+div.feedback-error {
+    background-color: red;
+    color: white;
+    display: inline-block;
+    padding: 3px;
+}
+
+a.feedback-button {
+    display: inline-block;
+    font-weight: bolder;
+    margin-right: 10px;
+    color: white;
+    width: 25px;
+    text-align: center;
+    cursor: pointer;
+}

@@ -14,7 +14,11 @@ namespace DevStats.Domain.Sprints
         private readonly IJiraLogRepository loggingRepository;
         private readonly IJiraSender jiraSender;
         private readonly IProjectsRepository projectsRepository;
-        private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,customfield_13701,customfield_13709";
+        private const string IssueSearchPath = @"{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,customfield_13701,customfield_13709";
+        private const string GetSprintItemsPath = @"{0}/rest/agile/1.0/sprint/{1}/issue?maxResults=500";
+        private const string MoveToBacklogPath = @"{0}/rest/agile/1.0/backlog/issue";
+        private const string MoveToSprintPath = @"{0}/rest/agile/1.0/sprint/{1}/issue";
+        private const string UpdateSprintPath = @"{0}/rest/agile/1.0/sprint/{1}";
 
         public SprintPlannerService(IJiraLogRepository loggingRepository, IJiraSender jiraSender, IProjectsRepository projectsRepository)
         {
@@ -89,14 +93,14 @@ namespace DevStats.Domain.Sprints
                 var jql = "project in ({0}) AND issuetype in standardIssueTypes() AND \"Cascade Team\" = {1} AND Status = \"To Do\"AND (Sprint = NULL OR Sprint != {2})";
                 jql = string.Format(jql, string.Join(",", projects), owningTeam, currentSprint);
 
-                var url = string.Format(JiraIssueSearchPath, apiRoot, WebUtility.UrlEncode(jql));
+                var url = string.Format(IssueSearchPath, apiRoot, WebUtility.UrlEncode(jql));
                 var stories = jiraSender.Get<JiraIssues>(url).Issues;
 
                 if (!stories.Any()) return new List<SprintStory>();
 
                 var storyKeys = stories.Select(x => x.Key).ToArray();
                 jql = string.Format("parent in ({0})", string.Join(",", storyKeys));
-                url = string.Format(JiraIssueSearchPath, apiRoot, WebUtility.UrlEncode(jql));
+                url = string.Format(IssueSearchPath, apiRoot, WebUtility.UrlEncode(jql));
 
                 var tasks = jiraSender.Get<JiraIssues>(url).Issues;
 
@@ -109,9 +113,51 @@ namespace DevStats.Domain.Sprints
             }
         }
 
+        public void SetSprintContents(int boardId, int sprintId, IEnumerable<string> storyKeys)
+        {
+            var url = string.Format(GetSprintItemsPath, GetApiRoot(), sprintId);
+            var existingStoryKeys = jiraSender.Get<JiraIssues>(url).Issues.Where(x => !x.Fields.Issuetype.Subtask).Select(x => x.Key);
+
+            try
+            {
+                var storiesToRemove = existingStoryKeys.Where(x => !storyKeys.Contains(x));
+                var storiesToAdd = storyKeys.Where(x => !existingStoryKeys.Contains(x));
+
+                RemoveFromSprint(storiesToRemove);
+                AddToSprint(sprintId, storiesToAdd);
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log("n/a", "n/a", "Sprint Planning: Commit Sprint", ex.Message, false);
+                throw;
+            }
+        }
+
+        private void RemoveFromSprint(IEnumerable<string> keys)
+        {
+            if (keys == null || !keys.Any())
+                return;
+
+            var backlogUrl = string.Format(MoveToBacklogPath, GetApiRoot());
+            var result = jiraSender.Post(backlogUrl, new StoryKeys(keys));
+
+            loggingRepository.Log("n/a", "n/a", "Sprint Planning: Assign Stories to Backlog", result.Response, result.WasSuccessful);
+        }
+
+        private void AddToSprint(int sprintId, IEnumerable<string> keys)
+        {
+            if (keys == null || !keys.Any())
+                return;
+
+            var sprintUrl = string.Format(MoveToSprintPath, GetApiRoot(), sprintId);
+            var result = jiraSender.Post(sprintUrl, new StoryKeys(keys));
+
+            loggingRepository.Log("n/a", "n/a", "Sprint Planning: Assign Stories to Sprint", result.Response, result.WasSuccessful);
+        }
+
         private string GetApiRoot()
         {
             return ConfigurationManager.AppSettings.Get("JiraApiRoot") ?? string.Empty;
-        }       
+        }
     }
 }

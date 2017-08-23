@@ -203,6 +203,7 @@
     <Compile Include="Models\DefectSummary\DefectSummaryModel.cs" />
     <Compile Include="Models\DefectTracking\DefectModel.cs" />
     <Compile Include="Models\Jira\AuditModel.cs" />
+    <Compile Include="Models\Jira\CommitSprintModel.cs" />
     <Compile Include="Models\Jira\DefectAnalysisModel.cs" />
     <Compile Include="Models\Jira\StateCheckerModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

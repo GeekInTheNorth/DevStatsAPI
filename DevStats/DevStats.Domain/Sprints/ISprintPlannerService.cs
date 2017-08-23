@@ -9,5 +9,7 @@ namespace DevStats.Domain.Sprints
         IEnumerable<SprintStory> GetSprintItems(int boardId, int sprintId);
 
         IEnumerable<SprintStory> GetRefinedItems(string owningTeam, int currentSprint);
+
+        void SetSprintContents(int boardId, int sprintId, IEnumerable<string> storyKeys);
     }
 }
