@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using DevStats.Domain.Sprints;
 using DevStats.Domain.Jira;
 using DevStats.Domain.Jira.Logging;
+using DevStats.Domain.Security;
 
 namespace DevStats
 {
@@ -22,6 +23,7 @@ namespace DevStats
             container.RegisterType<IJiraLogRepository, JiraLogRepository>();
             container.RegisterType<IProjectsRepository, ProjectsRepository>();
             container.RegisterType<IWorkLogRepository, WorkLogRepository>();
+            container.RegisterType<IUserRepository, UserRepository>();
 
             // Utilities
             container.RegisterType<IJiraConvertor, JiraConvertor>();

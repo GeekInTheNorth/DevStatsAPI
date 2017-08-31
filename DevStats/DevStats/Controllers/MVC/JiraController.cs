@@ -2,12 +2,11 @@
 using System.Linq;
 using System.Web.Mvc;
 using DevStats.Domain.Jira;
-using DevStats.Filters;
 using DevStats.Models.Jira;
 
 namespace DevStats.Controllers.MVC
 {
-    [IPAccess]
+    [Authorize]
     public class JiraController : Controller
     {
         private readonly IJiraService service;

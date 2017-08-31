@@ -14,5 +14,11 @@
                 return context;
             }
         }
+
+        public void Dispose()
+        {
+            if (context != null)
+                context.Dispose();
+        }
     }
 }

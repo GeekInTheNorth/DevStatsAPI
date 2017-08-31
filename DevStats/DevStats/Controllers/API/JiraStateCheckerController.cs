@@ -5,11 +5,9 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using DevStats.Domain.Jira;
-using DevStats.Filters;
 
 namespace DevStats.Controllers.API
 {
-    [IPAccess]
     public class JiraStateCheckerController : ApiController
     {
         private readonly IJiraService service;

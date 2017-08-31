@@ -22,6 +22,8 @@ namespace DevStats.Data
 
         public DbSet<WorkLogEntry> WorkLogEntries { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

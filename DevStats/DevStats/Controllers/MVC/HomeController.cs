@@ -2,6 +2,7 @@
 
 namespace DevStats.Controllers.MVC
 {
+    [Authorize]
     public class HomeController : Controller
     {
         // GET: Home

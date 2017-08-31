@@ -1,0 +1,43 @@
+﻿@model DevStats.Models.Account.LoginModel
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+}
+
+<section id="loginForm">
+    @using (Html.BeginForm("Login", "Account"))
+    {
+        @Html.AntiForgeryToken()
+        <h1>Login to Devstats</h1>
+        <hr />
+        @Html.ValidationSummary(true)
+        <div>
+            @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.UserName)
+            </div>
+        </div>
+        <div>
+            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+            <div>
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Password)
+            </div>
+        </div>
+        <div>
+            <div>
+                <div>
+                    @Html.CheckBoxFor(m => m.RememberMe)
+                    @Html.LabelFor(m => m.RememberMe)
+                </div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <input type="submit" value="Log in" class="btn btn-default" />
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.ReturnUrl);
+    }
+</section>
