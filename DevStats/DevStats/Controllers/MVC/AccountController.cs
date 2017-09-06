@@ -31,20 +31,6 @@ namespace DevStats.Controllers.MVC
         {
             if (ModelState.IsValid)
             {
-                if (true == false)
-                {
-                    var hasher = new PasswordHasher();
-
-                    var newUser = new ApplicationUser
-                    {
-                        UserName = model.UserName,
-                        EmailAddress = "bob@bob.com",
-                        Role = "Admin",
-                        PasswordHash = hasher.HashPassword(model.Password)
-                    };
-                    await UserStore.CreateAsync(newUser);
-                }
-
                 Request.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                 var signInStatus = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
 
@@ -61,7 +47,7 @@ namespace DevStats.Controllers.MVC
                 }
             }
 
-            // If we got this far, something failed, redisplay form
+            // Model is not valid, show login prompt again
             return View(model);
         }
 

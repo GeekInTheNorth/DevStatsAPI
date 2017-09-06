@@ -1,6 +1,8 @@
-﻿namespace DevStats.Data.Repositories
+﻿using System;
+
+namespace DevStats.Data.Repositories
 {
-    public class BaseRepository
+    public class BaseRepository : IDisposable
     {
         private DevStatContext context;
 
