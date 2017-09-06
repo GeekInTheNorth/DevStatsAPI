@@ -4,13 +4,6 @@ using Microsoft.AspNet.Identity;
 
 namespace DevStats.Domain.Security
 {
-    public class ApplicationUserManager : UserManager<ApplicationUser, int>
-    {
-        public ApplicationUserManager(IUserPasswordStore<ApplicationUser, int> store) : base(store)
-        {
-        }
-    }
-
     public class ApplicationUserStore : IUserPasswordStore<ApplicationUser, int>, IUserLockoutStore<ApplicationUser, int>, IUserTwoFactorStore<ApplicationUser, int>
     {
         private readonly IUserRepository repository;
@@ -40,6 +33,12 @@ namespace DevStats.Domain.Security
         }
 
         public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposeAll)
         {
             repository.Dispose();
         }

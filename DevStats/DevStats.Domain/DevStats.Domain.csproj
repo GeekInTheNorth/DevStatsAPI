@@ -73,6 +73,12 @@
     <Compile Include="DefectAnalysis\DefectType.cs" />
     <Compile Include="DefectAnalysis\IDefectRepository.cs" />
     <Compile Include="DefectAnalysis\IDefectService.cs" />
+    <Compile Include="DeveloperKpi\DeveloperKpiService.cs" />
+    <Compile Include="DeveloperKpi\DeveloperQualityKPI.cs" />
+    <Compile Include="DeveloperKpi\IDeveloperKpiRepository.cs" />
+    <Compile Include="DeveloperKpi\IDeveloperKpiService.cs" />
+    <Compile Include="DeveloperKpi\StoryBreakdown.cs" />
+    <Compile Include="DeveloperKpi\StoryTask.cs" />
     <Compile Include="Jira\IJiraSender.cs" />
     <Compile Include="Jira\IProjectsRepository.cs" />
     <Compile Include="Jira\IWorkLogRepository.cs" />
@@ -114,6 +120,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\ApplicationUser.cs" />
+    <Compile Include="Security\ApplicationUserManager.cs" />
     <Compile Include="Security\ApplicationUserStore.cs" />
     <Compile Include="Security\IUserRepository.cs" />
     <Compile Include="Sprints\ISprintPlannerService.cs" />

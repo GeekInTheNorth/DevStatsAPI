@@ -107,6 +107,7 @@
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\BurndownRepository.cs" />
     <Compile Include="Repositories\DefectRepository.cs" />
+    <Compile Include="Repositories\DeveloperKpiRepository.cs" />
     <Compile Include="Repositories\JiraLogRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\WorkLogRepository.cs" />

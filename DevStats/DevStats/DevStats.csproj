@@ -183,6 +183,7 @@
     <Compile Include="Controllers\MVC\AccountController.cs" />
     <Compile Include="Controllers\MVC\DefectSummaryController.cs" />
     <Compile Include="Controllers\API\DefectTrackingController.cs" />
+    <Compile Include="Controllers\MVC\DeveloperKPIController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\MVC\JiraController.cs" />
     <Compile Include="Filters\IPAccessAttribute.cs" />
@@ -190,6 +191,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account\LoginModel.cs" />
+    <Compile Include="Models\DeveloperKPI\QualityKpiModel.cs" />
     <Compile Include="Models\Jira\ApiTestModel.cs" />
     <Compile Include="Models\DefectSummary\DefectSummaryModel.cs" />
     <Compile Include="Models\DefectTracking\DefectModel.cs" />
@@ -215,6 +217,7 @@
     <Content Include="Scripts\jquery-3.1.1.min.map" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\LogOff.cshtml" />
+    <Content Include="Views\DeveloperKPI\Quality.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
