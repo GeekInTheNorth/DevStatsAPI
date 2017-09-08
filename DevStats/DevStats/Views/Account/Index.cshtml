@@ -1,0 +1,30 @@
+﻿@model DevStats.Models.Account.IndexModel
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+    Page.Title = "Users";
+}
+
+<h1>Current Users</h1>
+
+<table class="defectdata">
+    <thead>
+        <tr>
+            <th class="text">User</th>
+            <th class="text">User Name</th>
+            <th class="text">Email Address</th>
+            <th class="text">Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var user in Model.Users)
+        {
+            <tr>
+                <td class="text">@user.User</td>
+                <td class="text">@user.UserName</td>
+                <td class="text">@user.EmailAddress</td>
+                <td class="text">@user.Role</td>
+            </tr>
+        }
+    </tbody>
+</table>

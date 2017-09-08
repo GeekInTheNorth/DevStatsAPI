@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DevStats.Domain.Security
 {
@@ -12,7 +13,11 @@ namespace DevStats.Domain.Security
 
         Task<ApplicationUser> FindByNameAsync(string userName);
 
+        Task<ApplicationUser> FindByEmailAsync(string emailAddress);
+
         Task UpdateAsync(ApplicationUser user);
+
+        IEnumerable<ApplicationUser> Get();
 
         void Dispose();
     }

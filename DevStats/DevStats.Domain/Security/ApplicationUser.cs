@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using System;
+using Microsoft.AspNet.Identity;
 
 namespace DevStats.Domain.Security
 {
@@ -13,6 +14,10 @@ namespace DevStats.Domain.Security
         public string Role { get; set; }
 
         public string PasswordHash { get; set; }
+
+        public string PasswordResetToken { get; set; }
+
+        public DateTime? PasswordResetTokenExpiry { get; set; }
 
         public int AccessAttempts { get; set; }
     }

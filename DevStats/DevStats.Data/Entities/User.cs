@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DevStats.Data.Entities
 {
@@ -14,5 +15,11 @@ namespace DevStats.Data.Entities
         public string Role { get; set; }
 
         public string PasswordHash { get; set; }
+
+        public int LoginErrors { get; set; }
+
+        public string PasswordResetToken { get; set; }
+
+        public DateTime? PasswordResetTokenExpiry { get; set; }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
 
 namespace DevStats.Domain.Security
 {
-    public class ApplicationUserStore : IUserPasswordStore<ApplicationUser, int>, IUserLockoutStore<ApplicationUser, int>, IUserTwoFactorStore<ApplicationUser, int>
+    public class ApplicationUserStore : IApplicationUserStore<ApplicationUser, int>
     {
         private readonly IUserRepository repository;
 
@@ -111,7 +111,7 @@ namespace DevStats.Domain.Security
         {
             user.PasswordHash = passwordHash;
 
-            return Task.CompletedTask;
+            return repository.UpdateAsync(user);
         }
 
         public Task SetTwoFactorEnabledAsync(ApplicationUser user, bool enabled)
@@ -122,6 +122,55 @@ namespace DevStats.Domain.Security
         public Task UpdateAsync(ApplicationUser user)
         {
             return repository.UpdateAsync(user);
+        }
+
+        public IEnumerable<ApplicationUser> GetUsers()
+        {
+            return repository.Get();
+        }
+
+        public Task SetEmailAsync(ApplicationUser user, string email)
+        {
+            user.EmailAddress = email;
+
+            return repository.UpdateAsync(user);
+        }
+
+        public Task<string> GetEmailAsync(ApplicationUser user)
+        {
+            return Task.FromResult(user.EmailAddress);
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(ApplicationUser user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SetEmailConfirmedAsync(ApplicationUser user, bool confirmed)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApplicationUser> FindByEmailAsync(string email)
+        {
+            return repository.FindByEmailAsync(email);
+        }
+
+        public Task SetSecurityStampAsync(ApplicationUser user, string stamp)
+        {
+            user.PasswordResetToken = stamp;
+            user.PasswordResetTokenExpiry = DateTime.Now.AddDays(1);
+
+            return repository.UpdateAsync(user);
+        }
+
+        public Task<string> GetSecurityStampAsync(ApplicationUser user)
+        {
+            var expiry = user.PasswordResetTokenExpiry ?? DateTime.MinValue;
+            var token = user.PasswordResetTokenExpiry < DateTime.Now ? "Error" : user.PasswordResetToken;
+            token = token ?? string.Empty;
+
+            return Task.FromResult(token);
         }
     }
 }

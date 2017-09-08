@@ -101,6 +101,10 @@
     <Compile Include="Migrations\201708301040504_AddUsers.Designer.cs">
       <DependentUpon>201708301040504_AddUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709080635099_AddPasswordReset.cs" />
+    <Compile Include="Migrations\201709080635099_AddPasswordReset.Designer.cs">
+      <DependentUpon>201709080635099_AddPasswordReset.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -152,6 +156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708301040504_AddUsers.resx">
       <DependentUpon>201708301040504_AddUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709080635099_AddPasswordReset.resx">
+      <DependentUpon>201709080635099_AddPasswordReset.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

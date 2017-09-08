@@ -1,0 +1,41 @@
+﻿@model  DevStats.Models.Account.RegisterModel
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+    Page.Title = "Register User";
+}
+
+<section id="loginForm">
+    @using (Html.BeginForm("Register", "Account"))
+    {
+        @Html.AntiForgeryToken()
+        <h1>Create User</h1>
+        <hr />
+        @Html.ValidationSummary(true)
+        <div>
+            @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+            <div>
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.UserName)
+            </div>
+        </div>
+        <div>
+            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+            <div>
+                @Html.EditorFor(m => m.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Email)
+            </div>
+        </div>
+        <div>
+            @Html.LabelFor(m => m.Role, new { @class = "col-md-2 control-label" })
+            <div>
+                @Html.DropDownListFor(m => m.Role, new SelectList(Model.Roles))
+            </div>
+        </div>
+        <div>
+            <div>
+                <input type="submit" value="Create User" class="btn btn-default" />
+            </div>
+        </div>
+    }
+</section>
