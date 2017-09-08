@@ -26,7 +26,7 @@ namespace DevStats.Domain.DeveloperKpi
         {
             Stories = stories != null ? stories.ToList() : new List<StoryBreakdown>();
             TotalProportionalWork = Math.Round(stories.Sum(x => x.TotalDuration * x.DeveloperProportion), 2);
-            TotalProportionalRework = Math.Round(stories.Sum(x => x.ReworkDuration * x.ReworkProportion), 2);
+            TotalProportionalRework = Math.Round(stories.Sum(x => x.ReworkDuration * x.DeveloperProportion), 2);
         }
 
         private decimal GetProportionOfTime(decimal totalTime, decimal proportionalTime)
