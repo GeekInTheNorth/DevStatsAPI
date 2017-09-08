@@ -17,7 +17,7 @@ namespace DevStats.Domain.DeveloperKpi
 
         public bool IsOnTrack
         {
-            get { return TotalReworkProportion < 12.5M; }
+            get { return TotalReworkProportion < 0.125M; }
         }
 
         public List<StoryBreakdown> Stories { get; private set; }
