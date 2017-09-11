@@ -11,7 +11,7 @@ namespace DevStats.Domain.Security
 
         Task<ApplicationUser> FindByIdAsync(int userId);
 
-        Task<ApplicationUser> FindByNameAsync(string userName);
+        Task<ApplicationUser> FindByNameOrEmail(string searchText);
 
         Task<ApplicationUser> FindByEmailAsync(string emailAddress);
 

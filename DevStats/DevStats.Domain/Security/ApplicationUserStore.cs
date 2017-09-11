@@ -17,7 +17,7 @@ namespace DevStats.Domain.Security
 
         public async Task CreateAsync(ApplicationUser user)
         {
-            var userFound = await repository.FindByNameAsync(user.UserName);
+            var userFound = await repository.FindByNameOrEmail(user.UserName);
 
             if (userFound != null)
                 throw new Exception("User Exists");
@@ -50,7 +50,7 @@ namespace DevStats.Domain.Security
 
         public Task<ApplicationUser> FindByNameAsync(string userName)
         {
-            return repository.FindByNameAsync(userName);
+            return repository.FindByNameOrEmail(userName);
         }
 
         public Task<int> GetAccessFailedCountAsync(ApplicationUser user)

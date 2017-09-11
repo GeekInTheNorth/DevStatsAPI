@@ -54,9 +54,9 @@ namespace DevStats.Data.Repositories
             return Task.FromResult(domainUser);
         }
 
-        public Task<ApplicationUser> FindByNameAsync(string userName)
+        public Task<ApplicationUser> FindByNameOrEmail(string searchText)
         {
-            var user = Context.Users.FirstOrDefault(x => x.UserName == userName);
+            var user = Context.Users.FirstOrDefault(x => x.UserName == searchText || x.EmailAddress == searchText);
 
             if (user == null) return Task.FromResult<ApplicationUser>(null);
 

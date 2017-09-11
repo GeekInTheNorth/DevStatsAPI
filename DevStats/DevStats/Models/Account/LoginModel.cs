@@ -5,7 +5,7 @@ namespace DevStats.Models.Account
     public class LoginModel
     {
         [Required]
-        [Display(Name = "User name")]
+        [Display(Name = "User name or Email Address")]
         public string UserName { get; set; }
 
         [Required]
