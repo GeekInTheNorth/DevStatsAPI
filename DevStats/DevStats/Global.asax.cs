@@ -15,9 +15,6 @@ namespace DevStats
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-
-            if (!HttpContext.Current.IsDebuggingEnabled)
-                GlobalFilters.Filters.Add(new RequireHttpsAttribute());
         }
     }
 }
