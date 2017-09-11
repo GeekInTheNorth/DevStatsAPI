@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using DevStats.Filters;
 
 namespace DevStats
 {
@@ -8,7 +7,6 @@ namespace DevStats
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
-            filters.Add(new IPAccessAttribute());
         }
     }
 }

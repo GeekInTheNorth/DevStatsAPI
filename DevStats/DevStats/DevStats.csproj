@@ -186,7 +186,6 @@
     <Compile Include="Controllers\MVC\DeveloperKPIController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\MVC\JiraController.cs" />
-    <Compile Include="Filters\IPAccessAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
