@@ -64,5 +64,17 @@
             </tr>
         }
 
+        <tfoot>
+            <tr>
+                <th class="text" colspan="2">Totals</th>
+                <th class="numeric">@FormatTime(Model.TotalDevTaskDuration)</th>
+                <th class="numeric">@FormatTime(Model.TotalDevTaskDurationByDeveloper)</th>
+                <th class="numeric">&nbsp;</th>
+                <th class="numeric">@FormatTime(Model.TotalDuration)</th>
+                <th class="numeric">@FormatTime(Model.TotalReworkDuration)</th>
+                <th class="numeric">&nbsp;</th>
+                <th class="text">&nbsp;</th>
+            </tr>
+        </tfoot>
     </table>
 }

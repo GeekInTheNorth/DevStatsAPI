@@ -14,6 +14,50 @@ namespace DevStats.Models.DeveloperKPI
 
         public DeveloperQualityKPI Quality { get; set; }
 
+        public int TotalDevTaskDuration
+        {
+            get
+            {
+                if (Quality == null || Quality.Stories == null || !Quality.Stories.Any())
+                    return 0;
+
+                return Quality.Stories.Sum(x => x.TotalPlannedDevelopment);
+            }
+        }
+
+        public int TotalDevTaskDurationByDeveloper
+        {
+            get
+            {
+                if (Quality == null || Quality.Stories == null || !Quality.Stories.Any())
+                    return 0;
+
+                return Quality.Stories.Sum(x => x.TotalPlannedDevelopmentByDeveloper);
+            }
+        }
+
+        public int TotalDuration
+        {
+            get
+            {
+                if (Quality == null || Quality.Stories == null || !Quality.Stories.Any())
+                    return 0;
+
+                return Quality.Stories.Sum(x => x.TotalDuration);
+            }
+        }
+
+        public int TotalReworkDuration
+        {
+            get
+            {
+                if (Quality == null || Quality.Stories == null || !Quality.Stories.Any())
+                    return 0;
+
+                return Quality.Stories.Sum(x => x.ReworkDuration);
+            }
+        }
+
         public QualityKpiModel(Dictionary<string, string> developers, string userName, bool isAdmin) : this(developers, userName, isAdmin, userName)
         {
         }
@@ -26,7 +70,7 @@ namespace DevStats.Models.DeveloperKPI
             if (Developers.Any(x => x.Key == selectedDeveloper))
                 SelectedDeveloper = selectedDeveloper;
             else if (Developers.Any())
-                    SelectedDeveloper = Developers.First().Key;
+                SelectedDeveloper = Developers.First().Key;
         }
     }
 }
