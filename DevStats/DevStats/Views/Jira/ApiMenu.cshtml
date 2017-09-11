@@ -1,0 +1,8 @@
+﻿@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+    Page.Title = "Jira API Tools";
+}
+
+@Html.ActionLink("API Audit", "Audit", "Jira", null, new { @class = "menu-button" })
+@Html.ActionLink("API Execution", "ApiTest", "Jira", null, new { @class = "menu-button" })
+@Html.ActionLink("State Checker", "StateChecker", "Jira", null, new { @class = "menu-button" })

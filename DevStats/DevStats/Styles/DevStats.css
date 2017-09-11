@@ -105,3 +105,24 @@ a.add-button {
 a.delete-button:hover, a.add-button:hover {
     text-decoration: underline;
 }
+
+a.menu-button {
+    margin: 5px;
+    height: 100px;
+    width: 100px;
+    background-color: dodgerblue;
+    color: white;
+    display: inline-block;
+    font-size: 1.4em;
+    float: left;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    opacity: 0.8;
+    vertical-align: middle;
+    padding: 1em;
+}
+
+a.menu-button:hover {
+    opacity: 1;
+}

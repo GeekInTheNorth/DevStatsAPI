@@ -105,5 +105,10 @@ namespace DevStats.Controllers.MVC
         {
             return View();
         }
+
+        public ActionResult ApiMenu()
+        {
+            return View();
+        }
     }
 }

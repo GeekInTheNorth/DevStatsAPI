@@ -227,6 +227,7 @@
     <Content Include="Views\Account\ResetPasswordRequest.cshtml" />
     <Content Include="Views\Account\ResetPasswordRequestSent.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Jira\ApiMenu.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
