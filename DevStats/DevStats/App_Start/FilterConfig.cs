@@ -1,5 +1,5 @@
-﻿using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
+using DevStats.Filters;
 
 namespace DevStats
 {
@@ -8,9 +8,7 @@ namespace DevStats
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
-
-            if (!HttpContext.Current.IsDebuggingEnabled)
-                GlobalFilters.Filters.Add(new RequireHttpsAttribute());
+            filters.Add(new RequreSecureConnectionFilter());
         }
     }
 }
