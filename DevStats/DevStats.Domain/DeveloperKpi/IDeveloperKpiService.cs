@@ -7,5 +7,7 @@ namespace DevStats.Domain.DeveloperKpi
         Dictionary<string, string> GetDevelopers();
 
         DeveloperQualityKPI GetQualityKpi(string developer);
+
+        Dictionary<string, DeveloperQualityKPI> GetQualityKpi();
     }
 }

@@ -175,6 +175,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\BurndownController.cs" />
+    <Compile Include="Controllers\API\DeveloperKPIController.cs" />
     <Compile Include="Controllers\API\JiraCreateSubtasksController.cs" />
     <Compile Include="Controllers\API\JiraSprintPlanningController.cs" />
     <Compile Include="Controllers\API\JiraStateCheckerController.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
     <Compile Include="Models\Account\ResetPasswordRequestModel.cs" />
+    <Compile Include="Models\DeveloperKPI\QualityKpiApiModel.cs" />
     <Compile Include="Models\DeveloperKPI\QualityKpiModel.cs" />
     <Compile Include="Models\Jira\ApiTestModel.cs" />
     <Compile Include="Models\DefectSummary\DefectSummaryModel.cs" />

@@ -28,6 +28,19 @@ namespace DevStats.Domain.DeveloperKpi
             return new DeveloperQualityKPI(stories);
         }
 
+        public Dictionary<string, DeveloperQualityKPI> GetQualityKpi()
+        {
+            var results = new Dictionary<string, DeveloperQualityKPI>();
+            var developers = GetDevelopers().Select(x => x.Key);
+
+            foreach(var developer in developers)
+            {
+                results.Add(developer, GetQualityKpi(developer));
+            }
+
+            return results;
+        }
+
         private string FormatName(string userName)
         {
             userName = userName.Replace('.', ' ');
