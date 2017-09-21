@@ -46,6 +46,15 @@ namespace DevStats.Controllers.API
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
 
+        [HttpGet]
+        [Route("api/DeveloperKPI/IpCheck")]
+        public HttpResponseMessage IpCheck()
+        {
+            var userIp = HttpContext.Current.Request.UserHostAddress;
+
+            return Request.CreateResponse(HttpStatusCode.OK, userIp);
+        }
+
         private bool CanAccessApi()
         {
             var config = ConfigurationManager.AppSettings["EmailHost"];
