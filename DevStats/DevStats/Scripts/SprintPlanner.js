@@ -1,5 +1,7 @@
 ﻿var devCapacity = 0;
 var qaCapacity = 0;
+var completedSprintStories = false;
+var completedBacklogStories = false;
 
 $(document).ready(function () {
     onTeamChange();
@@ -14,7 +16,10 @@ $(document).ready(function () {
 });
 
 function onSprintChange() {
-    $("div.please-wait").show();
+    completedSprintStories = false;
+    completedBacklogStories = false;
+    $("#btnRefresh").attr('disabled', 'disabled');
+    
     clearContainers();
 
     var sprintOption = $("#ddlSprints").find(":selected");
@@ -24,12 +29,9 @@ function onSprintChange() {
 
     getSprintStories(boardid, sprintid);
     getRefinedStories(team, sprintid);
-
-    $("div.please-wait").hide();
 }
 
 function onTeamChange() {
-    $("div.please-wait").show();
     clearContainers();
 
     populateSprintNames();
@@ -69,6 +71,11 @@ function getSprintStories(boardid, sprintid) {
 
     $.get(sprintStoriesUrl, function (data) {
         fillSprintStories(data);
+
+        completedSprintStories = true;
+
+        if (completedSprintStories && completedBacklogStories)
+            $("#btnRefresh").removeAttr('disabled', 'disabled');
     });
 }
 
@@ -88,6 +95,11 @@ function getRefinedStories(team, sprintid) {
 
     $.get(refinedStoriesUrl, function (data) {
         fillRefinedStories(data);
+
+        completedBacklogStories = true;
+
+        if (completedSprintStories && completedBacklogStories)
+            $("#btnRefresh").removeAttr('disabled', 'disabled');
     });
 }
 
