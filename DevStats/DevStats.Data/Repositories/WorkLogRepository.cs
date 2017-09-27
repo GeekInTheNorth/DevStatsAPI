@@ -36,14 +36,7 @@ namespace DevStats.Data.Repositories
                     EstimateInSeconds = x.Estimate,
                     LastWorkedOn = x.LastWorkedOn,
                     Owner = x.Owner,
-                    TaskKey = x.Key,
-                    WorkLogEntries = x.Logs.Select(y => new WorkLogEntry
-                    {
-                        Description = y.Description,
-                        EffortInSeconds = y.Duration,
-                        Logged = y.Logged,
-                        Worker = y.Worker
-                    }).ToList()
+                    TaskKey = x.Key
                 }).ToList()
             };
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace DevStats.Data.Entities
 {
@@ -26,7 +25,5 @@ namespace DevStats.Data.Entities
         public DateTime? LastWorkedOn { get; set; }
 
         public virtual WorkLogStory WorkLogStory { get; set; }
-
-        public virtual ICollection<WorkLogEntry> WorkLogEntries { get; set; }
     }
 }
