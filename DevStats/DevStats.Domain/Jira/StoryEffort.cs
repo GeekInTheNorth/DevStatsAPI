@@ -15,6 +15,8 @@ namespace DevStats.Domain.Jira
 
         public string Complexity { get; private set; }
 
+        public string Release { get; private set; }
+
         public int LooseEstimate { get; private set; }
 
         public int Estimate { get; private set; }
@@ -25,7 +27,7 @@ namespace DevStats.Domain.Jira
 
         public DateTime? LastWorkedOn { get; private set; }
 
-        public StoryEffort(Issue story, IEnumerable<Issue> tasks, IEnumerable<WorkLog> logs)
+        public StoryEffort(Issue story, IEnumerable<Issue> tasks)
         {
             Key = story.Key;
             Description = story.Fields.Summary ?? string.Empty;
@@ -33,7 +35,12 @@ namespace DevStats.Domain.Jira
             Complexity = GetValue(story.Fields.Complexity);
             LooseEstimate = story.Fields.StoryPoints.HasValue ? (int)Math.Truncate(story.Fields.StoryPoints.Value) : 0;
 
-            Tasks = tasks.Select(x => new TaskEffort(x, logs)).ToList();
+            Tasks = tasks.Select(x => new TaskEffort(x)).ToList();
+
+            if (story.Fields.FixVersions != null && story.Fields.FixVersions.Any())
+            {
+                Release = story.Fields.FixVersions.OrderBy(x => x.ReleaseDate ?? DateTime.MinValue).Last().Name;
+            }
 
             if (Tasks.Any())
             {
@@ -72,11 +79,9 @@ namespace DevStats.Domain.Jira
 
         public int ActualTime { get; private set; }
 
-        public List<TaskEffortLog> Logs { get; private set; }
-
         public DateTime? LastWorkedOn { get; private set; }
 
-        public TaskEffort(Issue task, IEnumerable<WorkLog> logs)
+        public TaskEffort(Issue task)
         {
             Key = task.Key;
             Description = task.Fields.Summary ?? string.Empty;
@@ -84,24 +89,12 @@ namespace DevStats.Domain.Jira
             Estimate = task.Fields.Timeoriginalestimate ?? 0;
             Owner = task.Fields.Assignee == null ? string.Empty : task.Fields.Assignee.Name;
             Activity = GetValue(task.Fields.TaskType);
+            LastWorkedOn = task.Fields.Resolutiondate;
 
-            Logs = logs.Where(x => x.Issue.Key == task.Key).Select(x => new TaskEffortLog(x)).ToList();
-
-            if (Logs.Any())
+            if (task.Fields.TimeTracking != null)
             {
-                ActualTime = Logs.Sum(x => x.Duration);
-                LastWorkedOn = Logs.Max(x => x.Logged);
-                if (string.IsNullOrWhiteSpace(Owner))
-                {
-                    var totals = (from log in Logs
-                                  group log by log.Worker into logGrp
-                                  select new
-                                  {
-                                      Worker = logGrp.Key,
-                                      TotalTime = logGrp.Sum(x => x.Duration)
-                                  });
-                    Owner = totals.OrderByDescending(x => x.TotalTime).First().Worker;
-                }
+                Estimate = task.Fields.TimeTracking.EstimateInSeconds;
+                ActualTime = task.Fields.TimeTracking.TimeSpentInSeconds;
             }
         }
 
@@ -111,25 +104,6 @@ namespace DevStats.Domain.Jira
                 return string.Empty;
 
             return field.Value ?? string.Empty;
-        }
-    }
-
-    public class TaskEffortLog
-    {
-        public string Worker { get; private set; }
-
-        public int Duration { get; private set; }
-
-        public DateTime Logged { get; private set; }
-
-        public string Description { get; private set; }
-
-        public TaskEffortLog(WorkLog log)
-        {
-            Worker = log.Worker;
-            Duration = log.TimeSpentSeconds;
-            Logged = log.Created;
-            Description = log.Comment;
         }
     }
 }

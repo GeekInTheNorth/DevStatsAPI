@@ -27,6 +27,7 @@ namespace DevStats.Data.Repositories
                 LooseEstimateInHours = storyEffort.LooseEstimate,
                 StoryKey = storyEffort.Key,
                 TShirtSize = storyEffort.TShirtSize,
+                DeliveredInRelease = storyEffort.Release,
                 WorkLogTasks = storyEffort.Tasks.Select(x => new WorkLogTask
                 {
                     Activity = storyEffort.Key == x.Key ? "Dev" : x.Activity,

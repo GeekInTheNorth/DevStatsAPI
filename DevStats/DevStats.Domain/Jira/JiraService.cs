@@ -23,7 +23,6 @@ namespace DevStats.Domain.Jira
         private const string CoreIssueIdRegex = "({0})[-][0-9]{{1,6}}";
         private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}";
         private const string JiraUserGroupSearchPath = @"{0}/rest/api/2/group?groupname={1}&expand=users";
-        private const string TempoSearchPath = @"{0}/rest/tempo-timesheets/4/worklogs/search";
 
         public JiraService(
             IJiraConvertor convertor, 
@@ -264,15 +263,21 @@ namespace DevStats.Domain.Jira
             tasksToCheck.Add(story);
 
             var action = "Process Story Completion: Record Work Logs";
+            IEnumerable<Issue> tasksWithTimeAnalysis = null;
 
             try
             {
-                var tempoParams = new TempoSearchParameters(tasksToCheck);
-                var url = string.Format(TempoSearchPath, GetApiRoot());
-                var tempoResult = jiraSender.Post(url, tempoParams);
-                var workLogs = convertor.Deserialize<List<WorkLog>>(tempoResult.Response);
+                if (tasksToCheck.Any())
+                {
+                    var taskSearch = string.Format("issueKey in ({0})", string.Join(",", tasksToCheck.Select(x => x.Key)));
+                    var taskUrl = "{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,resolutiondate,customfield_13701,customfield_13709";
+                    taskUrl = string.Format(taskUrl, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
+                    tasksWithTimeAnalysis = jiraSender.Get<JiraIssues>(taskUrl).Issues;
+                }
 
-                var storyEffort = new StoryEffort(story, tasksToCheck, workLogs);
+                tasksWithTimeAnalysis = tasksWithTimeAnalysis ?? new Issue[] { };
+
+                var storyEffort = new StoryEffort(story, tasksWithTimeAnalysis);
 
                 workLogRepository.Save(storyEffort);
                 loggingRepository.Log(story.Id, story.Key, action, string.Empty, true);
