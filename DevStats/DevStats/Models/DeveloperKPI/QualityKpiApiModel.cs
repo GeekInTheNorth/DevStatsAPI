@@ -39,6 +39,12 @@ namespace DevStats.Models.DeveloperKPI
 
         public string Story { get; set; }
 
+        public string Release { get; set; }
+
+        public DateTime? Delivered { get; set; }
+
+        public string DeliveredDescription { get; set; }
+
         public int EffortForUserStory { get; set; }
 
         public int PlannedDevelopment { get; set; }
@@ -61,6 +67,9 @@ namespace DevStats.Models.DeveloperKPI
         {
             Developer = developer;
             Story = storyBreakdown.Description;
+            Release = storyBreakdown.Release;
+            Delivered = storyBreakdown.LastWorkedOn;
+            DeliveredDescription = storyBreakdown.LastWorkedOn.HasValue ? string.Format("{0:yyyy MMMM}", storyBreakdown.LastWorkedOn) : string.Empty;
             EffortForUserStory = storyBreakdown.TotalDuration;
             PlannedDevelopment = storyBreakdown.TotalPlannedDevelopment;
             PlannedDevelopmentByDeveloper = storyBreakdown.TotalPlannedDevelopmentByDeveloper;

@@ -10,6 +10,10 @@ namespace DevStats.Domain.DeveloperKpi
 
         public string Description { get; private set; }
 
+        public string Release { get; private set; }
+
+        public DateTime? LastWorkedOn { get; private set; }
+
         public int TotalDuration { get; private set; }
 
         public int ReworkDuration { get; private set; }
@@ -33,10 +37,12 @@ namespace DevStats.Domain.DeveloperKpi
             get { return GetProportionOfTime(TotalPlannedDevelopment, TotalPlannedDevelopmentByDeveloper); }
         }
 
-        public StoryBreakdown(string storyKey, string storyDescription, IEnumerable<StoryTask> tasks, string developer)
+        public StoryBreakdown(string storyKey, string storyDescription, string release, DateTime? lastWorkedOn , IEnumerable<StoryTask> tasks, string developer)
         {
             Key = storyKey;
             Description = storyDescription;
+            Release = release;
+            LastWorkedOn = lastWorkedOn;
             TotalDuration = tasks.Sum(x => x.TotalTimeInSeconds);
             ReworkDuration = tasks.Where(x => x.Activity == "Rework").Sum(x => x.TotalTimeInSeconds);
 
