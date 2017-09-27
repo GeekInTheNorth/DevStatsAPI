@@ -15,6 +15,8 @@ namespace DevStats.Data.Entities
 
         public string Complexity { get; set; }
 
+        public string DeliveredInRelease { get; set; }
+
         public int LooseEstimateInHours { get; set; }
 
         public int EstimateInSeconds { get; set; }

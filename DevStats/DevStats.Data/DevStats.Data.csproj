@@ -105,6 +105,10 @@
     <Compile Include="Migrations\201709080635099_AddPasswordReset.Designer.cs">
       <DependentUpon>201709080635099_AddPasswordReset.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709270635410_RecordReleaseAgainstStoryLogs.cs" />
+    <Compile Include="Migrations\201709270635410_RecordReleaseAgainstStoryLogs.Designer.cs">
+      <DependentUpon>201709270635410_RecordReleaseAgainstStoryLogs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -159,6 +163,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709080635099_AddPasswordReset.resx">
       <DependentUpon>201709080635099_AddPasswordReset.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709270635410_RecordReleaseAgainstStoryLogs.resx">
+      <DependentUpon>201709270635410_RecordReleaseAgainstStoryLogs.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
