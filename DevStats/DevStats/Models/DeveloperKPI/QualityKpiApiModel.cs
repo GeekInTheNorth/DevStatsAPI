@@ -37,6 +37,10 @@ namespace DevStats.Models.DeveloperKPI
     {
         public string Developer { get; set; }
 
+        public string Key { get; set; }
+
+        public string Product { get; set; }
+
         public string Story { get; set; }
 
         public string Release { get; set; }
@@ -66,6 +70,8 @@ namespace DevStats.Models.DeveloperKPI
         public QualityKpiApiModelItem(string developer, StoryBreakdown storyBreakdown)
         {
             Developer = developer;
+            Product = storyBreakdown.Product;
+            Key = storyBreakdown.Key;
             Story = storyBreakdown.Description;
             Release = storyBreakdown.Release;
             Delivered = storyBreakdown.LastWorkedOn;
