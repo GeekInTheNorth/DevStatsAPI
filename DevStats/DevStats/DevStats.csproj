@@ -181,6 +181,7 @@
     <Compile Include="Controllers\API\JiraStateCheckerController.cs" />
     <Compile Include="Controllers\API\JiraStoryUpdatedController.cs" />
     <Compile Include="Controllers\API\JiraSubtaskUpdatedController.cs" />
+    <Compile Include="Controllers\API\SecureBaseApiController.cs" />
     <Compile Include="Controllers\MVC\AccountController.cs" />
     <Compile Include="Controllers\MVC\DefectSummaryController.cs" />
     <Compile Include="Controllers\API\DefectTrackingController.cs" />

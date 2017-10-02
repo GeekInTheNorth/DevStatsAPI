@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Configuration;
 using System.Net;
 using System.Net.Http;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Http;
 using DevStats.Domain.DeveloperKpi;
 using DevStats.Models.DeveloperKPI;
 
 namespace DevStats.Controllers.API
 {
-    public class DeveloperKPIController : ApiController
+    public class DeveloperKPIController : SecureBaseApiController
     {
         private readonly IDeveloperKpiService service;
 
@@ -22,10 +21,11 @@ namespace DevStats.Controllers.API
 
         [HttpGet]
         [Route("api/DeveloperKPI/Quality")]
-        public HttpResponseMessage Quality()
+        public async Task<HttpResponseMessage> Quality()
         {
-            if (!CanAccessApi())
-                return Request.CreateResponse(HttpStatusCode.Forbidden);
+            var canAccess = await CanAccess();
+
+            if (!canAccess) return Request.CreateResponse(HttpStatusCode.Forbidden);
 
             var kpis = service.GetQualityKpi();
             var model = new QualityKpiApiModel(kpis);
@@ -35,27 +35,16 @@ namespace DevStats.Controllers.API
 
         [HttpGet]
         [Route("api/DeveloperKPI/Quality/{developer}")]
-        public HttpResponseMessage Quality([FromUri]string developer)
+        public async Task<HttpResponseMessage> Quality([FromUri]string developer)
         {
-            if (!CanAccessApi())
-                return Request.CreateResponse(HttpStatusCode.Forbidden);
+            var canAccess = await CanAccess();
+
+            if (!canAccess) return Request.CreateResponse(HttpStatusCode.Forbidden);
 
             var kpi = service.GetQualityKpi(developer);
             var model = new QualityKpiApiModel(developer, kpi);
 
             return Request.CreateResponse(HttpStatusCode.OK, model);
-        }
-
-        private bool CanAccessApi()
-        {
-            var config = ConfigurationManager.AppSettings["AllowedIpAddresses"];
-
-            if (config == "N/A" || Request.IsLocal())
-                return true;
-
-            var userIp = HttpContext.Current.Request.UserHostAddress;
-
-            return config.Contains(userIp);
         }
     }
 }
