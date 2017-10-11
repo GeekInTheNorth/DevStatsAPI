@@ -123,7 +123,7 @@ function clearContainers() {
 }
 
 function getHeaderRowMarkUp(tableName) {
-    var markUp = "<table id='" + tableName + "' class='defectdata'>";
+    var markUp = "<table id='" + tableName + "' class='table table-hover'>";
     markUp += "<thead><tr>";
     markUp += "<th>Key</th>";
     markUp += "<th>Description</th>";
@@ -175,28 +175,28 @@ function addTotalRow(tableName, includeCapacity) {
 
     var markUp = "<tfoot>"
     markUp += "<tr>";
-    markUp += "<th colspan='5' class='numeric'>Total</th>";
-    markUp += "<th class='numeric' id='totalDevRemaining'>" + totalDevRemaining.toFixed(2) + "</th>";
-    markUp += "<th class='numeric' id='totalQaRemaining'>" + totalQARemaining.toFixed(2) + "</th>";
-    markUp += "<th>&nbsp;</th>";
+    markUp += "<th class='active numeric' colspan='5'>Total</th>";
+    markUp += "<th class='active numeric' id='totalDevRemaining'>" + totalDevRemaining.toFixed(2) + "</th>";
+    markUp += "<th class='active numeric' id='totalQaRemaining'>" + totalQARemaining.toFixed(2) + "</th>";
+    markUp += "<th class='active'>&nbsp;</th>";
     markUp += "</tr>";
 
     if (includeCapacity) {
         markUp += "<tr>";
-        markUp += "<th colspan='5' class='numeric'>Capacity</th>";
-        markUp += "<th><input type='number' id='devCapacity' min='0' max='500' value='" + devCapacity.toFixed(2) + "'></input></th>"
-        markUp += "<th><input type='number' id='qaCapacity' min='0' max='500' value='" + qaCapacity.toFixed(2) + "'></th>"
-        markUp += "<th>&nbsp;</th>";
+        markUp += "<th class='active numeric' colspan='5'>Capacity</th>";
+        markUp += "<th class='active'><input type='number' id='devCapacity' min='0' max='500' value='" + devCapacity.toFixed(2) + "'></input></th>"
+        markUp += "<th class='active'><input type='number' id='qaCapacity' min='0' max='500' value='" + qaCapacity.toFixed(2) + "'></th>"
+        markUp += "<th class='active'>&nbsp;</th>";
         markUp += "</tr>";
 
         var devRemainingCapacity = devCapacity - totalDevRemaining;
         var qaRemainingCapacity = qaCapacity - totalQARemaining;
 
         markUp += "<tr>";
-        markUp += "<th colspan='5' class='numeric'>Remaining</th>";
-        markUp += "<th class='numeric' id='devRemainingCapacity'>" + devRemainingCapacity.toFixed(2) + "</th>";
-        markUp += "<th class='numeric' id='qaRemainingCapacity'>" + qaRemainingCapacity.toFixed(2) + "</th>";
-        markUp += "<th>&nbsp;</th>";
+        markUp += "<th class='active numeric' colspan='5'>Remaining</th>";
+        markUp += "<th class='active numeric' id='devRemainingCapacity'>" + devRemainingCapacity.toFixed(2) + "</th>";
+        markUp += "<th class='active numeric' id='qaRemainingCapacity'>" + qaRemainingCapacity.toFixed(2) + "</th>";
+        markUp += "<th class='active'>&nbsp;</th>";
         markUp += "</tr>";
     }
 
@@ -305,23 +305,14 @@ function setButtonState(newState) {
 }
 
 function showSprintUpdateSuccess(data, textStatus, jqXHR) {
-    $("#divFeedBack").removeClass("feedback-error");
-    $("#divFeedBack").removeClass("feedback-none");
-    $("#divFeedBack").addClass("feedback-success");
+    var markUp = "<div class='alert alert-success alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Sprint successfully updated</div>";
 
-    $("#feedback-label").text("Sprint successfully updated");
+    $(markUp).insertAfter("#filter-bar");
 }
 
 function showSprintUpdateFail(data, textStatus, jqXHR) {
-    $("#divFeedBack").removeClass("feedback-success");
-    $("#divFeedBack").removeClass("feedback-none");
-    $("#divFeedBack").addClass("feedback-error");
+    var markUp = "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
+    markUp += textStatus + " : " + jqXHR + "</div>";
 
-    $("#feedback-label").text(textStatus + " : " + jqXHR);
-}
-
-function hideFeedback() {
-    $("#divFeedBack").removeClass("feedback-success");
-    $("#divFeedBack").removeClass("feedback-error");
-    $("#divFeedBack").addClass("feedback-none");
+    $(markUp).insertAfter("#filter-bar");
 }

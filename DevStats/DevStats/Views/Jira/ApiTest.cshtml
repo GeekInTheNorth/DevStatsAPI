@@ -7,26 +7,27 @@
 
 @using (Html.BeginForm())
 {
-    <span>Select a service</span>
-    <br />
-    @Html.DropDownList("apiUrl", Model.ApiRoots)
-    <br />
-    <span>Enter a Jira Id</span>
-    <br />
-    @Html.TextBox("jiraId", "", new { @class = "jira-id" })
-    <br />
-    <button type="submit">Submit</button>
+    <div class="form-group">
+        <label for="apiUrl">Select a service:</label>
+        @Html.DropDownList("apiUrl", Model.ApiRoots, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="jiraId">Jira Id:</label>
+        @Html.TextBox("jiraId", "", new { @class = "form-control jira-id" })
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
 }
+<br />
 
 @if (Model.PostResult != null)
 {
     if (Model.PostResult.WasSuccessful)
     {
-        <div class="success-message">Success</div>
+        <div class="alert alert-success alert-dismissible"><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Success</div>
     }
     else
     {
-        <div class="error-message">Failed</div>
+        <div class="alert alert-danger alert-dismissible"><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Failed</div>
     }
     <div>
         @Model.PostResult.Response

@@ -7,21 +7,22 @@
 
 @using (Html.BeginForm())
 {
-    <span>Enter Jira Ids here, branch names are also accepted as Ids are evaluted using regular expressions</span>
-    <br />
-    @Html.TextArea("stateRequestData", "", new { @class = "free-text" })
-    <br />
-    <button type="submit">Submit</button>
+    <div class="form-group">
+        <label for="stateRequestData">Enter Jira Ids here, branch names are also accepted as Ids are evaluted using regular expressions:</label>
+        @Html.TextArea("stateRequestData", "", new { @class = "form-control free-text" })
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
 }
 
 @if (Model.HasError)
 {
-    <div class="error">@Model.ErrorMessage</div>
+    <br />
+    <div class="alert alert-danger alert-dismissible"><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>@Model.ErrorMessage</div>
 }
 
 @if (Model.Summaries != null)
 {
-    <table class="defectdata" style="margin-top: 10px;">
+    <table class="table table-striped" style="margin-top: 10px;">
         <thead>
             <tr>
                 <th>Jira Id</th>

@@ -3,7 +3,7 @@
     Page.Title = "Jira Sprint Planner";
 }
 
-<div class="filter">
+<div id="filter-bar" class="filter">
     <span class="filter-label">Team:</span>
     <select id="ddlTeam">
         <option value="HR">HR</option>
@@ -14,11 +14,6 @@
     <select id="ddlSprints"></select>
     <button id="btnRefresh" onclick="javascript:onSprintChange()">Refresh Stories</button>
     <button id="btnCommit" onclick="javascript:onSprintUpdate()">Commit Sprint</button>
-</div>
-
-<div id="divFeedBack" class="feedback-none">
-    <a onclick="javascript: hideFeedback()" class="feedback-button">X</a>
-    <span id="feedback-label"></span>
 </div>
 
 <h1>Sprint Stories</h1>

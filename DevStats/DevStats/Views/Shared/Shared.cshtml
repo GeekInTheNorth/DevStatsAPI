@@ -4,18 +4,43 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@Page.Title</title>
-    <link href="../Styles/DevStats.css" rel="stylesheet" />
-    <script src="../Scripts/jquery-3.1.1.min.js"></script>
+    <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="../Content/DevStats.css" rel="stylesheet" />
+    <script src="../Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
 </head>
 <body>
-    <div class="header">
-        @Html.ActionLink("Home", "Index", "Home", null, new { @class = "header-button" })
-        @Html.ActionLink("Defect Analysis", "DefectAnalysis", "Jira", null, new { @class = "header-button" })
-        @Html.ActionLink("Jira API Tools", "ApiMenu", "Jira", null, new { @class = "header-button" })
-        @Html.ActionLink("KPIs", "Quality", "DeveloperKPI", null, new { @class = "header-button" })
-        @Html.ActionLink("Sprint Planner", "SprintPlanner", "Jira", null, new { @class = "header-button" })
-        @Html.ActionLink("Log Off", "LogOff", "Account", null, new { @class = "header-button" })
-    </div>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                <li>@Html.ActionLink("Defect Analysis", "DefectAnalysis", "Jira")</li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">API Tools<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("API Audit", "Audit", "Jira")</li>
+                        <li>@Html.ActionLink("API Execution", "ApiTest", "Jira")</li>
+                        <li>@Html.ActionLink("State Checker", "StateChecker", "Jira")</li>
+                    </ul>
+                </li>
+                <li>@Html.ActionLink("KPIs", "Quality", "DeveloperKPI")</li>
+                <li>@Html.ActionLink("Sprint Planner", "SprintPlanner", "Jira")</li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>
+            </ul>
+        </div>
+    </nav>
     <div>
         @RenderBody()
     </div>

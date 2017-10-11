@@ -5,17 +5,21 @@
     Page.Title = "Defect Analysis";
 }
 
+<div class="btn-group">
+    <a id="btnShowInline" class="btn btn-primary" onclick="javascript:showInline();">Show Inline</a>
+    <a id="btnShowBroken" class="btn btn-primary disabled" onclick="javascript:showBrokenDown();">Show Broken Down</a>
+</div>
+
 <div id="div-broken-down">
-    <a onclick="javascript:showInline();" style="cursor: pointer">Show Inline</a>
     @{
         var total = 0;
     }
     @foreach (var report in Model.Reports)
     {
-        
+
         <h1>@report.Key</h1>
 
-        <table class="defectdata">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Category</th>
@@ -40,16 +44,14 @@
     }
 </div>
 
-@{ 
+@{
     var totalInternal = 0;
     var totalExternal = 0;
     var totalAll = 0;
 }
 
 <div id="div-inline-report" style="display: none;">
-    <a onclick="javascript:showBrokenDown();" style="cursor: pointer">Show Broken Down</a>
-    <br />
-    <table class="defectdata">
+    <table class="table table-striped" ">
         <thead>
             <tr>
                 <th>Category</th>
@@ -87,10 +89,16 @@
     function showInline() {
         document.getElementById('div-broken-down').style.display = 'none';
         document.getElementById('div-inline-report').style.display = 'block';
+
+        $("#btnShowInline").addClass("disabled");
+        $("#btnShowBroken").removeClass("disabled");
     }
 
     function showBrokenDown() {
         document.getElementById('div-broken-down').style.display = 'block';
         document.getElementById('div-inline-report').style.display = 'none';
+
+        $("#btnShowInline").removeClass("disabled");
+        $("#btnShowBroken").addClass("disabled");
     }
 </script>

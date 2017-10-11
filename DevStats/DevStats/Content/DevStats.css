@@ -1,0 +1,42 @@
+﻿div.filter {
+    padding: 3px;
+    border: 1px solid dodgerblue;
+    background-color: lightsteelblue;
+    margin-bottom: 5px;
+}
+
+span.filter-label {
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+textarea.free-text {
+    width: 100%;
+    height: 200px;
+}
+
+input.jira-id {
+    text-transform: uppercase;
+}
+
+td.text, th.text {
+    text-align: left;
+}
+
+td.numeric, th.numeric {
+    text-align: right;
+}
+
+a.delete-button {
+    color: red;
+    cursor: pointer;
+}
+
+a.add-button {
+    color: green;
+    cursor: pointer;
+}
+
+a.delete-button:hover, a.add-button:hover {
+    text-decoration: underline;
+}

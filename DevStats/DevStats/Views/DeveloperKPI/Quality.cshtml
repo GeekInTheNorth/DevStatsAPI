@@ -15,66 +15,66 @@
         @if (Model.IsAdmin)
         {
             @Html.DropDownListFor(m => m.SelectedDeveloper, new SelectList(Model.Developers, "Key", "Value"))
-            <button type="submit" class="btn btn-success">Search</button>
+            <button type="submit" class="btn btn-default">Search</button>
         }
         else
         {
             <span class="filter-label">@Model.Developers.Select(x => x.Value).FirstOrDefault()</span>
         }
     </div>
-
-    <h1>Summary</h1>
-
-    <ul>
-        <li>Total proportional work duration: @FormatTime(Model.Quality.TotalProportionalWork)</li>
-        <li>Total proportional rework duration: @FormatTime(Model.Quality.TotalProportionalRework)</li>
-        <li>Total rework proportion: @FormatProportion(Model.Quality.TotalReworkProportion)</li>
-        <li>Developer On Track: @FormatBoolean(Model.Quality.IsOnTrack)</li>
-    </ul>
-
-    <h1>Stories</h1>
-
-    <table class="defectdata">
-        <thead>
-            <tr>
-                <th class="numeric">Key</th>
-                <th class="text">Description</th>
-                <th class="numeric">Dev. Task Duration</th>
-                <th class="numeric">Dev. Task Duration By Developer</th>
-                <th class="numeric">Dev. Task Proportion By Developer</th>
-                <th class="numeric">Total Duration</th>
-                <th class="numeric">Rework Duration</th>
-                <th class="numeric">Rework Proportion</th>
-                <th class="text">Within Threshold</th>
-            </tr>
-        </thead>
-
-        @foreach (var story in Model.Quality.Stories)
-        {
-            <tr>
-                <td class="numeric">@story.Key</td>
-                <td class="text">@story.Description</td>
-                <td class="numeric">@FormatTime(story.TotalPlannedDevelopment)</td>
-                <td class="numeric">@FormatTime(story.TotalPlannedDevelopmentByDeveloper)</td>
-                <td class="numeric">@FormatProportion(story.DeveloperProportion)</td>
-                <td class="numeric">@FormatTime(story.TotalDuration)</td>
-                <td class="numeric">@FormatTime(story.ReworkDuration)</td>
-                <td class="numeric">@FormatProportion(story.ReworkProportion)</td>
-                <td class="text">@FormatBoolean(story.IsOnTrack)</td>
-            </tr>
-        }
-
-        <tfoot>
-            <tr>
-                <th class="text" colspan="2">Totals</th>
-                <th class="numeric">@FormatTime(Model.TotalDevTaskDuration)</th>
-                <th class="numeric">@FormatTime(Model.TotalDevTaskDurationByDeveloper)</th>
-                <th class="numeric">&nbsp;</th>
-                <th class="numeric">@FormatTime(Model.TotalDuration)</th>
-                <th class="numeric">@FormatTime(Model.TotalReworkDuration)</th>
-                <th class="numeric">&nbsp;</th>
-                <th class="text">&nbsp;</th>
-            </tr>
-        </tfoot>
-    </table>
 }
+
+<h1>Summary</h1>
+
+<ul>
+    <li>Total proportional work duration: @FormatTime(Model.Quality.TotalProportionalWork)</li>
+    <li>Total proportional rework duration: @FormatTime(Model.Quality.TotalProportionalRework)</li>
+    <li>Total rework proportion: @FormatProportion(Model.Quality.TotalReworkProportion)</li>
+    <li>Developer On Track: @FormatBoolean(Model.Quality.IsOnTrack)</li>
+</ul>
+
+<h1>Stories</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th class="numeric">Key</th>
+            <th class="text">Description</th>
+            <th class="numeric">Dev. Task Duration</th>
+            <th class="numeric">Dev. Task Duration By Developer</th>
+            <th class="numeric">Dev. Task Proportion By Developer</th>
+            <th class="numeric">Total Duration</th>
+            <th class="numeric">Rework Duration</th>
+            <th class="numeric">Rework Proportion</th>
+            <th class="text">Within Threshold</th>
+        </tr>
+    </thead>
+
+    @foreach (var story in Model.Quality.Stories)
+    {
+        <tr>
+            <td class="numeric">@story.Key</td>
+            <td class="text">@story.Description</td>
+            <td class="numeric">@FormatTime(story.TotalPlannedDevelopment)</td>
+            <td class="numeric">@FormatTime(story.TotalPlannedDevelopmentByDeveloper)</td>
+            <td class="numeric">@FormatProportion(story.DeveloperProportion)</td>
+            <td class="numeric">@FormatTime(story.TotalDuration)</td>
+            <td class="numeric">@FormatTime(story.ReworkDuration)</td>
+            <td class="numeric">@FormatProportion(story.ReworkProportion)</td>
+            <td class="text">@FormatBoolean(story.IsOnTrack)</td>
+        </tr>
+    }
+
+    <tfoot>
+        <tr>
+            <th class="text" colspan="2">Totals</th>
+            <th class="numeric">@FormatTime(Model.TotalDevTaskDuration)</th>
+            <th class="numeric">@FormatTime(Model.TotalDevTaskDurationByDeveloper)</th>
+            <th class="numeric">&nbsp;</th>
+            <th class="numeric">@FormatTime(Model.TotalDuration)</th>
+            <th class="numeric">@FormatTime(Model.TotalReworkDuration)</th>
+            <th class="numeric">&nbsp;</th>
+            <th class="text">&nbsp;</th>
+        </tr>
+    </tfoot>
+</table>
