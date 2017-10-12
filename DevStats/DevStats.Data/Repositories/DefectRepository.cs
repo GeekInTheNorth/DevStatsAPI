@@ -12,7 +12,7 @@ namespace DevStats.Data.Repositories
             return Context.Defects
                           .Where(x => x.Created >= createdFrom && x.Created <= createdTo)
                           .ToList()
-                          .Select(x => new Defect(x.DefectId, x.Module, x.Type, x.Created, x.Closed));
+                          .Select(x => new Defect(x.JiraId, x.AhaId, x.Module, x.Type, x.Created, x.Closed));
         }
 
         public void Save(IEnumerable<Defect> defects)
@@ -25,12 +25,12 @@ namespace DevStats.Data.Repositories
 
         private void ApplyChanges(Defect defect)
         {
-            var dbItem = Context.Defects.FirstOrDefault(x => x.DefectId == defect.DefectId);
+            var dbItem = Context.Defects.FirstOrDefault(x => x.JiraId == defect.JiraId || x.AhaId == defect.AhaId);
 
             if (dbItem == null)
             {
                 dbItem = new Entities.Defect();
-                dbItem.DefectId = defect.DefectId;
+                dbItem.JiraId = defect.JiraId;
                 Context.Defects.Add(dbItem);
             }
 

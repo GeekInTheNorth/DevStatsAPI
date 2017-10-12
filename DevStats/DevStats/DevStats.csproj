@@ -284,7 +284,6 @@
     <Compile Include="Controllers\API\SecureBaseApiController.cs" />
     <Compile Include="Controllers\MVC\AccountController.cs" />
     <Compile Include="Controllers\MVC\DefectSummaryController.cs" />
-    <Compile Include="Controllers\API\DefectTrackingController.cs" />
     <Compile Include="Controllers\MVC\DeveloperKPIController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\MVC\JiraController.cs" />

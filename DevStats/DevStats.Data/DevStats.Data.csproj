@@ -112,6 +112,10 @@
     <Compile Include="Migrations\201709270718082_RemoveWorkLogEntry.Designer.cs">
       <DependentUpon>201709270718082_RemoveWorkLogEntry.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710120637456_DefectAnalysisFromAhaAndJira.cs" />
+    <Compile Include="Migrations\201710120637456_DefectAnalysisFromAhaAndJira.Designer.cs">
+      <DependentUpon>201710120637456_DefectAnalysisFromAhaAndJira.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -172,6 +176,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201709270718082_RemoveWorkLogEntry.resx">
       <DependentUpon>201709270718082_RemoveWorkLogEntry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710120637456_DefectAnalysisFromAhaAndJira.resx">
+      <DependentUpon>201710120637456_DefectAnalysisFromAhaAndJira.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

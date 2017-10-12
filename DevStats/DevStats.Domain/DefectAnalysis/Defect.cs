@@ -4,7 +4,9 @@ namespace DevStats.Domain.DefectAnalysis
 {
     public class Defect
     {
-        public string DefectId { get; set; }
+        public string JiraId { get; set; }
+
+        public string AhaId { get; set; }
 
         public string Module { get; set; }
 
@@ -14,9 +16,10 @@ namespace DevStats.Domain.DefectAnalysis
 
         public DateTime? Closed { get; set; }
 
-        public Defect(string defectId, string module, string type, DateTime created, DateTime? closed)
+        public Defect(string jiraId, string ahaId, string module, string type, DateTime created, DateTime? closed)
         {
-            DefectId = defectId;
+            JiraId = jiraId;
+            AhaId = ahaId;
             Module = string.IsNullOrWhiteSpace(module) ? "Unknown" : module;
             Created = created;
             Closed = closed;

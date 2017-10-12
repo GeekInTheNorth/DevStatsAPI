@@ -6,7 +6,9 @@ namespace DevStats.Data.Entities
     {
         public int ID { get; set; }
 
-        public string DefectId { get; set; }
+        public string JiraId { get; set; }
+
+        public string AhaId { get; set; }
 
         public string Module { get; set; }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DevStats.Domain.DefectAnalysis
 {
@@ -27,10 +26,7 @@ namespace DevStats.Domain.DefectAnalysis
 
         public void Save(IEnumerable<Defect> defects)
         {
-            if (defects == null || !defects.Any())
-                return;
-
-            repository.Save(defects.Where(x => !string.IsNullOrWhiteSpace(x.DefectId)));
+            throw new NotImplementedException();
         }
     }
 }
