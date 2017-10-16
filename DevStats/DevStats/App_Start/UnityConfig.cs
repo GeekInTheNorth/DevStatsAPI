@@ -9,6 +9,7 @@ using DevStats.Domain.Jira;
 using DevStats.Domain.Jira.Logging;
 using DevStats.Domain.Security;
 using DevStats.Domain.DeveloperKpi;
+using DevStats.Domain.Aha;
 
 namespace DevStats
 {
@@ -30,12 +31,14 @@ namespace DevStats
             // Utilities
             container.RegisterType<IJiraConvertor, JiraConvertor>();
             container.RegisterType<IJiraSender, JiraSender>();
+            container.RegisterType<IAhaSender, AhaSender>();
 
             // Services
             container.RegisterType<IDefectService, DefectService>();
             container.RegisterType<IJiraService, JiraService>();
             container.RegisterType<ISprintPlannerService, SprintPlannerService>();
             container.RegisterType<IDeveloperKpiService, DeveloperKpiService>();
+            container.RegisterType<IAhaService, AhaService>();
 
             DependencyResolver.SetResolver(new Unity.Mvc5.UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);

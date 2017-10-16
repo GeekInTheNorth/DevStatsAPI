@@ -274,6 +274,7 @@
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\API\AhaController.cs" />
     <Compile Include="Controllers\API\BurndownController.cs" />
     <Compile Include="Controllers\API\DeveloperKPIController.cs" />
     <Compile Include="Controllers\API\JiraCreateSubtasksController.cs" />
