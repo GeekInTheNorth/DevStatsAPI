@@ -168,7 +168,7 @@ namespace DevStats.Domain.Jira
                     select new JiraStateSummary(issue));
         }
 
-        public IEnumerable<JiraDefect> GetDefects()
+        public IEnumerable<JiraDefectSummary> GetDefects()
         {
             var supportUserNames = GetUserNames(GetServiceDeskGroup());
             var jql = FilterBuilder.Create()
@@ -181,7 +181,7 @@ namespace DevStats.Domain.Jira
             var response = jiraSender.Get<JiraIssues>(url);
 
             return (from issue in response.Issues
-                    select new JiraDefect(issue, supportUserNames));
+                    select new JiraDefectSummary(issue, supportUserNames));
         }
 
         private IEnumerable<string> GetUserNames(string groupName)

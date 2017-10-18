@@ -88,6 +88,7 @@
     <Compile Include="Aha\IAhaService.cs" />
     <Compile Include="Aha\JsonModels\CustomField.cs" />
     <Compile Include="Aha\JsonModels\SimpleField.cs" />
+    <Compile Include="Jira\JiraDefectSummary.cs" />
     <Compile Include="Logging\IApiLogRepository.cs" />
     <Compile Include="Aha\JsonModels\Feature.cs" />
     <Compile Include="Aha\JsonModels\FeatureCollection.cs" />
@@ -113,7 +114,6 @@
     <Compile Include="Jira\IProjectsRepository.cs" />
     <Compile Include="Jira\IWorkLogRepository.cs" />
     <Compile Include="Jira\JiraAudit.cs" />
-    <Compile Include="Jira\JiraDefect.cs" />
     <Compile Include="Jira\JiraSender.cs" />
     <Compile Include="Jira\JsonModels\IssueTransition.cs" />
     <Compile Include="Jira\JsonModels\NameCollection.cs" />

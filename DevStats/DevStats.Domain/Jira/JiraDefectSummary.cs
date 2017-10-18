@@ -6,7 +6,7 @@ using DevStats.Domain.Jira.JsonModels;
 
 namespace DevStats.Domain.Jira
 {
-    public class JiraDefect
+    public class JiraDefectSummary
     {
         public string Id { get; set; }
 
@@ -14,7 +14,7 @@ namespace DevStats.Domain.Jira
 
         public DefectType Type { get; set; }
 
-        public JiraDefect(Issue issue, IEnumerable<string> supportUsers)
+        public JiraDefectSummary(Issue issue, IEnumerable<string> supportUsers)
         {
             var hrModuleName = issue.Fields.HRModule == null ? string.Empty : issue.Fields.HRModule.Value;
             var payrollModuleName = issue.Fields.PayrollModule == null ? string.Empty : issue.Fields.PayrollModule.Value;

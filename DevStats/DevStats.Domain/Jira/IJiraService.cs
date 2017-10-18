@@ -15,6 +15,6 @@ namespace DevStats.Domain.Jira
 
         IEnumerable<JiraStateSummary> GetStateSummaries(string requestData);
 
-        IEnumerable<JiraDefect> GetDefects();
+        IEnumerable<JiraDefectSummary> GetDefects();
     }
 }

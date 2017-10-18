@@ -11,13 +11,13 @@ namespace DevStats.Models.Jira
 
         public IEnumerable<DefectAnalysisModelInlineItem> InlineReport { get; set; }
 
-        public DefectAnalysisModel(IEnumerable<JiraDefect> defects)
+        public DefectAnalysisModel(IEnumerable<JiraDefectSummary> defects)
         {
             CreateReports(defects);
             CreateInlineReport(defects);
         }
 
-        private void CreateInlineReport(IEnumerable<JiraDefect> defects)
+        private void CreateInlineReport(IEnumerable<JiraDefectSummary> defects)
         {
             InlineReport = (from defect in defects
                             group defect by defect.Category into defectGrp
@@ -31,7 +31,7 @@ namespace DevStats.Models.Jira
                             });
         }
 
-        private void CreateReports(IEnumerable<JiraDefect> defects)
+        private void CreateReports(IEnumerable<JiraDefectSummary> defects)
         {
             var allItems = (from defect in defects
                             group defect by defect.Category into defectGrp
