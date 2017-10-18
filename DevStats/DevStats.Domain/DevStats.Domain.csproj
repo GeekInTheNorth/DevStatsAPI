@@ -81,15 +81,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aha\AhaDefect.cs" />
     <Compile Include="Aha\AhaSender.cs" />
     <Compile Include="Aha\AhaService.cs" />
     <Compile Include="Aha\IAhaSender.cs" />
     <Compile Include="Aha\IAhaService.cs" />
+    <Compile Include="Aha\JsonModels\CustomField.cs" />
+    <Compile Include="Aha\JsonModels\SimpleField.cs" />
+    <Compile Include="Logging\IApiLogRepository.cs" />
     <Compile Include="Aha\JsonModels\Feature.cs" />
     <Compile Include="Aha\JsonModels\FeatureCollection.cs" />
     <Compile Include="Aha\JsonModels\IntegrationField.cs" />
     <Compile Include="Aha\JsonModels\PaginationDetails.cs" />
-    <Compile Include="Aha\JsonModels\WorkFlowStatus.cs" />
     <Compile Include="Burndown\BurndownDay.cs" />
     <Compile Include="Burndown\BurndownSummary.cs" />
     <Compile Include="Burndown\IBurndownRepository.cs" />

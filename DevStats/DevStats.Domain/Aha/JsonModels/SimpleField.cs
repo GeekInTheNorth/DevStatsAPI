@@ -2,7 +2,7 @@
 
 namespace DevStats.Domain.Aha.JsonModels
 {
-    public class WorkFlowStatus
+    public class SimpleField
     {
         [JsonProperty("name")]
         public string Name { get; set; }

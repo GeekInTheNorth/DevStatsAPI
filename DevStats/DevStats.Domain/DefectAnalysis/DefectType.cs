@@ -5,6 +5,7 @@
         Unknown,
         Internal,
         External,
-        Rework
+        Rework,
+        NonDefect
     }
 }

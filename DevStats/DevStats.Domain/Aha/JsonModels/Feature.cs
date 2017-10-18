@@ -19,9 +19,15 @@ namespace DevStats.Domain.Aha.JsonModels
         public DateTime Updated { get; set; }
 
         [JsonProperty("workflow_status")]
-        public WorkFlowStatus Status { get; set; }
+        public SimpleField Status { get; set; }
+
+        [JsonProperty("workflow_kind")]
+        public SimpleField FeatureType { get; set; }
 
         [JsonProperty("integration_fields")]
         public List<IntegrationField> IntegrationFields { get; set; }
+
+        [JsonProperty("custom_fields")]
+        public List<CustomField> CustomFields { get; set; }
     }
 }

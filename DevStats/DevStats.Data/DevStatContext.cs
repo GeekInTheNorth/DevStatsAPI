@@ -22,6 +22,8 @@ namespace DevStats.Data
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<ApiLog> ApiLogs { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

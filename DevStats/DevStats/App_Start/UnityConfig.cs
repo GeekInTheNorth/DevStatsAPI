@@ -10,6 +10,7 @@ using DevStats.Domain.Jira.Logging;
 using DevStats.Domain.Security;
 using DevStats.Domain.DeveloperKpi;
 using DevStats.Domain.Aha;
+using DevStats.Domain.Logging;
 
 namespace DevStats
 {
@@ -27,6 +28,7 @@ namespace DevStats
             container.RegisterType<IWorkLogRepository, WorkLogRepository>();
             container.RegisterType<IUserRepository, UserRepository>();
             container.RegisterType<IDeveloperKpiRepository, DeveloperKpiRepository>();
+            container.RegisterType<IApiLogRepository, ApiLogRepository>();
 
             // Utilities
             container.RegisterType<IJiraConvertor, JiraConvertor>();

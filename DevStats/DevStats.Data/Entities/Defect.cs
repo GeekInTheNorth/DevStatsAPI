@@ -10,6 +10,8 @@ namespace DevStats.Data.Entities
 
         public string AhaId { get; set; }
 
+        public string Product { get; set; }
+
         public string Module { get; set; }
 
         public string Type { get; set; }

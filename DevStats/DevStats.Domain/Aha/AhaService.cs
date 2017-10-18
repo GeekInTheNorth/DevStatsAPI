@@ -1,18 +1,25 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
 using DevStats.Domain.Aha.JsonModels;
+using DevStats.Domain.DefectAnalysis;
+using DevStats.Domain.Logging;
 
 namespace DevStats.Domain.Aha
 {
     public class AhaService : IAhaService
     {
         private readonly IAhaSender sender;
+        private readonly IApiLogRepository apiLogRepository;
+        private readonly IDefectRepository defectRepository;
         private readonly string apiRoot;
-        private const string IssueSearchPath = @"{0}/api/v1/features?updated_since={1:yyyy-MM-dd}&fields=reference_num,name,created_at,updated_at,workflow_status,integration_fields&page={2}";
+        private const string IssueSearchPath = @"{0}/api/v1/features?updated_since={1:yyyy-MM-dd}&fields=reference_num,name,created_at,updated_at,workflow_status,integration_fields,custom_fields,workflow_kind&page={2}";
 
-        public AhaService(IAhaSender sender)
+        public AhaService(IAhaSender sender, IApiLogRepository apiLogRepository, IDefectRepository defectRepository)
         {
             this.sender = sender;
+            this.apiLogRepository = apiLogRepository;
+            this.defectRepository = defectRepository;
             this.apiRoot = ConfigurationManager.AppSettings.Get("AhaApiRoot") ?? string.Empty;
         }
 
@@ -21,20 +28,20 @@ namespace DevStats.Domain.Aha
             var pageNumber = 1;
             var numberOfPages = 1;
 
-            try
+            while (pageNumber <= numberOfPages)
             {
-                while (pageNumber <= numberOfPages)
-                {
-                    var defects = GetDefectsFromAha(earliestModified, pageNumber);
+                var ahaData = GetDefectsFromAha(earliestModified, pageNumber);
 
-                    numberOfPages = defects.Pagination.TotalPages;
+                if (ahaData == null) break;
 
-                    pageNumber++;
-                }
-            }
-            catch (Exception ex)
-            {
+                numberOfPages = ahaData.Pagination.TotalPages;
 
+                var defects = ahaData.Features
+                                     .Select(x => CaseFeatureToDefect(x));
+
+                defectRepository.Save(defects);
+
+                pageNumber++;
             }
         }
 
@@ -42,7 +49,49 @@ namespace DevStats.Domain.Aha
         {
             var url = string.Format(IssueSearchPath, apiRoot, earliestModified, pageNumber);
 
-            return sender.Get<FeatureCollection>(url);
+            try
+            {
+                var features = sender.Get<FeatureCollection>(url);
+
+                apiLogRepository.Success("AHA", url, "Get defects from Aha");
+
+                return features;
+            }
+            catch(Exception ex)
+            {
+                apiLogRepository.Failure("AHA", url, "Get defects from Aha", ex);
+
+                return null;
+            }
+        }
+
+        private AhaDefect CaseFeatureToDefect(Feature feature)
+        {
+            var completedStates = new string[] { "Shipped", "Ready to ship", "Will not Implement" };
+            DateTime? endDate = null;
+            string jiraId = null;
+            string module = null;
+            DefectType type = DefectType.NonDefect;
+
+            if (completedStates.Contains(feature.Status.Name))
+                endDate = feature.Updated;
+
+            if (feature.IntegrationFields != null)
+                jiraId = feature.IntegrationFields
+                                .Where(x => x.Service.Equals("Jira", StringComparison.CurrentCultureIgnoreCase) && x.Name.Equals("Key", StringComparison.CurrentCultureIgnoreCase))
+                                .Select(x => x.Value)
+                                .FirstOrDefault();
+
+            if (feature.CustomFields != null)
+                module = feature.CustomFields.Where(x => x.Name == "Module").Select(x => x.Value).FirstOrDefault();
+
+            if (feature.FeatureType != null && feature.FeatureType.Name == "Bug fix")
+                type = DefectType.External;
+
+            if (feature.FeatureType != null && feature.FeatureType.Name == "Defect")
+                type = DefectType.Internal;
+
+            return new AhaDefect(jiraId, feature.Id, module, type, feature.Created, endDate);
         }
     }
 }

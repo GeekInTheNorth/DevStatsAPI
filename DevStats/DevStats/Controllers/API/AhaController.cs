@@ -6,6 +6,7 @@ using DevStats.Domain.Aha;
 
 namespace DevStats.Controllers.API
 {
+    [RoutePrefix("api/aha")]
     public class AhaController : ApiController
     {
         private readonly IAhaService service;
@@ -16,7 +17,9 @@ namespace DevStats.Controllers.API
         }
 
         [HttpGet]
-        public HttpResponseMessage UpdateFromAha([FromUri]DateTime? earliestDate = null)
+        [Route("GetDefectUpdates")]
+        [Route("GetDefectUpdates/{earliestDate}")]
+        public HttpResponseMessage GetDefectUpdates([FromUri]DateTime? earliestDate = null)
         {
             var earliestModifiedDate = earliestDate ?? DateTime.Today.AddMonths(-2);
 
