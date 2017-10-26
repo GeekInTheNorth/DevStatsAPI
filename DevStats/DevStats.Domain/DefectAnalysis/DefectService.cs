@@ -14,14 +14,14 @@ namespace DevStats.Domain.DefectAnalysis
             this.repository = repository;
         }
 
-        public DefectSummaries GetSummary()
+        public ProductDefectSummaries GetSummary()
         {
             var today = DateTime.Today;
             var lastMonthEnd = new DateTime(today.Year, today.Month, 1).AddMonths(1).AddDays(-1);
             var firstMonthStart = new DateTime(today.Year, today.Month, 1).AddMonths(-12);
             var items = repository.Get(firstMonthStart, lastMonthEnd);
 
-            return new DefectSummaries(items, firstMonthStart, lastMonthEnd);
+            return new ProductDefectSummaries(items, firstMonthStart, lastMonthEnd);
         }
 
         public void Save(IEnumerable<Defect> defects)

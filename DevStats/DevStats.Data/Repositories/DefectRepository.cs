@@ -11,10 +11,21 @@ namespace DevStats.Data.Repositories
     {
         public IEnumerable<Defect> Get(DateTime createdFrom, DateTime createdTo)
         {
-            return Context.Defects
-                          .Where(x => x.Created >= createdFrom && x.Created <= createdTo)
-                          .ToList()
-                          .Select(x => new Defect(x.JiraId, x.AhaId, x.Module, x.Type, x.Created, x.Closed));
+            var rawDefects = (from defect in Context.Defects
+                              join mapping in Context.DefectMappings on new { defect.Product, defect.Module } equals new { Product = mapping.OriginalProduct, Module = mapping.OriginalModule } into mappings
+                              from map in mappings.DefaultIfEmpty()
+                              select new
+                              {
+                                  defect.JiraId,
+                                  defect.AhaId,
+                                  Product = map != null ? map.DisplayProduct : defect.Product,
+                                  Module = map != null ? map.DisplayModule : defect.Module,
+                                  defect.Type,
+                                  defect.Created,
+                                  defect.Closed
+                              }).ToList();
+
+            return rawDefects.Select(x => new Defect(x.JiraId, x.AhaId, x.Product, x.Module, x.Type, x.Created, x.Closed));
         }
 
         public void Save(IEnumerable<AhaDefect> defects)

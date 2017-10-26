@@ -4,7 +4,7 @@ namespace DevStats.Domain.DefectAnalysis
 {
     public interface IDefectService
     {
-        DefectSummaries GetSummary();
+        ProductDefectSummaries GetSummary();
 
         void Save(IEnumerable<Defect> defects);
     }

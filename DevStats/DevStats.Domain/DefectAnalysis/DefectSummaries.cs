@@ -10,6 +10,22 @@ namespace DevStats.Domain.DefectAnalysis
 
         private DefectType[] InternalAndExternal = new [] { DefectType.Internal, DefectType.External };
 
+        public Dictionary<string, List<DefectSummary>> Summaries
+        {
+            get
+            {
+                return new Dictionary<string, List<DefectSummary>>
+                {
+                    { "Total Outstanding Defects", TotalOutstandingDefects },
+                    { "Internal Outstanding Defects", InternalOutstandingDefects },
+                    { "External Outstanding Defects", ExternalOutstandingDefects },
+                    { "Total Items Logged", TotalItemsLogged },
+                    { "Internal Items Logged", InternalItemsLogged },
+                    { "External Items Logged", ExternalItemsLogged }
+                };
+            }
+        }
+
         public List<DefectSummary> TotalOutstandingDefects { get; private set; }
 
         public List<DefectSummary> InternalOutstandingDefects { get; private set; }
@@ -22,8 +38,6 @@ namespace DevStats.Domain.DefectAnalysis
 
         public List<DefectSummary> ExternalItemsLogged { get; private set; }
 
-        public List<DefectSummary> ReworkItemsLogged { get; private set; }
-
         public List<string> Modules { get; private set; }
 
         public DefectSummaries(IEnumerable<Defect> defects, DateTime firstMonthStart, DateTime lastMonthEnd)
@@ -35,7 +49,6 @@ namespace DevStats.Domain.DefectAnalysis
             TotalItemsLogged = new List<DefectSummary>();
             InternalItemsLogged = new List<DefectSummary>();
             ExternalItemsLogged = new List<DefectSummary>();
-            ReworkItemsLogged = new List<DefectSummary>();
 
             foreach(var module in Modules)
             {
@@ -47,7 +60,6 @@ namespace DevStats.Domain.DefectAnalysis
                 var totalItemsLogged = new DefectSummary(module);
                 var internalItemsLogged = new DefectSummary(module);
                 var externalItemsLogged = new DefectSummary(module);
-                var reworkItemsLogged = new DefectSummary(module);
 
                 while (currentMonthEnd <= lastMonthEnd)
                 {
@@ -59,7 +71,6 @@ namespace DevStats.Domain.DefectAnalysis
                     totalItemsLogged.MonthlyBreakdown.Add(monthString, GetLoggedDefectsForPeriod(defects, module, currentMonthEnd, AllDefectTypes));
                     internalItemsLogged.MonthlyBreakdown.Add(monthString, GetLoggedDefectsForPeriod(defects, module, currentMonthEnd, DefectType.Internal));
                     externalItemsLogged.MonthlyBreakdown.Add(monthString, GetLoggedDefectsForPeriod(defects, module, currentMonthEnd, DefectType.External));
-                    reworkItemsLogged.MonthlyBreakdown.Add(monthString, GetLoggedDefectsForPeriod(defects, module, currentMonthEnd, DefectType.Rework));
 
                     currentMonthEnd = new DateTime(currentMonthEnd.Year, currentMonthEnd.Month, 1).AddMonths(2).AddDays(-1);
                 }
@@ -70,7 +81,6 @@ namespace DevStats.Domain.DefectAnalysis
                 TotalItemsLogged.Add(totalItemsLogged);
                 InternalItemsLogged.Add(internalItemsLogged);
                 ExternalItemsLogged.Add(externalItemsLogged);
-                ReworkItemsLogged.Add(reworkItemsLogged);
             }
         }
 

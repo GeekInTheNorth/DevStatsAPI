@@ -284,7 +284,7 @@
     <Compile Include="Controllers\API\JiraSubtaskUpdatedController.cs" />
     <Compile Include="Controllers\API\SecureBaseApiController.cs" />
     <Compile Include="Controllers\MVC\AccountController.cs" />
-    <Compile Include="Controllers\MVC\DefectSummaryController.cs" />
+    <Compile Include="Controllers\MVC\DefectReportController.cs" />
     <Compile Include="Controllers\MVC\DeveloperKPIController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\MVC\JiraController.cs" />
@@ -300,7 +300,6 @@
     <Compile Include="Models\DeveloperKPI\QualityKpiApiModel.cs" />
     <Compile Include="Models\DeveloperKPI\QualityKpiModel.cs" />
     <Compile Include="Models\Jira\ApiTestModel.cs" />
-    <Compile Include="Models\DefectSummary\DefectSummaryModel.cs" />
     <Compile Include="Models\DefectTracking\DefectModel.cs" />
     <Compile Include="Models\Jira\AuditModel.cs" />
     <Compile Include="Models\Jira\CommitSprintModel.cs" />
@@ -310,7 +309,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\Shared.cshtml" />
-    <Content Include="Views\DefectSummary\Index.cshtml" />
+    <Content Include="Views\DefectReport\Analysis.cshtml" />
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -319,7 +318,7 @@
     <Content Include="Views\Jira\Audit.cshtml" />
     <Content Include="Views\Jira\ApiTest.cshtml" />
     <Content Include="Views\Jira\StateChecker.cshtml" />
-    <Content Include="Views\Jira\DefectAnalysis.cshtml" />
+    <Content Include="Views\DefectReport\JiraSummary.cshtml" />
     <Content Include="Views\Jira\SprintPlanner.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\LogOff.cshtml" />

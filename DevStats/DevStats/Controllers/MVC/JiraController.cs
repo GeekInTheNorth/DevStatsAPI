@@ -92,15 +92,6 @@ namespace DevStats.Controllers.MVC
         }
 
         [HttpGet]
-        public ActionResult DefectAnalysis()
-        {
-            var defects = service.GetDefects();
-            var model = new DefectAnalysisModel(defects);
-
-            return View(model);
-        }
-
-        [HttpGet]
         public ActionResult SprintPlanner()
         {
             return View();

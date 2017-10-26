@@ -1,0 +1,71 @@
+﻿@model DevStats.Domain.DefectAnalysis.ProductDefectSummaries
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+    Page.Title = "Defect Analysis";
+}
+
+<!-- Build Tabs -->
+
+<ul class="nav nav-tabs">
+    @foreach (var product in Model.ProductSummaries)
+    {
+        var tabName = "#summary-" + product.Key;
+        var productName = product.Key;
+        var isFirst = product.Key == Model.ProductSummaries.Keys.First();
+
+        if (isFirst)
+        {
+            <li class="active"><a data-toggle="tab" href="@tabName">@productName</a></li>
+        }
+        else
+        {
+            <li><a data-toggle="tab" href="@tabName">@productName</a></li>
+        }
+    }
+</ul>
+
+<div class="tab-content">
+    @foreach (var product in Model.ProductSummaries)
+    {
+        var tabName = "summary-" + product.Key;
+        var productName = product.Key;
+        var productSummary = product.Value;
+        var isFirst = product.Key == Model.ProductSummaries.Keys.First();
+        var divClass = isFirst ? "tab-pane fade in active" : "tab-pane fade";
+
+        <div id="@tabName" class="@divClass">
+            @foreach (var summary in productSummary.Summaries)
+            {
+                var doneHeader = false;
+
+                <h2>@summary.Key</h2>
+                <table class="table table-striped">
+                    @foreach (var summaryItem in summary.Value)
+                    {
+                        if (!doneHeader)
+                        {
+                            <tr>
+                                <th class="text">Module</th>
+                                @foreach (var detail in summaryItem.MonthlyBreakdown)
+                                {
+                                    <th class="numeric">@detail.Key</th>
+                                }
+                            </tr>
+
+                            doneHeader = true;
+                        }
+
+                        <tr>
+                            <td class="text">@summaryItem.Module</td>
+                            @foreach (var detail in summaryItem.MonthlyBreakdown)
+                            {
+                                <td class="numeric">@detail.Value</td>
+                            }
+                        </tr>
+                    }
+                </table>
+            }
+        </div>
+    }
+</div>
