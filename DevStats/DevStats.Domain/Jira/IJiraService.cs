@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DevStats.Domain.Jira.JsonModels;
 
 namespace DevStats.Domain.Jira
 {
@@ -16,5 +17,7 @@ namespace DevStats.Domain.Jira
         IEnumerable<JiraStateSummary> GetStateSummaries(string requestData);
 
         IEnumerable<JiraDefectSummary> GetDefects();
+
+        Issue GetIssue(string issueId);
     }
 }

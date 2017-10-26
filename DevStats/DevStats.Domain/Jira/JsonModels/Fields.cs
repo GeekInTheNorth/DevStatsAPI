@@ -124,5 +124,8 @@ namespace DevStats.Domain.Jira.JsonModels
 
         [JsonProperty("timetracking")]
         public TimeTracking TimeTracking { get; set; }
+
+        [JsonProperty("customfield_14300")]
+        public CategoryDetails Category { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
+using DevStats.Domain.DefectAnalysis;
 using DevStats.Domain.Jira.JsonModels;
 using DevStats.Domain.Jira.Logging;
 
@@ -17,6 +18,7 @@ namespace DevStats.Domain.Jira
         private readonly IJiraSender jiraSender;
         private readonly IProjectsRepository projectsRepository;
         private readonly IWorkLogRepository workLogRepository;
+        private readonly IDefectRepository defectRepository;
         private const string JiraIssuePath = @"{0}/rest/api/2/issue/{1}";
         private const string JiraCreatePath = @"{0}/rest/api/2/issue/";
         private const string JiraTransitionPath = @"{0}/rest/api/latest/issue/{1}/transitions";
@@ -29,19 +31,22 @@ namespace DevStats.Domain.Jira
             IJiraLogRepository loggingRepository,
             IJiraSender jiraSender,
             IProjectsRepository projectsRepository,
-            IWorkLogRepository workLogRepository)
+            IWorkLogRepository workLogRepository,
+            IDefectRepository defectRepository)
         {
             if (convertor == null) throw new ArgumentNullException(nameof(convertor));
             if (loggingRepository == null) throw new ArgumentNullException(nameof(loggingRepository));
             if (jiraSender == null) throw new ArgumentNullException(nameof(jiraSender));
             if (projectsRepository == null) throw new ArgumentNullException(nameof(projectsRepository));
             if (workLogRepository == null) throw new ArgumentNullException(nameof(workLogRepository));
+            if (defectRepository == null) throw new ArgumentNullException(nameof(defectRepository));
 
             this.convertor = convertor;
             this.loggingRepository = loggingRepository;
             this.jiraSender = jiraSender;
             this.projectsRepository = projectsRepository;
             this.workLogRepository = workLogRepository;
+            this.defectRepository = defectRepository;
         }
 
         public void CreateSubTasks(string issueId, string displayIssueId)
@@ -139,6 +144,7 @@ namespace DevStats.Domain.Jira
 
                 CopyTeamFromStoryToTask(story, tasks);
                 ProcessWorkLogs(story, tasks);
+                UpdateDefectAnalysis(story);
             }
             catch (Exception ex)
             {
@@ -287,6 +293,20 @@ namespace DevStats.Domain.Jira
                 loggingRepository.Log(story.Id, story.Key, action, ex.Message, false);
             }
 
+        }
+
+        public void UpdateDefectAnalysis(Issue story)
+        {
+            var defects = new List<JiraDefect> { new JiraDefect(story) };
+
+            defectRepository.Save(defects);
+        }
+
+        public Issue GetIssue(string issueId)
+        {
+            var url = string.Format(JiraIssuePath, GetApiRoot(), issueId);
+
+            return jiraSender.Get<Issue>(url);
         }
 
         private string GetApiRoot()

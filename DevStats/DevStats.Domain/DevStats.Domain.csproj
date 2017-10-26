@@ -88,7 +88,9 @@
     <Compile Include="Aha\IAhaService.cs" />
     <Compile Include="Aha\JsonModels\CustomField.cs" />
     <Compile Include="Aha\JsonModels\SimpleField.cs" />
+    <Compile Include="Jira\JiraDefect.cs" />
     <Compile Include="Jira\JiraDefectSummary.cs" />
+    <Compile Include="Jira\JsonModels\CategoryDetails.cs" />
     <Compile Include="Logging\IApiLogRepository.cs" />
     <Compile Include="Aha\JsonModels\Feature.cs" />
     <Compile Include="Aha\JsonModels\FeatureCollection.cs" />
