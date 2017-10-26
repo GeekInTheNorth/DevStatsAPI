@@ -24,6 +24,8 @@ namespace DevStats.Data
 
         public DbSet<ApiLog> ApiLogs { get; set; }
 
+        public DbSet<DefectMapping> DefectMappings { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
