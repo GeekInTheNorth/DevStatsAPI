@@ -28,7 +28,7 @@ namespace DevStats.Domain.Jira
             var ahaId = issue.Fields.AhaReference ?? string.Empty;
             var regEx = new Regex(@"([A-Z]{2,3}[\-]{1}[0-9]{1,5})");
 
-            if (regEx.IsMatch(issue.Fields.AhaReference))
+            if (!string.IsNullOrWhiteSpace(ahaId) && regEx.IsMatch(ahaId))
                 ahaId = regEx.Match(ahaId).Value;
 
             if (issue.Key.StartsWith("CPR"))

@@ -297,9 +297,20 @@ namespace DevStats.Domain.Jira
 
         public void UpdateDefectAnalysis(Issue story)
         {
-            var defects = new List<JiraDefect> { new JiraDefect(story) };
+            var action = string.Format("Process Story Update: Update defect analysis for {0}", story.Key);
 
-            defectRepository.Save(defects);
+            try
+            {
+                var defects = new List<JiraDefect> { new JiraDefect(story) };
+
+                defectRepository.Save(defects);
+
+                loggingRepository.Log(story.Id, story.Key, action, string.Empty, true);
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log(story.Id, story.Key, action, ex.Message, false);
+            }
         }
 
         public Issue GetIssue(string issueId)
