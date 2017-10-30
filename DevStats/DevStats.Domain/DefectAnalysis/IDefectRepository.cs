@@ -12,5 +12,7 @@ namespace DevStats.Domain.DefectAnalysis
         void Save(IEnumerable<AhaDefect> defects);
 
         void Save(IEnumerable<JiraDefect> defects);
+
+        void Delete(string jiraId);
     }
 }

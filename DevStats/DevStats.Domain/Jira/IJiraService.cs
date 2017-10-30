@@ -19,5 +19,7 @@ namespace DevStats.Domain.Jira
         IEnumerable<JiraDefectSummary> GetDefects();
 
         Issue GetIssue(string issueId);
+
+        void Delete(string jiraId);
     }
 }

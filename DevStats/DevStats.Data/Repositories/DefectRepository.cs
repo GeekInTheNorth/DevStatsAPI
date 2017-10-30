@@ -118,6 +118,17 @@ namespace DevStats.Data.Repositories
             }
         }
 
+        public void Delete(string jiraId)
+        {
+            var dbItem = Context.Defects.FirstOrDefault(x => x.JiraId == jiraId);
+
+            if (dbItem != null)
+            {
+                Context.Defects.Remove(dbItem);
+                Context.SaveChanges();
+            }
+        }
+
         private string GetBestString(string value1, string value2)
         {
             value1 = value1 == null || value1.Equals("Unknown", StringComparison.CurrentCultureIgnoreCase) ? null : value1;

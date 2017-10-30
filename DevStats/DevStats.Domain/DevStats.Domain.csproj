@@ -89,8 +89,10 @@
     <Compile Include="Aha\JsonModels\CustomField.cs" />
     <Compile Include="Aha\JsonModels\SimpleField.cs" />
     <Compile Include="DefectAnalysis\ProductDefectSummaries.cs" />
+    <Compile Include="Jira\IJiraIdValidator.cs" />
     <Compile Include="Jira\JiraDefect.cs" />
     <Compile Include="Jira\JiraDefectSummary.cs" />
+    <Compile Include="Jira\JiraIdValidator.cs" />
     <Compile Include="Jira\JsonModels\CategoryDetails.cs" />
     <Compile Include="Logging\IApiLogRepository.cs" />
     <Compile Include="Aha\JsonModels\Feature.cs" />

@@ -34,6 +34,7 @@ namespace DevStats
             container.RegisterType<IJiraConvertor, JiraConvertor>();
             container.RegisterType<IJiraSender, JiraSender>();
             container.RegisterType<IAhaSender, AhaSender>();
+            container.RegisterType<IJiraIdValidator, JiraIdValidator>();
 
             // Services
             container.RegisterType<IDefectService, DefectService>();

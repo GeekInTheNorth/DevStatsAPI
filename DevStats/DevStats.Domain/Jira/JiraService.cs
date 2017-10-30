@@ -19,6 +19,7 @@ namespace DevStats.Domain.Jira
         private readonly IProjectsRepository projectsRepository;
         private readonly IWorkLogRepository workLogRepository;
         private readonly IDefectRepository defectRepository;
+        private readonly IJiraIdValidator idValidator;
         private const string JiraIssuePath = @"{0}/rest/api/2/issue/{1}";
         private const string JiraCreatePath = @"{0}/rest/api/2/issue/";
         private const string JiraTransitionPath = @"{0}/rest/api/latest/issue/{1}/transitions";
@@ -32,7 +33,8 @@ namespace DevStats.Domain.Jira
             IJiraSender jiraSender,
             IProjectsRepository projectsRepository,
             IWorkLogRepository workLogRepository,
-            IDefectRepository defectRepository)
+            IDefectRepository defectRepository,
+            IJiraIdValidator idValidator)
         {
             if (convertor == null) throw new ArgumentNullException(nameof(convertor));
             if (loggingRepository == null) throw new ArgumentNullException(nameof(loggingRepository));
@@ -40,6 +42,7 @@ namespace DevStats.Domain.Jira
             if (projectsRepository == null) throw new ArgumentNullException(nameof(projectsRepository));
             if (workLogRepository == null) throw new ArgumentNullException(nameof(workLogRepository));
             if (defectRepository == null) throw new ArgumentNullException(nameof(defectRepository));
+            if (idValidator == null) throw new ArgumentNullException(nameof(idValidator));
 
             this.convertor = convertor;
             this.loggingRepository = loggingRepository;
@@ -47,6 +50,7 @@ namespace DevStats.Domain.Jira
             this.projectsRepository = projectsRepository;
             this.workLogRepository = workLogRepository;
             this.defectRepository = defectRepository;
+            this.idValidator = idValidator;
         }
 
         public void CreateSubTasks(string issueId, string displayIssueId)
@@ -318,6 +322,29 @@ namespace DevStats.Domain.Jira
             var url = string.Format(JiraIssuePath, GetApiRoot(), issueId);
 
             return jiraSender.Get<Issue>(url);
+        }
+
+        public void Delete(string jiraId)
+        {
+            var action = string.Format("Process Delete: Update defect analysis for {0}", jiraId);
+
+            if (!idValidator.Validate(jiraId))
+            {
+                var message = "Invalid Jira Id Provided.";
+                loggingRepository.Log(jiraId, jiraId, action, message, false);
+
+                throw new ArgumentException(message);
+            }
+
+            try
+            {
+                defectRepository.Delete(jiraId);
+                loggingRepository.Log(jiraId, jiraId, action, string.Empty, true);
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log(jiraId, jiraId, action, ex.Message, false);
+            }
         }
 
         private string GetApiRoot()
