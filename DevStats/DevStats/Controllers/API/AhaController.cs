@@ -16,7 +16,7 @@ namespace DevStats.Controllers.API
             this.service = service;
         }
 
-        [HttpGet]
+        [AcceptVerbs("GET", "POST")]
         [Route("GetDefectUpdates")]
         [Route("GetDefectUpdates/{earliestDate}")]
         public HttpResponseMessage GetDefectUpdates([FromUri]DateTime? earliestDate = null)
