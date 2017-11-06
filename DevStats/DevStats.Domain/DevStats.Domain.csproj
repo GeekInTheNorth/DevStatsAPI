@@ -153,6 +153,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>JsonFiles.resx</DependentUpon>
     </Compile>
+    <Compile Include="MVP\IMvpRepository.cs" />
+    <Compile Include="MVP\IMvpService.cs" />
+    <Compile Include="MVP\MvpService.cs" />
+    <Compile Include="MVP\VoteResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\ApplicationUser.cs" />
     <Compile Include="Security\ApplicationUserManager.cs" />

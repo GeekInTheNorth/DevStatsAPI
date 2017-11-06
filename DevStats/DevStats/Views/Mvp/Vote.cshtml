@@ -1,0 +1,30 @@
+﻿@model DevStats.Models.MVP.MvpVoteModel
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+    Page.Title = "MVP Voting";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        <label for="votee">Employee:</label>
+        @Html.DropDownListFor(m => m.VoteeId, new SelectList(Model.Users, "Key", "Value"), new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="reason">Reason:</label>
+        @Html.TextBox("description", null, new { @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-default">Submit Vote</button>
+}
+
+@if (Model.Result != null && Model.Result.WasSuccessful)
+{
+    <br />
+    <div class="alert alert-success alert-dismissible"><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Success: @Model.Result.Message</div>
+}
+else if (Model.Result != null && !Model.Result.WasSuccessful)
+{
+    <br />
+    <div class="alert alert-danger alert-dismissible"><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Failed: @Model.Result.Message</div>
+}

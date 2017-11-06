@@ -289,6 +289,7 @@
     <Compile Include="Controllers\MVC\DeveloperKPIController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\MVC\JiraController.cs" />
+    <Compile Include="Controllers\MVC\MvpController.cs" />
     <Compile Include="Filters\RequireSecureConnectionFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -306,6 +307,7 @@
     <Compile Include="Models\Jira\CommitSprintModel.cs" />
     <Compile Include="Models\Jira\DefectAnalysisModel.cs" />
     <Compile Include="Models\Jira\StateCheckerModel.cs" />
+    <Compile Include="Models\MVP\MvpVoteModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +333,7 @@
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.2.1.min.map" />
+    <Content Include="Views\Mvp\Vote.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

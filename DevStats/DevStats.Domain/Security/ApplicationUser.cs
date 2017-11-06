@@ -20,5 +20,12 @@ namespace DevStats.Domain.Security
         public DateTime? PasswordResetTokenExpiry { get; set; }
 
         public int AccessAttempts { get; set; }
+
+        public bool IsInRole(string role)
+        {
+            if (string.IsNullOrWhiteSpace(Role) || string.IsNullOrWhiteSpace(role)) return false;
+
+            return Role.Equals(role, StringComparison.CurrentCultureIgnoreCase);
+        }
     }
 }
