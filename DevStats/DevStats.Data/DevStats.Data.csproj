@@ -131,6 +131,10 @@
     <Compile Include="Migrations\201710261226430_RecordDefectMappings.Designer.cs">
       <DependentUpon>201710261226430_RecordDefectMappings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711060913484_AddMvpVoting.cs" />
+    <Compile Include="Migrations\201711060913484_AddMvpVoting.Designer.cs">
+      <DependentUpon>201711060913484_AddMvpVoting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -204,6 +208,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710261226430_RecordDefectMappings.resx">
       <DependentUpon>201710261226430_RecordDefectMappings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711060913484_AddMvpVoting.resx">
+      <DependentUpon>201711060913484_AddMvpVoting.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
