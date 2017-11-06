@@ -59,6 +59,7 @@
     <Compile Include="DevStatContext.cs" />
     <Compile Include="Entities\DefectCategory.cs" />
     <Compile Include="Entities\JiraLog.cs" />
+    <Compile Include="Entities\MvpVote.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\WorkLogStory.cs" />
     <Compile Include="Entities\WorkLogTask.cs" />

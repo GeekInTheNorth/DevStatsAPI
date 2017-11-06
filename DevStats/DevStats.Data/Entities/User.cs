@@ -10,6 +10,8 @@ namespace DevStats.Data.Entities
         [MaxLength(256)]
         public string UserName { get; set; }
 
+        public string DisplayName { get; set; }
+
         public string EmailAddress { get; set; }
 
         public string Role { get; set; }

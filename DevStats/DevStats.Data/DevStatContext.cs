@@ -26,6 +26,8 @@ namespace DevStats.Data
 
         public DbSet<DefectMapping> DefectMappings { get; set; }
 
+        public DbSet<MvpVote> MvpVotes { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
