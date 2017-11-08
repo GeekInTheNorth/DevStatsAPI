@@ -31,7 +31,7 @@ namespace DevStats.Domain.MVP
         public VoteResult Vote(int voteeId, int voterId, string description)
         {
             if (voteeId == voterId) return new VoteResult(false, "You cannot vote for yourself.");
-            if (string.IsNullOrWhiteSpace(description)) return new VoteResult(false, "You cannot vote without giving a reason");
+            if (string.IsNullOrWhiteSpace(description)) return new VoteResult(false, "You cannot vote without giving a reason.");
 
             try
             {
@@ -40,15 +40,29 @@ namespace DevStats.Domain.MVP
                 if (!users.Any(x => x.Id == voteeId)) return new VoteResult(false, "Unrecognised Votee.");
                 if (!users.Any(x => x.Id == voterId)) return new VoteResult(false, "Unrecognised Voter.");
 
+                var lastVotedFor = mvpRepository.GetLastVotedFor(voteeId);
+
+                if (lastVotedFor != null && lastVotedFor >= DateTime.Now.AddMinutes(-1))
+                    return new VoteResult(false, "A vote has already been received in the last minute for this team member.");
+
                 mvpRepository.Vote(voteeId, voterId, description);
 
                 return new VoteResult(true, "Thank you for voting.");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new VoteResult(false, "Unknown Error.");
             }
         }
 
+        public IEnumerable<Vote> Get()
+        {
+            return mvpRepository.Get();
+        }
+
+        public void AuthorizeVote(int voteId, bool isAuthorised)
+        {
+            mvpRepository.AuthorizeVote(voteId, isAuthorised);
+        }
     }
 }

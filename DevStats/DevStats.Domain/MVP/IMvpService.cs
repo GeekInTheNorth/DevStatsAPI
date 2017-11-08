@@ -7,5 +7,9 @@ namespace DevStats.Domain.MVP
         Dictionary<int, string> GetVotableUsers(int currentUserId);
 
         VoteResult Vote(int voteeId, int voterId, string description);
+
+        IEnumerable<Vote> Get();
+
+        void AuthorizeVote(int voteId, bool isAuthorised);
     }
 }

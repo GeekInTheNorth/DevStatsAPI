@@ -283,6 +283,7 @@
     <Compile Include="Controllers\API\JiraStateCheckerController.cs" />
     <Compile Include="Controllers\API\JiraStoryUpdatedController.cs" />
     <Compile Include="Controllers\API\JiraSubtaskUpdatedController.cs" />
+    <Compile Include="Controllers\API\MvpController.cs" />
     <Compile Include="Controllers\API\SecureBaseApiController.cs" />
     <Compile Include="Controllers\MVC\AccountController.cs" />
     <Compile Include="Controllers\MVC\DefectReportController.cs" />
@@ -307,7 +308,9 @@
     <Compile Include="Models\Jira\CommitSprintModel.cs" />
     <Compile Include="Models\Jira\DefectAnalysisModel.cs" />
     <Compile Include="Models\Jira\StateCheckerModel.cs" />
+    <Compile Include="Models\MVP\MvpVoteListModel.cs" />
     <Compile Include="Models\MVP\MvpVoteModel.cs" />
+    <Compile Include="Models\MVP\VoteModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -334,6 +337,7 @@
     <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.2.1.min.map" />
     <Content Include="Views\Mvp\Vote.cshtml" />
+    <Content Include="Views\Mvp\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

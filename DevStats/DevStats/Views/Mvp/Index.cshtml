@@ -1,0 +1,85 @@
+﻿@model DevStats.Models.MVP.MvpVoteListModel
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+    Page.Title = "MVP Voting";
+    Func<bool, string> FormatBoolean = (thisBool) => thisBool ? "Yes" : "No";
+    Func<DateTime, string> FormatDate = (thisDate) => string.Format("{0:dd/MM/yyyy HH:mm:ss}", thisDate);
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Votee</th>
+            <th>Voter</th>
+            <th>Reason</th>
+            <th>Voted</th>
+            <th>Authorised</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vote in Model.Votes)
+        {
+            var cellId = "AuthActionCell-" + vote.VoteId;
+            <tr>
+                <td>@vote.Votee</td>
+                <td>@vote.Voter</td>
+                <td>@vote.Reason</td>
+                <td>@FormatDate(vote.Voted)</td>
+                <td id="@cellId">
+                    <a onclick="javascript: toggleAuthorised(this);" data-id="@vote.VoteId" data-isauthorised="@vote.IsAuthorised" class="btn btn-link">@FormatBoolean(vote.IsAuthorised)</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="apiErrorModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Error</h4>
+            </div>
+            <div class="modal-body">
+                <p id="apiErrorMessage">
+                An error was encountered when trying to administer a vote.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function toggleAuthorised(source) {
+        var voteId = $(source).data("id");
+        var isAuthorised = $(source).data("isauthorised");
+
+        var endPoint = Boolean(isAuthorised) === true ? "/api/mvp/DeauthorizeVote/" : "/api/mvp/AuthorizeVote/";
+        var voteUrl = document.location.origin + endPoint + voteId;
+
+        $.post(voteUrl)
+            .done(function (data, textStatus, jqXHR) { authSuccess(data, textStatus, jqXHR, voteId, isAuthorised); })
+            .fail(function (data, textStatus, jqXHR) { authError(data, textStatus, jqXHR); });
+    }
+
+    function authSuccess(data, textStatus, jqXHR, voteId, isAuthorised)
+    {
+        var newAuthState = !isAuthorised;
+        var newAuthText = newAuthState ? "Yes" : "No";
+        var linkSearch = "#AuthActionCell-" + voteId;
+        var newMarkUp = "<a onclick='javascript: toggleAuthorised(this);' data-id='" + voteId + "' data-isauthorised='" + newAuthState + "' class='btn btn-link'>" + newAuthText + "</a>";
+
+        $(linkSearch).html(newMarkUp);
+    }
+
+    function authError(data, textStatus, jqXHR) {
+        $("#apiErrorMessage").text("An error was encountered when trying to administer a vote: " + jqXHR);
+        $("#apiErrorModal").modal();
+    }
+</script>
