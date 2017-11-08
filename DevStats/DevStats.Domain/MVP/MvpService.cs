@@ -25,7 +25,9 @@ namespace DevStats.Domain.MVP
 
             return userRepository.Get()
                                  .Where(x => validUserRoles.Contains(x.Role) && x.Id != currentUserId)
-                                 .ToDictionary(x => x.Id, y => y.UserName);
+                                 .Select(x => new { x.Id, Name = x.DisplayName ?? x.UserName })
+                                 .OrderBy(x => x.Name)
+                                 .ToDictionary(x => x.Id, y => y.Name);
         }
 
         public VoteResult Vote(int voteeId, int voterId, string description)

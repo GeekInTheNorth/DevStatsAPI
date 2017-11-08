@@ -9,6 +9,8 @@ namespace DevStats.Domain.Security
 
         public string UserName { get; set; }
 
+        public string DisplayName { get; set; }
+
         public string EmailAddress { get; set; }
 
         public string Role { get; set; }
