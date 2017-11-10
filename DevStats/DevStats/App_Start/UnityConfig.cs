@@ -12,6 +12,7 @@ using DevStats.Domain.DeveloperKpi;
 using DevStats.Domain.Aha;
 using DevStats.Domain.Logging;
 using DevStats.Domain.MVP;
+using DevStats.Domain.Communications;
 
 namespace DevStats
 {
@@ -45,6 +46,7 @@ namespace DevStats
             container.RegisterType<IDeveloperKpiService, DeveloperKpiService>();
             container.RegisterType<IAhaService, AhaService>();
             container.RegisterType<IMvpService, MvpService>();
+            container.RegisterType<IEmailService, EmailService>();
 
             DependencyResolver.SetResolver(new Unity.Mvc5.UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);

@@ -108,7 +108,7 @@ namespace DevStats.Data.Repositories
                 AccessAttempts = data.LoginErrors,
                 PasswordResetToken = data.PasswordResetToken,
                 PasswordResetTokenExpiry = data.PasswordResetTokenExpiry,
-                DisplayName = data.DisplayName
+                DisplayName = data.DisplayName ?? data.UserName
             };
         }
     }

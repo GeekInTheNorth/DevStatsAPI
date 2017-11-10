@@ -28,9 +28,10 @@
         var voteeId = $("select#VoteeId").val();
         var reason = $("input#description").val();
 
-        var newVote = new Object();
-        newVote.VoteeId = voteeId;
-        newVote.Reason = reason;
+        var newVote = {
+            VoteeId: voteeId,
+            Reason: reason
+        };
 
         var voteUrl = document.location.origin + "/api/mvp/vote";
 

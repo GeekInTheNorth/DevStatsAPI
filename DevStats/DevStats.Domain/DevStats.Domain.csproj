@@ -88,6 +88,7 @@
     <Compile Include="Aha\IAhaService.cs" />
     <Compile Include="Aha\JsonModels\CustomField.cs" />
     <Compile Include="Aha\JsonModels\SimpleField.cs" />
+    <Compile Include="Communications\IEmailService.cs" />
     <Compile Include="DefectAnalysis\ProductDefectSummaries.cs" />
     <Compile Include="Jira\IJiraIdValidator.cs" />
     <Compile Include="Jira\JiraDefect.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Security\ApplicationUser.cs" />
     <Compile Include="Security\ApplicationUserManager.cs" />
     <Compile Include="Security\ApplicationUserStore.cs" />
+    <Compile Include="Communications\EmailService.cs" />
     <Compile Include="Security\IApplicationUserStore.cs" />
     <Compile Include="Security\IUserRepository.cs" />
     <Compile Include="Sprints\ISprintPlannerService.cs" />
