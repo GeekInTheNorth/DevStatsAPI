@@ -280,7 +280,7 @@ namespace DevStats.Domain.Jira
                 if (tasksToCheck.Any())
                 {
                     var taskSearch = string.Format("issueKey in ({0})", string.Join(",", tasksToCheck.Select(x => x.Key)));
-                    var taskUrl = "{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,resolutiondate,customfield_13701,customfield_13709";
+                    var taskUrl = "{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,resolutiondate,customfield_13701,customfield_13709,assignee";
                     taskUrl = string.Format(taskUrl, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
                     tasksWithTimeAnalysis = jiraSender.Get<JiraIssues>(taskUrl).Issues;
                 }
