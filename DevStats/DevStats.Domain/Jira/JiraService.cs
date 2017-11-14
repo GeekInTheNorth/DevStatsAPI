@@ -53,36 +53,6 @@ namespace DevStats.Domain.Jira
             this.idValidator = idValidator;
         }
 
-        public void CreateSubTasks(string issueId, string displayIssueId)
-        {
-            loggingRepository.LogIncomingHook(JiraHook.StoryCreated, issueId, displayIssueId);
-
-            try
-            {
-                var storyUrl = string.Format(JiraIssuePath, GetApiRoot(), displayIssueId);
-                var story = jiraSender.Get<Issue>(storyUrl);
-                var taskSummaries = story.Fields.Subtasks ?? new Issue[] { };
-                var tasks = new Issue[] { };
-
-                if (taskSummaries.Any())
-                {
-                    var taskSearch = string.Format("issueKey in ({0})", string.Join(",", taskSummaries.Select(x => x.Key)));
-                    var taskUrl = string.Format(JiraIssueSearchPath, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
-                    tasks = jiraSender.Get<JiraIssues>(taskUrl).Issues ?? new Issue[] { };
-                }
-
-                var hasPOTask = tasks.Any(x => x.Fields.TaskType != null && x.Fields.TaskType.Value == "PO Review");
-                var hasMergeTask = tasks.Any(x => x.Fields.TaskType != null && x.Fields.TaskType.Value == "Merge");
-
-                if (!hasPOTask) CreateProductOwnerTask(issueId, displayIssueId);
-                if (!hasMergeTask) CreateMergeTask(issueId, displayIssueId);
-            }
-            catch (Exception ex)
-            {
-                loggingRepository.Log(issueId, displayIssueId, "Process Create Sub-Tasks", ex.Message, false);
-            }
-        }
-
         public void ProcessSubTaskUpdate(string issueId, string displayIssueId)
         {
             loggingRepository.LogIncomingHook(JiraHook.SubtaskUpdate, issueId, displayIssueId);
@@ -125,6 +95,42 @@ namespace DevStats.Domain.Jira
             catch (Exception ex)
             {
                 loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update", string.Format("Unexpected Error: {0}", ex.Message), false);
+            }
+        }
+
+        public void ProcessStoryCreate(string jiraId)
+        {
+            if (!idValidator.Validate(jiraId))
+            {
+                var message = "Invalid Jira Id Provided.";
+                loggingRepository.Log(jiraId, "Process Story Create", message, false);
+
+                throw new ArgumentException(message);
+            }
+
+            try
+            {
+                var storyUrl = string.Format(JiraIssuePath, GetApiRoot(), jiraId);
+                var story = jiraSender.Get<Issue>(storyUrl);
+                var taskSummaries = story.Fields.Subtasks ?? new Issue[] { };
+                var tasks = new Issue[] { };
+
+                if (taskSummaries.Any())
+                {
+                    var taskSearch = string.Format("issueKey in ({0})", string.Join(",", taskSummaries.Select(x => x.Key)));
+                    var taskUrl = string.Format(JiraIssueSearchPath, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
+                    tasks = jiraSender.Get<JiraIssues>(taskUrl).Issues ?? new Issue[] { };
+                }
+
+                var hasPOTask = tasks.Any(x => x.Fields.TaskType != null && x.Fields.TaskType.Value == "PO Review");
+                var hasMergeTask = tasks.Any(x => x.Fields.TaskType != null && x.Fields.TaskType.Value == "Merge");
+
+                if (!hasPOTask) CreateProductOwnerTask(story.Id, story.Key);
+                if (!hasMergeTask) CreateMergeTask(story.Id, story.Key);
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log(jiraId, "Process Create Sub-Tasks", ex.Message, false);
             }
         }
 

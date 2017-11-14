@@ -23,13 +23,10 @@
 {
     if (Model.PostResult.WasSuccessful)
     {
-        <div class="alert alert-success alert-dismissible"><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Success</div>
+        <div class="alert alert-success alert-dismissible"><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Success: @Model.PostResult.Response</div>
     }
     else
     {
-        <div class="alert alert-danger alert-dismissible"><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Failed</div>
+        <div class="alert alert-danger alert-dismissible"><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Failed: @Model.PostResult.Response</div>
     }
-    <div>
-        @Model.PostResult.Response
-    </div>
 }

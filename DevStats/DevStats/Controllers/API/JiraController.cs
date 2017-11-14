@@ -7,6 +7,7 @@ using DevStats.Domain.Jira;
 
 namespace DevStats.Controllers.API
 {
+    [EnableCors("*", "*", "*")]
     [RoutePrefix("api/jira")]
     public class JiraController : ApiController
     {
@@ -19,7 +20,26 @@ namespace DevStats.Controllers.API
             this.jiraService = jiraService;
         }
 
-        [EnableCors("*", "*", "*")]
+        [AcceptVerbs("POST")]
+        [Route("story/create/{jiraId}")]
+        public HttpResponseMessage StoryCreate(string jiraId)
+        {
+            try
+            {
+                jiraService.ProcessStoryCreate(jiraId);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (ArgumentException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+        }
+
         [AcceptVerbs("POST")]
         [Route("story/update/{jiraId}")]
         public HttpResponseMessage StoryUpdate(string jiraId)
@@ -40,7 +60,6 @@ namespace DevStats.Controllers.API
             }
         }
 
-        [EnableCors("*", "*", "*")]
         [AcceptVerbs("DELETE", "POST")]
         [Route("Delete/{jiraId}")]
         public HttpResponseMessage Delete(string jiraId)

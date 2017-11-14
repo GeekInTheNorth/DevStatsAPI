@@ -278,7 +278,6 @@
     <Compile Include="Controllers\API\BurndownController.cs" />
     <Compile Include="Controllers\API\DeveloperKPIController.cs" />
     <Compile Include="Controllers\API\JiraController.cs" />
-    <Compile Include="Controllers\API\JiraCreateSubtasksController.cs" />
     <Compile Include="Controllers\API\JiraSprintPlanningController.cs" />
     <Compile Include="Controllers\API\JiraStateCheckerController.cs" />
     <Compile Include="Controllers\API\JiraSubtaskUpdatedController.cs" />

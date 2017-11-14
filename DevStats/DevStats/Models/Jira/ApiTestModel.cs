@@ -15,7 +15,7 @@ namespace DevStats.Models.Jira
         {
             ApiRoots = new List<SelectListItem>
             {
-                new SelectListItem { Value = "/api/JiraCreateSubtasks?issueId=@@id@@&displayIssueId=@@id@@", Text = "Story or Bug Created (Create Subtasks)" },
+                new SelectListItem { Value = "/api/jira/story/create/@@id@@", Text = "Story or Bug Created (Create Subtasks)" },
                 new SelectListItem { Value = "/api/jira/story/update/@@id@@", Text = "Story or Bug Updated" },
                 new SelectListItem { Value = "/api/Jira/Delete/@@id@@", Text = "Story or Bug Deleted" },
                 new SelectListItem { Value = "/api/JiraSubtaskUpdated?issueId=@@id@@&displayIssueId=@@id@@", Text = "Subtask Updated" },
