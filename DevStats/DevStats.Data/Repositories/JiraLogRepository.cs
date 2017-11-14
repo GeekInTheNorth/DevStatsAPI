@@ -9,6 +9,22 @@ namespace DevStats.Data.Repositories
 {
     public class JiraLogRepository : BaseRepository, IJiraLogRepository
     {
+        public void Log(string jiraId, string action, string content, bool wasSuccessful)
+        {
+            var log = new JiraLog
+            {
+                IssueIdentity = jiraId,
+                IssueKey = jiraId,
+                Content = content,
+                Triggered = DateTime.Now,
+                Action = action,
+                Success = wasSuccessful
+            };
+
+            Context.JiraLogs.Add(log);
+            Context.SaveChanges();
+        }
+
         public void Log(string issueId, string displayIssueId, string action, string content, bool wasSuccessful)
         {
             var log = new JiraLog

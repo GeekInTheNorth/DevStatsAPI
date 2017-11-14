@@ -20,6 +20,27 @@ namespace DevStats.Controllers.API
         }
 
         [EnableCors("*", "*", "*")]
+        [AcceptVerbs("POST")]
+        [Route("story/update/{jiraId}")]
+        public HttpResponseMessage StoryUpdate(string jiraId)
+        {
+            try
+            {
+                jiraService.ProcessStoryUpdate(jiraId);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (ArgumentException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [EnableCors("*", "*", "*")]
         [AcceptVerbs("DELETE", "POST")]
         [Route("Delete/{jiraId}")]
         public HttpResponseMessage Delete(string jiraId)

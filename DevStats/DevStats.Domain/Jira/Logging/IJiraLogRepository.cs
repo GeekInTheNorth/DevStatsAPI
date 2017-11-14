@@ -5,6 +5,8 @@ namespace DevStats.Domain.Jira.Logging
 {
     public interface IJiraLogRepository
     {
+        void Log(string jiraId, string action, string content, bool wasSuccessful);
+
         void Log(string issueId, string displayIssueId, string action, string content, bool wasSuccessful);
 
         void LogIncomingHook(JiraHook hook, string issueId, string displayIssueId);

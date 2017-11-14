@@ -128,13 +128,19 @@ namespace DevStats.Domain.Jira
             }
         }
 
-        public void ProcessStoryUpdate(string issueId, string displayIssueId)
+        public void ProcessStoryUpdate(string jiraId)
         {
-            loggingRepository.LogIncomingHook(JiraHook.StoryUpdate, issueId, displayIssueId);
+            if (!idValidator.Validate(jiraId))
+            {
+                var message = "Invalid Jira Id Provided.";
+                loggingRepository.Log(jiraId, "Process Story Update", message, false);
+
+                throw new ArgumentException(message);
+            }
 
             try
             {
-                var storyUrl = string.Format(JiraIssuePath, GetApiRoot(), displayIssueId);
+                var storyUrl = string.Format(JiraIssuePath, GetApiRoot(), jiraId);
                 var story = jiraSender.Get<Issue>(storyUrl);
                 var taskSummaries = story.Fields.Subtasks ?? new Issue[] { };
                 var tasks = new Issue[] { };
@@ -142,7 +148,9 @@ namespace DevStats.Domain.Jira
                 if (taskSummaries.Any())
                 {
                     var taskSearch = string.Format("issueKey in ({0})", string.Join(",", taskSummaries.Select(x => x.Key)));
-                    var taskUrl = string.Format(JiraIssueSearchPath, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
+                    var taskUrl = "{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,resolutiondate,customfield_13701,customfield_13709,assignee,customfield_13700";
+                    taskUrl = string.Format(taskUrl, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
+
                     tasks = jiraSender.Get<JiraIssues>(taskUrl).Issues ?? new Issue[] { };
                 }
 
@@ -152,7 +160,7 @@ namespace DevStats.Domain.Jira
             }
             catch (Exception ex)
             {
-                loggingRepository.Log(issueId, displayIssueId, "Process Story Update", string.Format("Unexpected Error: {0}", ex.Message), false);
+                loggingRepository.Log(jiraId, "Process Story Update", string.Format("Unexpected Error: {0}", ex.Message), false);
             }
         }
 
@@ -273,22 +281,10 @@ namespace DevStats.Domain.Jira
             tasksToCheck.Add(story);
 
             var action = "Process Story Completion: Record Work Logs";
-            IEnumerable<Issue> tasksWithTimeAnalysis = null;
 
             try
             {
-                if (tasksToCheck.Any())
-                {
-                    var taskSearch = string.Format("issueKey in ({0})", string.Join(",", tasksToCheck.Select(x => x.Key)));
-                    var taskUrl = "{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,resolutiondate,customfield_13701,customfield_13709,assignee";
-                    taskUrl = string.Format(taskUrl, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
-                    tasksWithTimeAnalysis = jiraSender.Get<JiraIssues>(taskUrl).Issues;
-                }
-
-                tasksWithTimeAnalysis = tasksWithTimeAnalysis ?? new Issue[] { };
-
-                var storyEffort = new StoryEffort(story, tasksWithTimeAnalysis);
-
+                var storyEffort = new StoryEffort(story, tasksToCheck);
                 workLogRepository.Save(storyEffort);
                 loggingRepository.Log(story.Id, story.Key, action, string.Empty, true);
             }
@@ -296,7 +292,6 @@ namespace DevStats.Domain.Jira
             {
                 loggingRepository.Log(story.Id, story.Key, action, ex.Message, false);
             }
-
         }
 
         public void UpdateDefectAnalysis(Issue story)

@@ -281,7 +281,6 @@
     <Compile Include="Controllers\API\JiraCreateSubtasksController.cs" />
     <Compile Include="Controllers\API\JiraSprintPlanningController.cs" />
     <Compile Include="Controllers\API\JiraStateCheckerController.cs" />
-    <Compile Include="Controllers\API\JiraStoryUpdatedController.cs" />
     <Compile Include="Controllers\API\JiraSubtaskUpdatedController.cs" />
     <Compile Include="Controllers\API\MvpController.cs" />
     <Compile Include="Controllers\API\SecureBaseApiController.cs" />
