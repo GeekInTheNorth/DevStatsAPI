@@ -248,7 +248,7 @@ namespace DevStats.Domain.Jira
         {
             if (tasks == null || !tasks.Any())
             {
-                loggingRepository.Log(story.Id, story.Key, "Process Story Update", "No Sub-Tasks to update", true);
+                loggingRepository.Log(story.Id, story.Key, "Process Story Update: Update Cascade Team on Sub-Tasks", "No Sub-Tasks to update", true);
                 return;
             }
 
