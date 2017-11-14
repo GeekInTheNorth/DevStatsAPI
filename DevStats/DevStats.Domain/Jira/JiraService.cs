@@ -312,13 +312,6 @@ namespace DevStats.Domain.Jira
             }
         }
 
-        public Issue GetIssue(string issueId)
-        {
-            var url = string.Format(JiraIssuePath, GetApiRoot(), issueId);
-
-            return jiraSender.Get<Issue>(url);
-        }
-
         public void Delete(string jiraId)
         {
             var action = string.Format("Process Delete: Update defect analysis for {0}", jiraId);
