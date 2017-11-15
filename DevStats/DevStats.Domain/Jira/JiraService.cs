@@ -53,51 +53,6 @@ namespace DevStats.Domain.Jira
             this.idValidator = idValidator;
         }
 
-        public void ProcessSubTaskUpdate(string issueId, string displayIssueId)
-        {
-            loggingRepository.LogIncomingHook(JiraHook.SubtaskUpdate, issueId, displayIssueId);
-
-            try
-            {
-                var taskUrl = string.Format(JiraIssuePath, GetApiRoot(), displayIssueId);
-                var task = jiraSender.Get<Issue>(taskUrl);
-
-                if (task.Fields.Parent == null)
-                {
-                    loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update", "No parent to update", false);
-                    return;
-                }
-
-                if (task.Fields.Parent.Fields.Status.Name.Equals("In Progress") || !task.Fields.Status.Name.Equals("In Progress"))
-                {
-                    loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update", "No updates to apply to parent", true);
-                    return;
-                }
-
-                var transistionUrl = string.Format(JiraTransitionPath, GetApiRoot(), task.Fields.Parent.Key);
-                var transitions = jiraSender.Get<IssueTransitions>(transistionUrl);
-
-                if (transitions == null || transitions.Transitions == null || !transitions.Transitions.Any(x => x.Name == task.Fields.Status.Name))
-                {
-                    loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update", "No known transitions for updating the parent", false);
-                    return;
-                }
-
-                var transition = transitions.Transitions.First(x => x.Name == task.Fields.Status.Name);
-                var json = "{ \"update\": { \"comment\": [{ \"add\": { \"body\": \"@@COMMENT@@\" } } ] }, \"transition\": { \"id\": \"@@ID@@\" } }";
-                var comment = string.Format("Moved to {0} to match subtask: {1}", task.Fields.Status.Name, displayIssueId);
-                json = json.Replace("@@ID@@", transition.Id.ToString())
-                           .Replace("@@COMMENT@@", HttpUtility.JavaScriptStringEncode(comment));
-
-                var postResult = jiraSender.Post(transistionUrl, json);
-                loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update: Update Parent", postResult.Response, postResult.WasSuccessful);
-            }
-            catch (Exception ex)
-            {
-                loggingRepository.Log(issueId, displayIssueId, "Process Sub-Task Update", string.Format("Unexpected Error: {0}", ex.Message), false);
-            }
-        }
-
         public void ProcessStoryCreate(string jiraId)
         {
             if (!idValidator.Validate(jiraId))
@@ -167,6 +122,57 @@ namespace DevStats.Domain.Jira
             catch (Exception ex)
             {
                 loggingRepository.Log(jiraId, "Process Story Update", string.Format("Unexpected Error: {0}", ex.Message), false);
+            }
+        }
+
+        public void ProcessSubtaskUpdate(string jiraId)
+        {
+            if (!idValidator.Validate(jiraId))
+            {
+                var message = "Invalid Jira Id Provided.";
+                loggingRepository.Log(jiraId, "Process Story Update", message, false);
+
+                throw new ArgumentException(message);
+            }
+
+            try
+            {
+                var taskUrl = string.Format(JiraIssuePath, GetApiRoot(), jiraId);
+                var task = jiraSender.Get<Issue>(taskUrl);
+
+                if (task.Fields.Parent == null)
+                {
+                    loggingRepository.Log(jiraId, "Process Sub-Task Update", "No parent to update", false);
+                    return;
+                }
+
+                if (task.Fields.Parent.Fields.Status.Name.Equals("In Progress") || !task.Fields.Status.Name.Equals("In Progress"))
+                {
+                    loggingRepository.Log(jiraId, "Process Sub-Task Update", "No updates to apply to parent", true);
+                    return;
+                }
+
+                var transistionUrl = string.Format(JiraTransitionPath, GetApiRoot(), task.Fields.Parent.Key);
+                var transitions = jiraSender.Get<IssueTransitions>(transistionUrl);
+
+                if (transitions == null || transitions.Transitions == null || !transitions.Transitions.Any(x => x.Name == task.Fields.Status.Name))
+                {
+                    loggingRepository.Log(jiraId, "Process Sub-Task Update", "No known transitions for updating the parent", false);
+                    return;
+                }
+
+                var transition = transitions.Transitions.First(x => x.Name == task.Fields.Status.Name);
+                var json = "{ \"update\": { \"comment\": [{ \"add\": { \"body\": \"@@COMMENT@@\" } } ] }, \"transition\": { \"id\": \"@@ID@@\" } }";
+                var comment = string.Format("Moved to {0} to match subtask: {1}", task.Fields.Status.Name, jiraId);
+                json = json.Replace("@@ID@@", transition.Id.ToString())
+                           .Replace("@@COMMENT@@", HttpUtility.JavaScriptStringEncode(comment));
+
+                var postResult = jiraSender.Post(transistionUrl, json);
+                loggingRepository.Log(jiraId, "Process Sub-Task Update: Update Parent", postResult.Response, postResult.WasSuccessful);
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log(jiraId, "Process Sub-Task Update", string.Format("Unexpected Error: {0}", ex.Message), false);
             }
         }
 

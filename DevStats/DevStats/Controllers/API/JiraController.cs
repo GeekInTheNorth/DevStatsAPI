@@ -61,7 +61,7 @@ namespace DevStats.Controllers.API
         }
 
         [AcceptVerbs("DELETE", "POST")]
-        [Route("Delete/{jiraId}")]
+        [Route("story/Delete/{jiraId}")]
         public HttpResponseMessage Delete(string jiraId)
         {
             try
@@ -79,5 +79,25 @@ namespace DevStats.Controllers.API
                 return Request.CreateResponse(HttpStatusCode.InternalServerError);
             }
         }
+
+        [AcceptVerbs("POST")]
+        [Route("subtask/update/{jiraId}")]
+        public HttpResponseMessage SubTaskUpdate(string jiraId)
+        {
+            try
+            {
+                jiraService.ProcessSubtaskUpdate(jiraId);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (ArgumentException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+        }       
     }
 }
