@@ -8,11 +8,11 @@ using DevStats.Models.Jira;
 
 namespace DevStats.Controllers.API
 {
-    public class JiraSprintPlanningController : ApiController
+    public class SprintPlanningController : ApiController
     {
         private readonly ISprintPlannerService service;
 
-        public JiraSprintPlanningController(ISprintPlannerService service)
+        public SprintPlanningController(ISprintPlannerService service)
         {
             if (service == null) throw new ArgumentNullException(nameof(service));
 
