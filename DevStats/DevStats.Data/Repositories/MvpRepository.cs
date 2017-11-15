@@ -39,7 +39,7 @@ namespace DevStats.Data.Repositories
                 VoterId = voterId,
                 Description = description,
                 VoteDate = DateTime.Now,
-                Authorised = true
+                Authorised = false
             };
 
             Context.MvpVotes.Add(dataItem);

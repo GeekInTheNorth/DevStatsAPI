@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Web;
-using DevStats.Domain.Communications;
 using DevStats.Domain.Security;
 
 namespace DevStats.Domain.MVP
@@ -12,17 +9,14 @@ namespace DevStats.Domain.MVP
     {
         private readonly IUserRepository userRepository;
         private readonly IMvpRepository mvpRepository;
-        private readonly IEmailService emailService;
 
-        public MvpService(IMvpRepository mvpRepository, IUserRepository userRepository, IEmailService emailService)
+        public MvpService(IMvpRepository mvpRepository, IUserRepository userRepository)
         {
             if (mvpRepository == null) throw new ArgumentNullException(nameof(mvpRepository));
             if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
-            if (emailService == null) throw new ArgumentNullException(nameof(emailService));
 
             this.mvpRepository = mvpRepository;
             this.userRepository = userRepository;
-            this.emailService = emailService;
         }
 
         public Dictionary<int, string> GetVotableUsers(int currentUserId)
@@ -53,11 +47,10 @@ namespace DevStats.Domain.MVP
                     return new VoteResult(false, "A vote has already been received in the last minute for this team member.");
 
                 mvpRepository.Vote(voteeId, voterId, description);
-                SendVoteEmail(users, voteeId, voterId, description);
 
                 return new VoteResult(true, "Thank you for voting.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new VoteResult(false, "Unknown Error.");
             }
@@ -71,27 +64,6 @@ namespace DevStats.Domain.MVP
         public void AuthorizeVote(int voteId, bool isAuthorised)
         {
             mvpRepository.AuthorizeVote(voteId, isAuthorised);
-        }
-
-        private void SendVoteEmail(IEnumerable<ApplicationUser> users, int voteeId, int voterId, string description)
-        {
-            try
-            {
-                var votee = users.FirstOrDefault(x => x.Id == voteeId);
-                var voter = users.FirstOrDefault(x => x.Id == voterId);
-
-                var targetEmail = ConfigurationManager.AppSettings["MvpDistributionEmail"];
-                var subject = string.Format("MVP: Vote placed for {0}", votee.DisplayName);
-                var bodyText = "<div style=\"background-color: #659EC7; margin: 10px; padding:5px; color: black; font-family: tahoma; font-size: 1.2em;\"><h1>MVP Award</h1><p>A vote has been placed for {0}.</p><p>For: {1}</p></div>";
-
-                bodyText = string.Format(bodyText, HttpUtility.HtmlEncode(votee.DisplayName), HttpUtility.HtmlEncode(description));
-
-                emailService.SendEmail(targetEmail, subject, bodyText);
-            }
-            catch (Exception)
-            {
-                // TODO: Log
-            }
         }
     }
 }

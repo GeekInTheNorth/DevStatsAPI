@@ -20,7 +20,7 @@
     @Html.ActionLink("Administer Votes", "Index", "MVP", null, new { @class = "btn btn-info" });
 }
 
-<br/ >
+<div id="vote-responses" style="margin-top: 10px;"></div>
 
 <script type="text/javascript">
     function sendVote() {
@@ -47,12 +47,12 @@
         else
             markUp = "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Vote Failed for " + votee + ": " + data.Message + "</div>";
 
-        $("body").append(markUp);
+        $("#vote-responses").append(markUp);
     }
 
     function voteError(data, textStatus, jqXHR, votee) {
         var markUp = "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>Vote Failed for " + votee + "</div>";
 
-        $("body").append(markUp);
+        $("#vote-responses").append(markUp);
     }
 </script>
