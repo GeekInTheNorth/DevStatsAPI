@@ -36,7 +36,7 @@
         {
             var rowClass = auditItem.WasSuccessful ? "" : "danger";
             <tr class="@rowClass">
-                <td>@auditItem.AuditDate.ToString("dd/MM/yyyy hh:mm:ss")</td>
+                <td>@auditItem.AuditDate.ToString("dd/MM/yyyy HH:mm:ss")</td>
                 <td>@auditItem.JiraId</td>
                 <td>@auditItem.Action</td>
                 <td>@auditItem.WasSuccessfulString</td>
