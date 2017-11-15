@@ -10,8 +10,6 @@ namespace DevStats.Data
         {
         }
 
-        public DbSet<BurndownDay> BurndownDays { get; set; }
-
         public DbSet<Defect> Defects { get; set; }
 
         public DbSet<JiraLog> JiraLogs { get; set; }

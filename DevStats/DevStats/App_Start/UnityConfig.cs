@@ -1,7 +1,6 @@
 using Microsoft.Practices.Unity;
 using System.Web.Http;
 using DevStats.Data.Repositories;
-using DevStats.Domain.Burndown;
 using DevStats.Domain.DefectAnalysis;
 using System.Web.Mvc;
 using DevStats.Domain.Sprints;
@@ -23,7 +22,6 @@ namespace DevStats
 			var container = new UnityContainer();
 
             // Repositories
-            container.RegisterType<IBurndownRepository, BurndownRepository>();
             container.RegisterType<IDefectRepository, DefectRepository>();
             container.RegisterType<IJiraLogRepository, JiraLogRepository>();
             container.RegisterType<IProjectsRepository, ProjectsRepository>();

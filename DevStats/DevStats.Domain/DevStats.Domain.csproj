@@ -100,9 +100,6 @@
     <Compile Include="Aha\JsonModels\FeatureCollection.cs" />
     <Compile Include="Aha\JsonModels\IntegrationField.cs" />
     <Compile Include="Aha\JsonModels\PaginationDetails.cs" />
-    <Compile Include="Burndown\BurndownDay.cs" />
-    <Compile Include="Burndown\BurndownSummary.cs" />
-    <Compile Include="Burndown\IBurndownRepository.cs" />
     <Compile Include="DefectAnalysis\Defect.cs" />
     <Compile Include="DefectAnalysis\DefectService.cs" />
     <Compile Include="DefectAnalysis\DefectSummaries.cs" />
