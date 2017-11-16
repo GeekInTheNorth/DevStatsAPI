@@ -95,6 +95,11 @@
     <Compile Include="Jira\JiraDefectSummary.cs" />
     <Compile Include="Jira\JiraIdValidator.cs" />
     <Compile Include="Jira\JsonModels\CategoryDetails.cs" />
+    <Compile Include="KPI\ActualsVsEstimatesService.cs" />
+    <Compile Include="KPI\ActualsVsEstimateSummary.cs" />
+    <Compile Include="KPI\ActualsVsEstimateWorkItem.cs" />
+    <Compile Include="KPI\IActualsVsEstimatesRepository.cs" />
+    <Compile Include="KPI\IActualsVsEstimatesService.cs" />
     <Compile Include="Logging\IApiLogRepository.cs" />
     <Compile Include="Aha\JsonModels\Feature.cs" />
     <Compile Include="Aha\JsonModels\FeatureCollection.cs" />

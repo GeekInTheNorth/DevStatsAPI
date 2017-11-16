@@ -1,0 +1,69 @@
+﻿@model DevStats.Models.KPI.ActualsVsEstimatesModel
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+    Page.Title = "Individual Actuals vs Estimates";
+    Func<decimal, string> FormatTime = (seconds) => string.Format("{0:F2} hrs", seconds / 3600);
+    Func<decimal, string> FormatProportion = (proportion) => string.Format("{0:F2} %", proportion * 100);
+}
+
+@using (Html.BeginForm())
+{
+    <div class="filter">
+        <span class="filter-label">Showing Data for:</span>
+        @if (Model.IsAdmin)
+        {
+            @Html.DropDownListFor(m => m.SelectedTeamMember, new SelectList(Model.TeamMembers, "Key", "Value"))
+            <button type="submit" class="btn btn-default">Search</button>
+        }
+        else
+        {
+            <span class="filter-label">@Model.TeamMembers.Select(x => x.Value).FirstOrDefault()</span>
+        }
+    </div>
+}
+
+@if (Model.Summary != null && Model.Summary.WorkItems != null && Model.Summary.WorkItems.Any())
+{
+    <h1>Summary</h1>
+
+    <ul>
+        <li>30 Rolling Days: @FormatProportion(Model.Summary.Rolling30Days)</li>
+        <li>60 Rolling Days: @FormatProportion(Model.Summary.Rolling90Days)</li>
+        <li>365 Rolling Days: @FormatProportion(Model.Summary.Rolling365Days)</li>
+    </ul>
+
+    <h1>Details</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="numeric">Key</th>
+                <th class="text">Description</th>
+                <th class="text">Complexity</th>
+                <th class="numeric">Estimate</th>
+                <th class="numeric">Actual</th>
+                <th class="numeric">Completed</th>
+                <th class="numeric">Ratio</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var workItem in Model.Summary.WorkItems)
+            {
+                <tr>
+                    <td class="numeric">@workItem.Key</td>
+                    <td class="text">@workItem.Description</td>
+                    <td class="text">@workItem.Complexity</td>
+                    <td class="numeric">@FormatTime(workItem.EstimateInSeconds)</td>
+                    <td class="numeric">@FormatTime(workItem.ActualInSeconds)</td>
+                    <td class="numeric">@workItem.Completed</td>
+                    <td class="numeric">@FormatProportion(workItem.Ratio)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-danger">No data to display</div>
+}

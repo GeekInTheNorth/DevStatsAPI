@@ -266,7 +266,9 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-TW.min.js" />
     <Content Include="Scripts\SprintPlanner.js" />
     <Content Include="Content\DevStats.css" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -286,6 +288,7 @@
     <Compile Include="Controllers\MVC\DeveloperKPIController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\MVC\JiraController.cs" />
+    <Compile Include="Controllers\MVC\KPIController.cs" />
     <Compile Include="Controllers\MVC\MvpController.cs" />
     <Compile Include="Filters\RequireSecureConnectionFilter.cs" />
     <Compile Include="Global.asax.cs">
@@ -304,6 +307,7 @@
     <Compile Include="Models\Jira\CommitSprintModel.cs" />
     <Compile Include="Models\Jira\DefectAnalysisModel.cs" />
     <Compile Include="Models\Jira\StateCheckerModel.cs" />
+    <Compile Include="Models\KPI\ActualsVsEstimatesModel.cs" />
     <Compile Include="Models\MVP\MvpVoteListModel.cs" />
     <Compile Include="Models\MVP\MvpVoteModel.cs" />
     <Compile Include="Models\MVP\VoteModel.cs" />
@@ -334,6 +338,7 @@
     <Content Include="Scripts\jquery-3.2.1.min.map" />
     <Content Include="Views\Mvp\Vote.cshtml" />
     <Content Include="Views\Mvp\Index.cshtml" />
+    <Content Include="Views\KPI\ActualsVsEstimates.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
