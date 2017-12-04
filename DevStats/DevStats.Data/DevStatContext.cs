@@ -26,6 +26,8 @@ namespace DevStats.Data
 
         public DbSet<MvpVote> MvpVotes { get; set; }
 
+        public DbSet<ReleaseQuality> ReleaseQualities { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

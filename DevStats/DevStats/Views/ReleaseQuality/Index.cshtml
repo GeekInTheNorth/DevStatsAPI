@@ -1,0 +1,60 @@
+﻿@model DevStats.Models.ReleaseQuality.ReleaseQualityModel
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+    Page.Title = "Release Quality";
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Version</th>
+            <th>Reworks</th>
+            <th>Code Review Failures</th>
+            <th>Test Plan Failures</th>
+            <th>Backlog Bugs Resolved</th>
+            <th>Regression Bugs Found</th>
+            <th>Deployment Issues</th>
+            <th>Hotfixes</th>
+            <th>Days Delayed</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var release in Model.Releases)
+        {
+            var baseTip = "{0} {1}: {2} x {3}<br/>";
+            var toolTip = string.Format(baseTip, "&nbsp;", "Reworks", release.Reworks, 1);
+            toolTip += string.Format(baseTip, "+", "Code Review Failures", release.CodeReviewFailures, 1);
+            toolTip += string.Format(baseTip, "+", "Test Plan Review Failures", release.TestPlanReviewFailures, 1);
+            toolTip += string.Format(baseTip, "-", "Backlog Bugs Resolved", release.BacklogBugsResolved, 1);
+            toolTip += string.Format(baseTip, "+", "Regression Bugs", release.RegressionBugs, 10);
+            toolTip += string.Format(baseTip, "+", "Deployment Issues", release.DeploymentIssues, 10);
+            toolTip += string.Format(baseTip, "+", "Days Delayed", release.DeploymentIssues, 10);
+            toolTip += string.Format(baseTip, "+", "Hotfixes", release.DeploymentIssues, 100);
+
+            <tr>
+                <td>@release.Product</td>
+                <td>@release.Version</td>
+                <td>@release.Reworks</td>
+                <td>@release.CodeReviewFailures</td>
+                <td>@release.TestPlanReviewFailures</td>
+                <td>@release.BacklogBugsResolved</td>
+                <td>@release.RegressionBugs</td>
+                <td>@release.DeploymentIssues</td>
+                <td>@release.Hotfixes</td>
+                <td>@release.DaysDelayed</td>
+                <td>
+                    <a href="#" data-toggle="tooltip" title="@toolTip" data-html="true" data-placement="left">@release.Score</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>

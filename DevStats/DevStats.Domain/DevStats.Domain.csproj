@@ -162,6 +162,10 @@
     <Compile Include="MVP\Vote.cs" />
     <Compile Include="MVP\VoteResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\ReleaseReport\IReleaseQualityRepository.cs" />
+    <Compile Include="Reports\ReleaseReport\IReleaseQualityService.cs" />
+    <Compile Include="Reports\ReleaseReport\ReleaseQuality.cs" />
+    <Compile Include="Reports\ReleaseReport\ReleaseQualityService.cs" />
     <Compile Include="Security\ApplicationUser.cs" />
     <Compile Include="Security\ApplicationUserManager.cs" />
     <Compile Include="Security\ApplicationUserStore.cs" />

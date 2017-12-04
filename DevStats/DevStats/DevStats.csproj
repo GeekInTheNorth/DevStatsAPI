@@ -290,6 +290,7 @@
     <Compile Include="Controllers\MVC\JiraController.cs" />
     <Compile Include="Controllers\MVC\KPIController.cs" />
     <Compile Include="Controllers\MVC\MvpController.cs" />
+    <Compile Include="Controllers\MVC\ReleaseQualityController.cs" />
     <Compile Include="Filters\RequireSecureConnectionFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -311,6 +312,7 @@
     <Compile Include="Models\MVP\MvpVoteListModel.cs" />
     <Compile Include="Models\MVP\MvpVoteModel.cs" />
     <Compile Include="Models\MVP\VoteModel.cs" />
+    <Compile Include="Models\ReleaseQuality\ReleaseQualityModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -339,6 +341,7 @@
     <Content Include="Views\Mvp\Vote.cshtml" />
     <Content Include="Views\Mvp\Index.cshtml" />
     <Content Include="Views\KPI\ActualsVsEstimates.cshtml" />
+    <Content Include="Views\ReleaseQuality\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

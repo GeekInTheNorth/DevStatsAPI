@@ -13,6 +13,7 @@ using DevStats.Domain.Logging;
 using DevStats.Domain.MVP;
 using DevStats.Domain.Communications;
 using DevStats.Domain.KPI;
+using DevStats.Domain.Reports.ReleaseReport;
 
 namespace DevStats
 {
@@ -32,6 +33,7 @@ namespace DevStats
             container.RegisterType<IApiLogRepository, ApiLogRepository>();
             container.RegisterType<IMvpRepository, MvpRepository>();
             container.RegisterType<IActualsVsEstimatesRepository, ActualsVsEstimatesRepository>();
+            container.RegisterType<IReleaseQualityRepository, ReleaseQualityRepository>();
 
             // Utilities
             container.RegisterType<IJiraConvertor, JiraConvertor>();
@@ -48,6 +50,7 @@ namespace DevStats
             container.RegisterType<IMvpService, MvpService>();
             container.RegisterType<IEmailService, EmailService>();
             container.RegisterType<IActualsVsEstimatesService, ActualsVsEstimatesService>();
+            container.RegisterType<IReleaseQualityService, ReleaseQualityService>();
 
             DependencyResolver.SetResolver(new Unity.Mvc5.UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);
