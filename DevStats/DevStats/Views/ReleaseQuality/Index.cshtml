@@ -15,9 +15,9 @@
             <th>Test Plan Failures</th>
             <th>Backlog Bugs Resolved</th>
             <th>Regression Bugs Found</th>
+            <th>Days Delayed</th>
             <th>Deployment Issues</th>
             <th>Hotfixes</th>
-            <th>Days Delayed</th>
             <th>Score</th>
         </tr>
     </thead>
@@ -30,9 +30,9 @@
             toolTip += string.Format(baseTip, "+", "Test Plan Review Failures", release.TestPlanReviewFailures, 1);
             toolTip += string.Format(baseTip, "-", "Backlog Bugs Resolved", release.BacklogBugsResolved, 1);
             toolTip += string.Format(baseTip, "+", "Regression Bugs", release.RegressionBugs, 10);
+            toolTip += string.Format(baseTip, "+", "Days Delayed", release.DaysDelayed, 10);
             toolTip += string.Format(baseTip, "+", "Deployment Issues", release.DeploymentIssues, 10);
-            toolTip += string.Format(baseTip, "+", "Days Delayed", release.DeploymentIssues, 10);
-            toolTip += string.Format(baseTip, "+", "Hotfixes", release.DeploymentIssues, 100);
+            toolTip += string.Format(baseTip, "+", "Hotfixes", release.Hotfixes, 100);
 
             <tr>
                 <td>@release.Product</td>
@@ -42,9 +42,9 @@
                 <td>@release.TestPlanReviewFailures</td>
                 <td>@release.BacklogBugsResolved</td>
                 <td>@release.RegressionBugs</td>
+                <td>@release.DaysDelayed</td>
                 <td>@release.DeploymentIssues</td>
                 <td>@release.Hotfixes</td>
-                <td>@release.DaysDelayed</td>
                 <td>
                     <a href="#" data-toggle="tooltip" title="@toolTip" data-html="true" data-placement="left">@release.Score</a>
                 </td>
