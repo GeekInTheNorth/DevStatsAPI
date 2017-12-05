@@ -116,6 +116,7 @@ namespace DevStats.Domain.Jira
                 }
 
                 CopyTeamFromStoryToTask(story, tasks);
+                CopyVersionFromStoryToTask(story, tasks);
                 ProcessWorkLogs(story, tasks);
                 UpdateDefectAnalysis(story);
             }
@@ -281,6 +282,38 @@ namespace DevStats.Domain.Jira
 
                     loggingRepository.Log(task.Id, task.Key, action, putResult.Response, putResult.WasSuccessful);
                 }
+            }
+        }
+
+        private void CopyVersionFromStoryToTask(Issue story, IEnumerable<Issue> tasks)
+        {
+            if (tasks == null || !tasks.Any())
+            {
+                loggingRepository.Log(story.Id, story.Key, "Process Story Update: Update Fix Version on Sub-Tasks", "No Sub-Tasks to update", true);
+                return;
+            }
+
+            var regEx = new Regex("[0-9][.][0-9]{1,2}");
+            var storyVersions = story.Fields.FixVersions != null ? story.Fields.FixVersions.Where(x => regEx.IsMatch(x.Name)).Select(x => x.Name) : Enumerable.Empty<string>();
+
+            if (!storyVersions.Any())
+            {
+                loggingRepository.Log(story.Id, story.Key, "Process Story Update: Update Fix Version on Sub-Tasks", "No version to copy", true);
+                return;
+            }
+
+            var versions = storyVersions.Select(x => "{ \"name\": \"" + x + "\" }");
+            var json = "{ \"update\" : { \"fixVersions\" : [ { \"set\": [";
+            json += string.Join(",", versions);
+            json += "] } ] } }";
+
+            foreach (var task in tasks)
+            {
+                var url = string.Format(JiraIssuePath, GetApiRoot(), task.Key);
+                var action = string.Format("Process Story Update: Update Fix Version on Sub-Task {0}", task.Key);
+                var putResult = jiraSender.Put(url, json);
+
+                loggingRepository.Log(task.Id, task.Key, action, putResult.Response, putResult.WasSuccessful);
             }
         }
 
