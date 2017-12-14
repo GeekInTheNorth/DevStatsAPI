@@ -39,7 +39,7 @@ namespace DevStats.Controllers.API
 
                 var result = service.Vote(vote.VoteeId, userDetails.Id, vote.Reason);
 
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return Request.CreateResponse(HttpStatusCode.Created, result);
             }
             catch
             {
