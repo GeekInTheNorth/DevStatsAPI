@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using DevStats.Domain.DeveloperKpi;
+using DevStats.Domain.KPI;
 
-namespace DevStats.Models.DeveloperKPI
+namespace DevStats.Models.KPI
 {
-    public class QualityKpiModel
+    public class NewFeatureFailureRateModel
     {
         public Dictionary<string, string> Developers { get; set; }
 
@@ -12,7 +12,7 @@ namespace DevStats.Models.DeveloperKPI
 
         public string SelectedDeveloper { get; set; }
 
-        public DeveloperQualityKPI Quality { get; set; }
+        public NewFeatureFailureRate Quality { get; set; }
 
         public int TotalDevTaskDuration
         {
@@ -58,11 +58,11 @@ namespace DevStats.Models.DeveloperKPI
             }
         }
 
-        public QualityKpiModel(Dictionary<string, string> developers, string userName, bool isAdmin) : this(developers, userName, isAdmin, userName)
+        public NewFeatureFailureRateModel(Dictionary<string, string> developers, string userName, bool isAdmin) : this(developers, userName, isAdmin, userName)
         {
         }
 
-        public QualityKpiModel(Dictionary<string, string> developers, string userName, bool isAdmin, string selectedDeveloper)
+        public NewFeatureFailureRateModel(Dictionary<string, string> developers, string userName, bool isAdmin, string selectedDeveloper)
         {
             Developers = developers.Where(x => x.Key == userName || isAdmin).ToDictionary(x => x.Key, y => y.Value);
             IsAdmin = isAdmin;

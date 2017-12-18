@@ -7,7 +7,6 @@ using DevStats.Domain.Sprints;
 using DevStats.Domain.Jira;
 using DevStats.Domain.Jira.Logging;
 using DevStats.Domain.Security;
-using DevStats.Domain.DeveloperKpi;
 using DevStats.Domain.Aha;
 using DevStats.Domain.Logging;
 using DevStats.Domain.MVP;
@@ -29,7 +28,7 @@ namespace DevStats
             container.RegisterType<IProjectsRepository, ProjectsRepository>();
             container.RegisterType<IWorkLogRepository, WorkLogRepository>();
             container.RegisterType<IUserRepository, UserRepository>();
-            container.RegisterType<IDeveloperKpiRepository, DeveloperKpiRepository>();
+            container.RegisterType<INewFeatureFailureRateRepository, NewFeatureFailureRateRepository>();
             container.RegisterType<IApiLogRepository, ApiLogRepository>();
             container.RegisterType<IMvpRepository, MvpRepository>();
             container.RegisterType<IActualsVsEstimatesRepository, ActualsVsEstimatesRepository>();
@@ -45,7 +44,7 @@ namespace DevStats
             container.RegisterType<IDefectService, DefectService>();
             container.RegisterType<IJiraService, JiraService>();
             container.RegisterType<ISprintPlannerService, SprintPlannerService>();
-            container.RegisterType<IDeveloperKpiService, DeveloperKpiService>();
+            container.RegisterType<INewFeatureFailureRateService, NewFeatureFailureRateService>();
             container.RegisterType<IAhaService, AhaService>();
             container.RegisterType<IMvpService, MvpService>();
             container.RegisterType<IEmailService, EmailService>();

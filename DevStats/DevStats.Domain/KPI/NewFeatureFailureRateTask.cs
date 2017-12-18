@@ -1,6 +1,6 @@
-﻿namespace DevStats.Domain.DeveloperKpi
+﻿namespace DevStats.Domain.KPI
 {
-    public class StoryTask
+    public class NewFeatureFailureRateTask
     {
         public string Activity { get; set; }
 
@@ -8,7 +8,7 @@
 
         public int TotalTimeInSeconds { get; set; }
 
-        public StoryTask(string owner, string activity, int totalTimeInSeconds)
+        public NewFeatureFailureRateTask(string owner, string activity, int totalTimeInSeconds)
         {
             Owner = owner;
             Activity = activity;

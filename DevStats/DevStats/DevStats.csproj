@@ -277,15 +277,14 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AhaController.cs" />
-    <Compile Include="Controllers\API\DeveloperKPIController.cs" />
     <Compile Include="Controllers\API\JiraController.cs" />
     <Compile Include="Controllers\API\JiraStateCheckerController.cs" />
+    <Compile Include="Controllers\API\KPIController.cs" />
     <Compile Include="Controllers\API\MvpController.cs" />
     <Compile Include="Controllers\API\SecureBaseApiController.cs" />
     <Compile Include="Controllers\API\SprintPlanningController.cs" />
     <Compile Include="Controllers\MVC\AccountController.cs" />
     <Compile Include="Controllers\MVC\DefectReportController.cs" />
-    <Compile Include="Controllers\MVC\DeveloperKPIController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\MVC\JiraController.cs" />
     <Compile Include="Controllers\MVC\KPIController.cs" />
@@ -300,8 +299,6 @@
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
     <Compile Include="Models\Account\ResetPasswordRequestModel.cs" />
-    <Compile Include="Models\DeveloperKPI\QualityKpiApiModel.cs" />
-    <Compile Include="Models\DeveloperKPI\QualityKpiModel.cs" />
     <Compile Include="Models\Jira\ApiTestModel.cs" />
     <Compile Include="Models\DefectTracking\DefectModel.cs" />
     <Compile Include="Models\Jira\AuditModel.cs" />
@@ -309,6 +306,8 @@
     <Compile Include="Models\Jira\DefectAnalysisModel.cs" />
     <Compile Include="Models\Jira\StateCheckerModel.cs" />
     <Compile Include="Models\KPI\ActualsVsEstimatesModel.cs" />
+    <Compile Include="Models\KPI\NewFeatureFailureRateApiModel.cs" />
+    <Compile Include="Models\KPI\NewFeatureFailureRateModel.cs" />
     <Compile Include="Models\MVP\MvpVoteListModel.cs" />
     <Compile Include="Models\MVP\MvpVoteModel.cs" />
     <Compile Include="Models\MVP\VoteModel.cs" />
@@ -330,7 +329,7 @@
     <Content Include="Views\Jira\SprintPlanner.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\LogOff.cshtml" />
-    <Content Include="Views\DeveloperKPI\Quality.cshtml" />
+    <Content Include="Views\KPI\NewFeatureFailureRate.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\ResetPasswordRequest.cshtml" />

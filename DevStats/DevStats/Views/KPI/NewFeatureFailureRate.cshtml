@@ -1,8 +1,8 @@
-﻿@model DevStats.Models.DeveloperKPI.QualityKpiModel
+﻿@model DevStats.Models.KPI.NewFeatureFailureRateModel
 
 @{
     Layout = "~/Views/Shared/Shared.cshtml";
-    Page.Title = "Developer Quality KPI";
+    Page.Title = "New Feature Failure Rate";
     Func<decimal, string> FormatTime = (seconds) => string.Format("{0:F2} hrs", seconds / 3600);
     Func<decimal, string> FormatProportion = (proportion) => string.Format("{0:F2} %", proportion * 100);
     Func<bool, string> FormatBoolean = (thisBool) => thisBool ? "Yes" : "No";

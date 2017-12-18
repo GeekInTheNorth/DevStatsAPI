@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace DevStats.Domain.DeveloperKpi
+namespace DevStats.Domain.KPI
 {
-    public class DeveloperKpiService : IDeveloperKpiService
+    public class NewFeatureFailureRateService : INewFeatureFailureRateService
     {
-        private readonly IDeveloperKpiRepository repository;
+        private readonly INewFeatureFailureRateRepository repository;
 
-        public DeveloperKpiService(IDeveloperKpiRepository repository)
+        public NewFeatureFailureRateService(INewFeatureFailureRateRepository repository)
         {
             if (repository == null) throw new ArgumentNullException(nameof(repository));
 
@@ -21,16 +21,16 @@ namespace DevStats.Domain.DeveloperKpi
             return repository.GetDevelopers().ToDictionary(x => x, y => FormatName(y));
         }
 
-        public DeveloperQualityKPI GetQualityKpi(string developer)
+        public NewFeatureFailureRate GetQualityKpi(string developer)
         {
             var stories = repository.GetQualityApi(developer);
 
-            return new DeveloperQualityKPI(stories);
+            return new NewFeatureFailureRate(stories);
         }
 
-        public Dictionary<string, DeveloperQualityKPI> GetQualityKpi()
+        public Dictionary<string, NewFeatureFailureRate> GetQualityKpi()
         {
-            var results = new Dictionary<string, DeveloperQualityKPI>();
+            var results = new Dictionary<string, NewFeatureFailureRate>();
             var developers = GetDevelopers().Select(x => x.Key);
 
             foreach(var developer in developers)

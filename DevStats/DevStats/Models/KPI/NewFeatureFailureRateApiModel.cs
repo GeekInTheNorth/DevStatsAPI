@@ -1,39 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DevStats.Domain.DeveloperKpi;
+using DevStats.Domain.KPI;
 
-namespace DevStats.Models.DeveloperKPI
+namespace DevStats.Models.KPI
 {
-    public class QualityKpiApiModel
+    public class NewFeatureFailureRateApiModel
     {
-        public List<QualityKpiApiModelItem> KpiData { get; set; }
+        public List<NewFeatureFailureRateApiModelItem> KpiData { get; set; }
 
-        public QualityKpiApiModel()
+        public NewFeatureFailureRateApiModel()
         {
         }
 
-        public QualityKpiApiModel(Dictionary<string, DeveloperQualityKPI> kpis)
+        public NewFeatureFailureRateApiModel(Dictionary<string, NewFeatureFailureRate> kpis)
         {
-            KpiData = new List<QualityKpiApiModelItem>();
+            KpiData = new List<NewFeatureFailureRateApiModelItem>();
 
             foreach (var kpi in kpis)
             {
                 var stories = kpi.Value.Stories;
                 var developer = kpi.Key;
-                KpiData.AddRange(stories.Select(x => new QualityKpiApiModelItem(developer, x)));
+                KpiData.AddRange(stories.Select(x => new NewFeatureFailureRateApiModelItem(developer, x)));
             }
         }
 
-        public QualityKpiApiModel(string developer, DeveloperQualityKPI kpi)
+        public NewFeatureFailureRateApiModel(string developer, NewFeatureFailureRate kpi)
         {
-            KpiData = new List<QualityKpiApiModelItem>();
+            KpiData = new List<NewFeatureFailureRateApiModelItem>();
 
-            KpiData.AddRange(kpi.Stories.Select(x => new QualityKpiApiModelItem(developer, x)));
+            KpiData.AddRange(kpi.Stories.Select(x => new NewFeatureFailureRateApiModelItem(developer, x)));
         }
     }
 
-    public class QualityKpiApiModelItem
+    public class NewFeatureFailureRateApiModelItem
     {
         public string Developer { get; set; }
 
@@ -63,11 +63,11 @@ namespace DevStats.Models.DeveloperKPI
 
         public bool OnTrack { get; set; }
 
-        public QualityKpiApiModelItem()
+        public NewFeatureFailureRateApiModelItem()
         {
         }
 
-        public QualityKpiApiModelItem(string developer, StoryBreakdown storyBreakdown)
+        public NewFeatureFailureRateApiModelItem(string developer, NewFeatureFailureRateStory storyBreakdown)
         {
             Developer = developer;
             Product = storyBreakdown.Product;

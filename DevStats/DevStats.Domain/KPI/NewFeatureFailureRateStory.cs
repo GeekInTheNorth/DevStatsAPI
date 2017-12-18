@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DevStats.Domain.DeveloperKpi
+namespace DevStats.Domain.KPI
 {
-    public class StoryBreakdown
+    public class NewFeatureFailureRateStory
     {
         public string Key { get; private set; }
 
@@ -39,7 +39,7 @@ namespace DevStats.Domain.DeveloperKpi
             get { return GetProportionOfTime(TotalPlannedDevelopment, TotalPlannedDevelopmentByDeveloper); }
         }
 
-        public StoryBreakdown(string storyKey, string storyDescription, string release, DateTime? lastWorkedOn , IEnumerable<StoryTask> tasks, string developer)
+        public NewFeatureFailureRateStory(string storyKey, string storyDescription, string release, DateTime? lastWorkedOn , IEnumerable<NewFeatureFailureRateTask> tasks, string developer)
         {
             Key = storyKey;
             Description = storyDescription;

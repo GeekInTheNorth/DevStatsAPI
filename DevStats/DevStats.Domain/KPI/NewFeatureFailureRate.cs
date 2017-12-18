@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DevStats.Domain.DeveloperKpi
+namespace DevStats.Domain.KPI
 {
-    public class DeveloperQualityKPI
+    public class NewFeatureFailureRate
     {
         public decimal TotalProportionalWork { get; private set; }
 
@@ -20,11 +20,11 @@ namespace DevStats.Domain.DeveloperKpi
             get { return TotalReworkProportion < 0.125M; }
         }
 
-        public List<StoryBreakdown> Stories { get; private set; }
+        public List<NewFeatureFailureRateStory> Stories { get; private set; }
 
-        public DeveloperQualityKPI(IEnumerable<StoryBreakdown> stories)
+        public NewFeatureFailureRate(IEnumerable<NewFeatureFailureRateStory> stories)
         {
-            Stories = stories != null ? stories.ToList() : new List<StoryBreakdown>();
+            Stories = stories != null ? stories.ToList() : new List<NewFeatureFailureRateStory>();
             TotalProportionalWork = Math.Round(stories.Sum(x => x.TotalDuration * x.DeveloperProportion), 2);
             TotalProportionalRework = Math.Round(stories.Sum(x => x.ReworkDuration * x.DeveloperProportion), 2);
         }

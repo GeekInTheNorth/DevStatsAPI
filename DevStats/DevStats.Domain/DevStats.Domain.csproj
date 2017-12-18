@@ -90,6 +90,10 @@
     <Compile Include="Aha\JsonModels\SimpleField.cs" />
     <Compile Include="Communications\IEmailService.cs" />
     <Compile Include="DefectAnalysis\ProductDefectSummaries.cs" />
+    <Compile Include="KPI\INewFeatureFailureRateRepository.cs" />
+    <Compile Include="KPI\INewFeatureFailureRateService.cs" />
+    <Compile Include="KPI\NewFeatureFailureRate.cs" />
+    <Compile Include="KPI\NewFeatureFailureRateService.cs" />
     <Compile Include="Jira\IJiraIdValidator.cs" />
     <Compile Include="Jira\JiraDefect.cs" />
     <Compile Include="Jira\JiraDefectSummary.cs" />
@@ -100,6 +104,8 @@
     <Compile Include="KPI\ActualsVsEstimateWorkItem.cs" />
     <Compile Include="KPI\IActualsVsEstimatesRepository.cs" />
     <Compile Include="KPI\IActualsVsEstimatesService.cs" />
+    <Compile Include="KPI\NewFeatureFailureRateStory.cs" />
+    <Compile Include="KPI\NewFeatureFailureRateTask.cs" />
     <Compile Include="Logging\IApiLogRepository.cs" />
     <Compile Include="Aha\JsonModels\Feature.cs" />
     <Compile Include="Aha\JsonModels\FeatureCollection.cs" />
@@ -112,12 +118,6 @@
     <Compile Include="DefectAnalysis\DefectType.cs" />
     <Compile Include="DefectAnalysis\IDefectRepository.cs" />
     <Compile Include="DefectAnalysis\IDefectService.cs" />
-    <Compile Include="DeveloperKpi\DeveloperKpiService.cs" />
-    <Compile Include="DeveloperKpi\DeveloperQualityKPI.cs" />
-    <Compile Include="DeveloperKpi\IDeveloperKpiRepository.cs" />
-    <Compile Include="DeveloperKpi\IDeveloperKpiService.cs" />
-    <Compile Include="DeveloperKpi\StoryBreakdown.cs" />
-    <Compile Include="DeveloperKpi\StoryTask.cs" />
     <Compile Include="Jira\IJiraSender.cs" />
     <Compile Include="Jira\IProjectsRepository.cs" />
     <Compile Include="Jira\IWorkLogRepository.cs" />

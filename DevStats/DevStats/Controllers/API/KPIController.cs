@@ -3,16 +3,16 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using DevStats.Domain.DeveloperKpi;
-using DevStats.Models.DeveloperKPI;
+using DevStats.Domain.KPI;
+using DevStats.Models.KPI;
 
 namespace DevStats.Controllers.API
 {
-    public class DeveloperKPIController : SecureBaseApiController
+    public class KPIController : SecureBaseApiController
     {
-        private readonly IDeveloperKpiService service;
+        private readonly INewFeatureFailureRateService service;
 
-        public DeveloperKPIController(IDeveloperKpiService service)
+        public KPIController(INewFeatureFailureRateService service)
         {
             if (service == null) throw new ArgumentNullException(nameof(service));
 
@@ -28,7 +28,7 @@ namespace DevStats.Controllers.API
             if (!canAccess) return Request.CreateResponse(HttpStatusCode.Forbidden);
 
             var kpis = service.GetQualityKpi();
-            var model = new QualityKpiApiModel(kpis);
+            var model = new NewFeatureFailureRateApiModel(kpis);
 
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
@@ -42,7 +42,7 @@ namespace DevStats.Controllers.API
             if (!canAccess) return Request.CreateResponse(HttpStatusCode.Forbidden);
 
             var kpi = service.GetQualityKpi(developer);
-            var model = new QualityKpiApiModel(developer, kpi);
+            var model = new NewFeatureFailureRateApiModel(developer, kpi);
 
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
