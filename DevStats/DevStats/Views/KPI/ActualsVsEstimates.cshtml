@@ -5,6 +5,7 @@
     Page.Title = "Individual Actuals vs Estimates";
     Func<decimal, string> FormatTime = (seconds) => string.Format("{0:F2} hrs", seconds / 3600);
     Func<decimal, string> FormatProportion = (proportion) => string.Format("{0:F2} %", proportion * 100);
+    Func<string, string, string> FormatUrl = (root, key) => string.Format("{0}/browse/{1}", root, key);
 }
 
 @using (Html.BeginForm())
@@ -51,7 +52,7 @@
             @foreach(var workItem in Model.Summary.WorkItems)
             {
                 <tr>
-                    <td class="numeric">@workItem.Key</td>
+                    <td class="numeric"><a href="@FormatUrl(Model.JiraRoot, workItem.Key)" target="_blank" style="white-space: nowrap;">@workItem.Key</a></td>
                     <td class="text">@workItem.Description</td>
                     <td class="text">@workItem.Complexity</td>
                     <td class="numeric">@FormatTime(workItem.EstimateInSeconds)</td>

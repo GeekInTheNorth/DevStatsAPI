@@ -12,6 +12,8 @@ namespace DevStats.Models.KPI
 
         public string SelectedDeveloper { get; set; }
 
+        public string JiraRoot { get; set; }
+
         public NewFeatureFailureRate Quality { get; set; }
 
         public int TotalDevTaskDuration
@@ -58,14 +60,15 @@ namespace DevStats.Models.KPI
             }
         }
 
-        public NewFeatureFailureRateModel(Dictionary<string, string> developers, string userName, bool isAdmin) : this(developers, userName, isAdmin, userName)
+        public NewFeatureFailureRateModel(Dictionary<string, string> developers, string userName, bool isAdmin, string jiraRoot) : this(developers, userName, isAdmin, jiraRoot, userName)
         {
         }
 
-        public NewFeatureFailureRateModel(Dictionary<string, string> developers, string userName, bool isAdmin, string selectedDeveloper)
+        public NewFeatureFailureRateModel(Dictionary<string, string> developers, string userName, bool isAdmin, string jiraRoot, string selectedDeveloper)
         {
             Developers = developers.Where(x => x.Key == userName || isAdmin).ToDictionary(x => x.Key, y => y.Value);
             IsAdmin = isAdmin;
+            JiraRoot = jiraRoot;
 
             if (Developers.Any(x => x.Key == selectedDeveloper))
                 SelectedDeveloper = selectedDeveloper;

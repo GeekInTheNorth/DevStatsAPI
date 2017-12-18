@@ -6,6 +6,7 @@
     Func<decimal, string> FormatTime = (seconds) => string.Format("{0:F2} hrs", seconds / 3600);
     Func<decimal, string> FormatProportion = (proportion) => string.Format("{0:F2} %", proportion * 100);
     Func<bool, string> FormatBoolean = (thisBool) => thisBool ? "Yes" : "No";
+    Func<string, string, string> FormatUrl = (root, key) => string.Format("{0}/browse/{1}", root, key);
 }
 
 @using (Html.BeginForm())
@@ -53,7 +54,7 @@
     @foreach (var story in Model.Quality.Stories)
     {
         <tr>
-            <td class="numeric">@story.Key</td>
+            <td class="numeric"><a href="@FormatUrl(Model.JiraRoot, story.Key)" target="_blank" style="white-space: nowrap;">@story.Key</a></td>
             <td class="text">@story.Description</td>
             <td class="numeric">@FormatTime(story.TotalPlannedDevelopment)</td>
             <td class="numeric">@FormatTime(story.TotalPlannedDevelopmentByDeveloper)</td>

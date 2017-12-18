@@ -12,16 +12,19 @@ namespace DevStats.Models.KPI
 
         public string SelectedTeamMember { get; set; }
 
+        public string JiraRoot { get; set; }
+
         public ActualsVsEstimateSummary Summary { get; set; }
 
-        public ActualsVsEstimatesModel(Dictionary<string, string> teamMembers, string userName, bool isAdmin) : this(teamMembers, userName, userName, isAdmin)
+        public ActualsVsEstimatesModel(Dictionary<string, string> teamMembers, string userName, bool isAdmin, string jiraRoot) : this(teamMembers, userName, userName, isAdmin, jiraRoot)
         {
         }
 
-        public ActualsVsEstimatesModel(Dictionary<string, string> teamMembers, string selectedTeamMember, string userName, bool isAdmin)
+        public ActualsVsEstimatesModel(Dictionary<string, string> teamMembers, string selectedTeamMember, string userName, bool isAdmin, string jiraRoot)
         {
             TeamMembers = teamMembers.Where(x => x.Key == userName || isAdmin).ToDictionary(x => x.Key, y => y.Value);
             IsAdmin = isAdmin;
+            JiraRoot = jiraRoot;
 
             if (TeamMembers.Any(x => x.Key == selectedTeamMember))
                 SelectedTeamMember = selectedTeamMember;

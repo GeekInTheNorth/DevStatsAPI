@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -33,7 +34,7 @@ namespace DevStats.Controllers.MVC
             var isAdmin = await UserManager.IsInRoleAsync(user.Identity.Name, "Admin");
 
             var teamMembers = actualsVsEstimatesService.GetTeamMembers();
-            var model = new ActualsVsEstimatesModel(teamMembers, user.Identity.Name, isAdmin);
+            var model = new ActualsVsEstimatesModel(teamMembers, user.Identity.Name, isAdmin, GetJiraRoot());
             model.Summary = actualsVsEstimatesService.Get(model.SelectedTeamMember);
 
             return View(model);
@@ -46,7 +47,7 @@ namespace DevStats.Controllers.MVC
             var isAdmin = await UserManager.IsInRoleAsync(user.Identity.Name, "Admin");
 
             var teamMembers = actualsVsEstimatesService.GetTeamMembers();
-            var model = new ActualsVsEstimatesModel(teamMembers, selectedTeamMember, user.Identity.Name, isAdmin);
+            var model = new ActualsVsEstimatesModel(teamMembers, selectedTeamMember, user.Identity.Name, isAdmin, GetJiraRoot());
             model.Summary = actualsVsEstimatesService.Get(model.SelectedTeamMember);
 
             return View(model);
@@ -59,7 +60,7 @@ namespace DevStats.Controllers.MVC
             var isAdmin = await UserManager.IsInRoleAsync(user.Identity.Name, "Admin");
             var developers = newFeatureFailureRateService.GetDevelopers();
 
-            var model = new NewFeatureFailureRateModel(developers, user.Identity.Name, isAdmin);
+            var model = new NewFeatureFailureRateModel(developers, user.Identity.Name, isAdmin, GetJiraRoot());
             model.Quality = newFeatureFailureRateService.GetQualityKpi(model.SelectedDeveloper);
 
             return View(model);
@@ -72,10 +73,15 @@ namespace DevStats.Controllers.MVC
             var isAdmin = await UserManager.IsInRoleAsync(user.Identity.Name, "Admin");
             var developers = newFeatureFailureRateService.GetDevelopers();
 
-            var model = new NewFeatureFailureRateModel(developers, selectedDeveloper, isAdmin, selectedDeveloper);
+            var model = new NewFeatureFailureRateModel(developers, selectedDeveloper, isAdmin, GetJiraRoot(), selectedDeveloper);
             model.Quality = newFeatureFailureRateService.GetQualityKpi(model.SelectedDeveloper);
 
             return View(model);
+        }
+
+        private string GetJiraRoot()
+        {
+            return ConfigurationManager.AppSettings.Get("JiraApiRoot") ?? string.Empty;
         }
     }
 }
