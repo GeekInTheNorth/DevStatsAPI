@@ -127,5 +127,17 @@ namespace DevStats.Domain.Jira.JsonModels
 
         [JsonProperty("customfield_14300")]
         public CategoryDetails Category { get; set; }
+
+        [JsonProperty("customfield_15716")]
+        public ValueField DefectScaleOfUserImpact { get; set; }
+
+        [JsonProperty("customfield_15717")]
+        public ValueField DefectScaleOfFunctionalImpact { get; set; }
+
+        [JsonProperty("customfield_15718")]
+        public ValueField DefectWorkaround { get; set; }
+
+        [JsonProperty("customfield_15705")]
+        public decimal? DefectScore { get; set; }
     }
 }

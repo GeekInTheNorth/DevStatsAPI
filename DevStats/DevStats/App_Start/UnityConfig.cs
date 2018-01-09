@@ -33,6 +33,7 @@ namespace DevStats
             container.RegisterType<IMvpRepository, MvpRepository>();
             container.RegisterType<IActualsVsEstimatesRepository, ActualsVsEstimatesRepository>();
             container.RegisterType<IReleaseQualityRepository, ReleaseQualityRepository>();
+            container.RegisterType<IDefectScoringRepository, DefectScoringRepository>();
 
             // Utilities
             container.RegisterType<IJiraConvertor, JiraConvertor>();

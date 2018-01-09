@@ -98,6 +98,26 @@ namespace DevStats.Controllers.API
             {
                 return Request.CreateResponse(HttpStatusCode.InternalServerError);
             }
-        }       
+        }
+
+        [AcceptVerbs("POST")]
+        [Route("bug/update/{jiraId}")]
+        public HttpResponseMessage BugUpdate(string jiraId)
+        {
+            try
+            {
+                jiraService.ProcessBugUpdate(jiraId);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (ArgumentException ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+        }
     }
 }

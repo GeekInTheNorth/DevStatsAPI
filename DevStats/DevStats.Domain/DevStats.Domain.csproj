@@ -90,6 +90,7 @@
     <Compile Include="Aha\JsonModels\SimpleField.cs" />
     <Compile Include="Communications\IEmailService.cs" />
     <Compile Include="DefectAnalysis\ProductDefectSummaries.cs" />
+    <Compile Include="Jira\IDefectScoringRepository.cs" />
     <Compile Include="KPI\INewFeatureFailureRateRepository.cs" />
     <Compile Include="KPI\INewFeatureFailureRateService.cs" />
     <Compile Include="KPI\NewFeatureFailureRate.cs" />

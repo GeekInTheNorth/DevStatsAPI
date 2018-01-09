@@ -11,7 +11,7 @@ using DevStats.Domain.Jira.Logging;
 
 namespace DevStats.Domain.Jira
 {
-    public class JiraService: IJiraService
+    public class JiraService : IJiraService
     {
         private readonly IJiraConvertor convertor;
         private readonly IJiraLogRepository loggingRepository;
@@ -19,6 +19,7 @@ namespace DevStats.Domain.Jira
         private readonly IProjectsRepository projectsRepository;
         private readonly IWorkLogRepository workLogRepository;
         private readonly IDefectRepository defectRepository;
+        private readonly IDefectScoringRepository defectScoringRepository;
         private readonly IJiraIdValidator idValidator;
         private const string JiraIssuePath = @"{0}/rest/api/2/issue/{1}";
         private const string JiraCreatePath = @"{0}/rest/api/2/issue/";
@@ -28,12 +29,13 @@ namespace DevStats.Domain.Jira
         private const string JiraUserGroupSearchPath = @"{0}/rest/api/2/group?groupname={1}&expand=users";
 
         public JiraService(
-            IJiraConvertor convertor, 
+            IJiraConvertor convertor,
             IJiraLogRepository loggingRepository,
             IJiraSender jiraSender,
             IProjectsRepository projectsRepository,
             IWorkLogRepository workLogRepository,
             IDefectRepository defectRepository,
+            IDefectScoringRepository defectScoringRepository,
             IJiraIdValidator idValidator)
         {
             if (convertor == null) throw new ArgumentNullException(nameof(convertor));
@@ -42,6 +44,7 @@ namespace DevStats.Domain.Jira
             if (projectsRepository == null) throw new ArgumentNullException(nameof(projectsRepository));
             if (workLogRepository == null) throw new ArgumentNullException(nameof(workLogRepository));
             if (defectRepository == null) throw new ArgumentNullException(nameof(defectRepository));
+            if (defectScoringRepository == null) throw new ArgumentNullException(nameof(defectScoringRepository));
             if (idValidator == null) throw new ArgumentNullException(nameof(idValidator));
 
             this.convertor = convertor;
@@ -50,6 +53,7 @@ namespace DevStats.Domain.Jira
             this.projectsRepository = projectsRepository;
             this.workLogRepository = workLogRepository;
             this.defectRepository = defectRepository;
+            this.defectScoringRepository = defectScoringRepository;
             this.idValidator = idValidator;
         }
 
@@ -123,6 +127,46 @@ namespace DevStats.Domain.Jira
             catch (Exception ex)
             {
                 loggingRepository.Log(jiraId, "Process Story Update", string.Format("Unexpected Error: {0}", ex.Message), false);
+            }
+        }
+
+        public void ProcessBugUpdate(string jiraId)
+        {
+            if (!idValidator.Validate(jiraId))
+            {
+                var message = "Invalid Jira Id Provided.";
+                loggingRepository.Log(jiraId, "Process Story Update", message, false);
+
+                throw new ArgumentException(message);
+            }
+
+            try
+            {
+                var bugUrl = string.Format(JiraIssuePath, GetApiRoot(), jiraId);
+                var bug = jiraSender.Get<Issue>(bugUrl);
+                var action = string.Format("Process Bug Update: Update IAM Score on Bug {0}", bug.Key);
+
+                var score = GetScore(defectScoringRepository.GetUserImpactScores(), bug.Fields.DefectScaleOfUserImpact);
+                score += GetScore(defectScoringRepository.GetFunctionalImpactScores(), bug.Fields.DefectScaleOfFunctionalImpact);
+                score += GetScore(defectScoringRepository.GetWorkAroundScores(), bug.Fields.DefectWorkaround);
+
+                var json = "{ \"update\" : { \"@@fieldName@@\" : [{\"set\" : @@FieldValue@@ }] }}";
+                json = json.Replace("@@fieldName@@", "customfield_15705")
+                           .Replace("@@FieldValue@@", score.ToString("F2"));
+
+                if (!bug.Fields.DefectScore.HasValue || score != bug.Fields.DefectScore.Value)
+                {
+                    var url = string.Format(JiraIssuePath, GetApiRoot(), bug.Key);
+                    var putResult = jiraSender.Put(url, json);
+
+                    loggingRepository.Log(bug.Id, bug.Key, action, putResult.Response, putResult.WasSuccessful);
+                }
+                else
+                    loggingRepository.Log(bug.Id, bug.Key, action, "No updates to apply.", true);
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log(jiraId, "Process Bug Update", string.Format("Unexpected Error: {0}", ex.Message), false);
             }
         }
 
@@ -388,6 +432,22 @@ namespace DevStats.Domain.Jira
         private string GetServiceDeskGroup()
         {
             return ConfigurationManager.AppSettings.Get("JiraServiceDeskGroup") ?? string.Empty;
+        }
+
+        private decimal GetScore(Dictionary<string, decimal> scores, ValueField field)
+        {
+            if (field == null || string.IsNullOrWhiteSpace(field.Value))
+                return 0;
+
+            return GetScore(scores, field.Value);
+        }
+
+        private decimal GetScore(Dictionary<string, decimal> scores, string option)
+        {
+            if (scores == null || !scores.Any() || string.IsNullOrWhiteSpace(option))
+                return 0;
+
+            return scores.ContainsKey(option) ? scores[option] : 0;
         }
     }
 }
