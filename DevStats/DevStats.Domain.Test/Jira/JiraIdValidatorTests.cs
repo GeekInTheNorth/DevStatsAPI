@@ -12,6 +12,7 @@ namespace DevStats.Domain.Test.Jira
         [TestCase("OCT-12345")]
         [TestCase("KFPAYROLL-12345")]
         [TestCase("OPAYSLIP-12345")]
+        [TestCase("PROJECT-123456789")]
         public void GivenAValidJiraId_WhenIValidate_ThenIShouldGetAPositiveResult(string jiraId)
         {
             var validator = new JiraIdValidator();
@@ -25,6 +26,8 @@ namespace DevStats.Domain.Test.Jira
         [TestCase("TEXT-TEXT")]
         [TestCase("1234-5678")]
         [TestCase("ABC=123")]
+        [TestCase("TOOLONGPROJECT-123")]
+        [TestCase("PROJECT-1234567890")]
         public void GivenAnInValidJiraId_WhenIValidate_ThenIShouldGetANegativeResult(string jiraId)
         {
             var validator = new JiraIdValidator();
