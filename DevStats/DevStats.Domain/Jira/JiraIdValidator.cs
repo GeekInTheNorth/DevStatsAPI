@@ -9,7 +9,7 @@ namespace DevStats.Domain.Jira
             if (string.IsNullOrWhiteSpace(idToValidate))
                 return false;
 
-            var regEx = new Regex(@"([A-Z]{2,3}[\-]{1}[0-9]{1,5})");
+            var regEx = new Regex(@"([A-Z]{2,9}[\-]{1}[0-9]{1,5})");
 
             return regEx.IsMatch(idToValidate);
         }
