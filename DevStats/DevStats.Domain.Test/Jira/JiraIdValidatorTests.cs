@@ -13,6 +13,12 @@ namespace DevStats.Domain.Test.Jira
         [TestCase("KFPAYROLL-12345")]
         [TestCase("OPAYSLIP-12345")]
         [TestCase("PROJECT-123456789")]
+        [TestCase("SE32-123456789")]
+        [TestCase("SIP-123456789")]
+        [TestCase("SIQ-123456789")]
+        [TestCase("SGP-123456789")]
+        [TestCase("SPM-123456789")]
+        [TestCase("S12P-123456789")]
         public void GivenAValidJiraId_WhenIValidate_ThenIShouldGetAPositiveResult(string jiraId)
         {
             var validator = new JiraIdValidator();
@@ -24,7 +30,6 @@ namespace DevStats.Domain.Test.Jira
         [TestCase("TEXTONLY")]
         [TestCase("01234")]
         [TestCase("TEXT-TEXT")]
-        [TestCase("1234-5678")]
         [TestCase("ABC=123")]
         [TestCase("TOOLONGPROJECT-123")]
         [TestCase("PROJECT-1234567890")]
