@@ -1,18 +1,19 @@
-using Microsoft.Practices.Unity;
 using System.Web.Http;
-using DevStats.Data.Repositories;
-using DevStats.Domain.DefectAnalysis;
 using System.Web.Mvc;
-using DevStats.Domain.Sprints;
+using DevStats.Data.Repositories;
+using DevStats.Domain.Aha;
+using DevStats.Domain.Communications;
+using DevStats.Domain.DefectAnalysis;
 using DevStats.Domain.Jira;
 using DevStats.Domain.Jira.Logging;
 using DevStats.Domain.Security;
-using DevStats.Domain.Aha;
+using DevStats.Domain.KPI;
 using DevStats.Domain.Logging;
 using DevStats.Domain.MVP;
-using DevStats.Domain.Communications;
-using DevStats.Domain.KPI;
 using DevStats.Domain.Reports.ReleaseReport;
+using DevStats.Domain.Reports.TaskingStatus;
+using DevStats.Domain.Sprints;
+using Microsoft.Practices.Unity;
 
 namespace DevStats
 {
@@ -34,6 +35,7 @@ namespace DevStats
             container.RegisterType<IActualsVsEstimatesRepository, ActualsVsEstimatesRepository>();
             container.RegisterType<IReleaseQualityRepository, ReleaseQualityRepository>();
             container.RegisterType<IDefectScoringRepository, DefectScoringRepository>();
+            container.RegisterType<IEstimationRepository, EstimationRepository>();
 
             // Utilities
             container.RegisterType<IJiraConvertor, JiraConvertor>();
@@ -51,6 +53,7 @@ namespace DevStats
             container.RegisterType<IEmailService, EmailService>();
             container.RegisterType<IActualsVsEstimatesService, ActualsVsEstimatesService>();
             container.RegisterType<IReleaseQualityService, ReleaseQualityService>();
+            container.RegisterType<ITaskingStatusService, TaskingStatusService>();
 
             DependencyResolver.SetResolver(new Unity.Mvc5.UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);

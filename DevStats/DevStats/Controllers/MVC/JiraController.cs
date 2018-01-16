@@ -96,5 +96,11 @@ namespace DevStats.Controllers.MVC
         {
             return View();
         }
+
+        [HttpGet]
+        public ActionResult TaskingStatus()
+        {
+            return View();
+        }
     }
 }

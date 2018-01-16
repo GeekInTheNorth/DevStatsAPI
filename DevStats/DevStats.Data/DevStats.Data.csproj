@@ -151,6 +151,7 @@
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\DefectRepository.cs" />
     <Compile Include="Repositories\DefectScoringRepository.cs" />
+    <Compile Include="Repositories\EstimationRepository.cs" />
     <Compile Include="Repositories\JiraLogRepository.cs" />
     <Compile Include="Repositories\MvpRepository.cs" />
     <Compile Include="Repositories\NewFeatureFailureRateRepository.cs" />

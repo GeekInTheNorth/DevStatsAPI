@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+    Page.Title = "Tasking Status";
+}
+
+<h2>Tasking Status</h2>
+<div>
+    <span class="filter-label">Team:</span>
+    <select id="ddlTeam">
+        <option value="HR">HR</option>
+        <option value="Octopus">Octopus</option>
+        <option value="Payroll">Payroll</option>
+    </select>
+</div>
+<div>
+    <table style="display:none;">
+        <tr>
+            <td>Dev To Task Out</td>
+            <td id="DevTTO">0 hours</td>
+        </tr>
+        <tr>
+            <td>QA To Task Out</td>
+            <td id="QATTO">0 hours</td>
+        </tr>
+        <tr>
+            <td>Dev Ready</td>
+            <td id="DevReady">0 hours</td>
+        </tr>
+        <tr>
+            <td>QA Ready</td>
+            <td id="QAReady">0 hours</td>
+        </tr>
+    </table>
+</div>
+<div id="chartContainer" style="width: 720px"> 
+    <canvas id="barChart"></canvas>
+</div>
+
+<script src="~/Scripts/mdb.min.js"></script>
+<script src="../Scripts/TaskingStatus.js"></script>

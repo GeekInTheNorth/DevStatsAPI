@@ -264,8 +264,11 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.vi.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="Scripts\mdb.js" />
+    <Content Include="Scripts\mdb.min.js" />
     <Content Include="Scripts\SprintPlanner.js" />
     <Content Include="Content\DevStats.css" />
+    <Content Include="Scripts\TaskingStatus.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -283,6 +286,7 @@
     <Compile Include="Controllers\API\MvpController.cs" />
     <Compile Include="Controllers\API\SecureBaseApiController.cs" />
     <Compile Include="Controllers\API\SprintPlanningController.cs" />
+    <Compile Include="Controllers\API\TaskingStatusController.cs" />
     <Compile Include="Controllers\MVC\AccountController.cs" />
     <Compile Include="Controllers\MVC\DefectReportController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
@@ -341,6 +345,7 @@
     <Content Include="Views\Mvp\Index.cshtml" />
     <Content Include="Views\KPI\ActualsVsEstimates.cshtml" />
     <Content Include="Views\ReleaseQuality\Index.cshtml" />
+    <Content Include="Views\Jira\TaskingStatus.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

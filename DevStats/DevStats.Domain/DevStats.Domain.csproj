@@ -167,6 +167,9 @@
     <Compile Include="Reports\ReleaseReport\IReleaseQualityService.cs" />
     <Compile Include="Reports\ReleaseReport\ReleaseQuality.cs" />
     <Compile Include="Reports\ReleaseReport\ReleaseQualityService.cs" />
+    <Compile Include="Reports\TaskingStatus\IEstimationRepository.cs" />
+    <Compile Include="Reports\TaskingStatus\ITaskingStatusService.cs" />
+    <Compile Include="Reports\TaskingStatus\TaskingStatusService.cs" />
     <Compile Include="Security\ApplicationUser.cs" />
     <Compile Include="Security\ApplicationUserManager.cs" />
     <Compile Include="Security\ApplicationUserStore.cs" />
