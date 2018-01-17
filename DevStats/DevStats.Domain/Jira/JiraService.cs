@@ -22,6 +22,7 @@ namespace DevStats.Domain.Jira
         private readonly IDefectScoringRepository defectScoringRepository;
         private readonly IJiraIdValidator idValidator;
         private const string JiraIssuePath = @"{0}/rest/api/2/issue/{1}";
+        private const string JiraIssuePathWithFields = @"{0}/rest/api/2/issue/{1}?fields={2}";
         private const string JiraCreatePath = @"{0}/rest/api/2/issue/";
         private const string JiraTransitionPath = @"{0}/rest/api/latest/issue/{1}/transitions";
         private const string CoreIssueIdRegex = "({0})[-][0-9]{{1,6}}";
@@ -142,7 +143,8 @@ namespace DevStats.Domain.Jira
 
             try
             {
-                var bugUrl = string.Format(JiraIssuePath, GetApiRoot(), jiraId);
+                var fields = "customfield_15716,customfield_15717,customfield_15718,customfield_15705";
+                var bugUrl = string.Format(JiraIssuePathWithFields, GetApiRoot(), jiraId, fields);
                 var bug = jiraSender.Get<Issue>(bugUrl);
                 var action = string.Format("Process Bug Update: Update IAM Score on Bug {0}", bug.Key);
 
@@ -150,12 +152,11 @@ namespace DevStats.Domain.Jira
                 score += GetScore(defectScoringRepository.GetFunctionalImpactScores(), bug.Fields.DefectScaleOfFunctionalImpact);
                 score += GetScore(defectScoringRepository.GetWorkAroundScores(), bug.Fields.DefectWorkaround);
 
-                var json = "{ \"update\" : { \"@@fieldName@@\" : [{\"set\" : @@FieldValue@@ }] }}";
-                json = json.Replace("@@fieldName@@", "customfield_15705")
-                           .Replace("@@FieldValue@@", score.ToString("F2"));
-
                 if (!bug.Fields.DefectScore.HasValue || score != bug.Fields.DefectScore.Value)
                 {
+                    var json = "{ \"update\" : { \"customfield_15705\" : [{\"set\" : @@FieldValue@@ }] }}";
+                    json = json.Replace("@@FieldValue@@", score.ToString("F2"));
+
                     var url = string.Format(JiraIssuePath, GetApiRoot(), bug.Key);
                     var putResult = jiraSender.Put(url, json);
 
