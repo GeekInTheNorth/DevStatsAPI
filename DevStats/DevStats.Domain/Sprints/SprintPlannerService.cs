@@ -90,7 +90,7 @@ namespace DevStats.Domain.Sprints
             {
                 var apiRoot = GetApiRoot();
                 var projects = projectsRepository.Get();
-                var jql = "project in ({0}) AND issuetype in (Bug, Story, Task) AND \"Cascade Team\" = {1} AND Status = \"To Do\" AND (Sprint = NULL OR Sprint != {2})";
+                var jql = "project in ({0}) AND issuetype in (Bug, Story, Task) AND \"Cascade Team\" = {1} AND Status = \"To Do\" AND Refinement in (\"Dev to Task Out\", \"QA to Task Out\", Ready) AND (Sprint = NULL OR Sprint != {2})";
                 jql = string.Format(jql, string.Join(",", projects), owningTeam, currentSprint);
 
                 var url = string.Format(IssueSearchPath, apiRoot, WebUtility.UrlEncode(jql));
