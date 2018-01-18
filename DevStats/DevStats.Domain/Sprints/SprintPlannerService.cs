@@ -14,7 +14,7 @@ namespace DevStats.Domain.Sprints
         private readonly IJiraLogRepository loggingRepository;
         private readonly IJiraSender jiraSender;
         private readonly IProjectsRepository projectsRepository;
-        private const string IssueSearchPath = @"{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,customfield_13701,customfield_13709";
+        private const string IssueSearchPath = @"{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,customfield_13701,customfield_13709&maxResults=500";
         private const string GetSprintItemsPath = @"{0}/rest/agile/1.0/sprint/{1}/issue?maxResults=500";
         private const string MoveToBacklogPath = @"{0}/rest/agile/1.0/backlog/issue";
         private const string MoveToSprintPath = @"{0}/rest/agile/1.0/sprint/{1}/issue";
@@ -99,7 +99,7 @@ namespace DevStats.Domain.Sprints
                 if (!stories.Any()) return new List<SprintStory>();
 
                 var storyKeys = stories.Select(x => x.Key).ToArray();
-                jql = string.Format("parent in ({0})", string.Join(",", storyKeys));
+                jql = string.Format("parent in ({0}) AND \"Task Type\" Not IN (\"PO Review\", Merge)", string.Join(",", storyKeys));
                 url = string.Format(IssueSearchPath, apiRoot, WebUtility.UrlEncode(jql));
 
                 var tasks = jiraSender.Get<JiraIssues>(url).Issues;
