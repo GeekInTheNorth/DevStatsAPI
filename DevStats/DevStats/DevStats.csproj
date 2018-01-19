@@ -294,7 +294,9 @@
     <Compile Include="Controllers\MVC\KPIController.cs" />
     <Compile Include="Controllers\MVC\MvpController.cs" />
     <Compile Include="Controllers\MVC\ReleaseQualityController.cs" />
+    <Compile Include="Filters\ActionValidationAttribute.cs" />
     <Compile Include="Filters\RequireSecureConnectionFilter.cs" />
+    <Compile Include="Filters\ResponseManagementAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -325,7 +327,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Jira\Audit.cshtml" />
     <Content Include="Views\Jira\ApiTest.cshtml" />
     <Content Include="Views\Jira\StateChecker.cshtml" />

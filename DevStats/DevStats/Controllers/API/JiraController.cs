@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using DevStats.Domain.Jira;
@@ -22,102 +20,37 @@ namespace DevStats.Controllers.API
 
         [AcceptVerbs("POST")]
         [Route("story/create/{jiraId}")]
-        public HttpResponseMessage StoryCreate(string jiraId)
+        public void StoryCreate(string jiraId)
         {
-            try
-            {
-                jiraService.ProcessStoryCreate(jiraId);
-
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (ArgumentException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError);
-            }
+            jiraService.ProcessStoryCreate(jiraId);
         }
 
         [AcceptVerbs("POST")]
         [Route("story/update/{jiraId}")]
-        public HttpResponseMessage StoryUpdate(string jiraId)
+        public void StoryUpdate(string jiraId)
         {
-            try
-            {
-                jiraService.ProcessStoryUpdate(jiraId);
-
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (ArgumentException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError);
-            }
+            jiraService.ProcessStoryUpdate(jiraId);
         }
 
         [AcceptVerbs("DELETE", "POST")]
         [Route("story/Delete/{jiraId}")]
-        public HttpResponseMessage Delete(string jiraId)
+        public void Delete(string jiraId)
         {
-            try
-            {
-                jiraService.Delete(jiraId);
-
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (ArgumentException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError);
-            }
+            jiraService.Delete(jiraId);
         }
 
         [AcceptVerbs("POST")]
         [Route("subtask/update/{jiraId}")]
-        public HttpResponseMessage SubTaskUpdate(string jiraId)
+        public void SubTaskUpdate(string jiraId)
         {
-            try
-            {
-                jiraService.ProcessSubtaskUpdate(jiraId);
-
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (ArgumentException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError);
-            }
+            jiraService.ProcessSubtaskUpdate(jiraId);
         }
 
         [AcceptVerbs("POST")]
         [Route("bug/update/{jiraId}")]
-        public HttpResponseMessage BugUpdate(string jiraId)
+        public void BugUpdate(string jiraId)
         {
-            try
-            {
-                jiraService.ProcessBugUpdate(jiraId);
-
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (ArgumentException ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError);
-            }
+            jiraService.ProcessBugUpdate(jiraId);
         }
     }
 }

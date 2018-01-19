@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using DevStats.Filters;
 
 namespace DevStats
 {
@@ -19,6 +20,9 @@ namespace DevStats
             );
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new System.Net.Http.Headers.MediaTypeHeaderValue("text/html"));
+
+            config.Filters.Add(new ActionValidationAttribute());
+            config.Filters.Add(new ResponseManagementAttribute());
         }
     }
 }
