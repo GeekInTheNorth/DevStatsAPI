@@ -47,10 +47,10 @@ namespace DevStats.Controllers.API
         }
 
         [AcceptVerbs("POST")]
-        [Route("bug/update/{jiraId}")]
-        public void BugUpdate(string jiraId)
+        [Route("iam/update/{jiraId}")]
+        public void ImpactAnalysisModelUpdate(string jiraId)
         {
-            jiraService.ProcessBugUpdate(jiraId);
+            jiraService.ProcessImpactAnalysisModelUpdate(jiraId);
         }
     }
 }

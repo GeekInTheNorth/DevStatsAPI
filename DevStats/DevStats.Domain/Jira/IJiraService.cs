@@ -9,9 +9,9 @@ namespace DevStats.Domain.Jira
 
         void ProcessStoryUpdate(string jiraId);
 
-        void ProcessBugUpdate(string jiraId);
-
         void ProcessSubtaskUpdate(string jiraId);
+
+        void ProcessImpactAnalysisModelUpdate(string jiraId);
 
         IEnumerable<JiraAudit> GetJiraAudit(DateTime from, DateTime to);
 

@@ -131,46 +131,6 @@ namespace DevStats.Domain.Jira
             }
         }
 
-        public void ProcessBugUpdate(string jiraId)
-        {
-            if (!idValidator.Validate(jiraId))
-            {
-                var message = "Invalid Jira Id Provided.";
-                loggingRepository.Log(jiraId, "Process Story Update", message, false);
-
-                throw new ArgumentException(message);
-            }
-
-            try
-            {
-                var fields = "customfield_15716,customfield_15717,customfield_15718,customfield_15705";
-                var bugUrl = string.Format(JiraIssuePathWithFields, GetApiRoot(), jiraId, fields);
-                var bug = jiraSender.Get<Issue>(bugUrl);
-                var action = string.Format("Process Bug Update: Update IAM Score on Bug {0}", bug.Key);
-
-                var score = GetScore(defectScoringRepository.GetUserImpactScores(), bug.Fields.DefectScaleOfUserImpact);
-                score += GetScore(defectScoringRepository.GetFunctionalImpactScores(), bug.Fields.DefectScaleOfFunctionalImpact);
-                score += GetScore(defectScoringRepository.GetWorkAroundScores(), bug.Fields.DefectWorkaround);
-
-                if (!bug.Fields.DefectScore.HasValue || score != bug.Fields.DefectScore.Value)
-                {
-                    var json = "{ \"update\" : { \"customfield_15705\" : [{\"set\" : @@FieldValue@@ }] }}";
-                    json = json.Replace("@@FieldValue@@", score.ToString("F2"));
-
-                    var url = string.Format(JiraIssuePath, GetApiRoot(), bug.Key);
-                    var putResult = jiraSender.Put(url, json);
-
-                    loggingRepository.Log(bug.Id, bug.Key, action, putResult.Response, putResult.WasSuccessful);
-                }
-                else
-                    loggingRepository.Log(bug.Id, bug.Key, action, "No updates to apply.", true);
-            }
-            catch (Exception ex)
-            {
-                loggingRepository.Log(jiraId, "Process Bug Update", string.Format("Unexpected Error: {0}", ex.Message), false);
-            }
-        }
-
         public void ProcessSubtaskUpdate(string jiraId)
         {
             if (!idValidator.Validate(jiraId))
@@ -222,6 +182,46 @@ namespace DevStats.Domain.Jira
             }
         }
 
+        public void ProcessImpactAnalysisModelUpdate(string jiraId)
+        {
+            if (!idValidator.Validate(jiraId))
+            {
+                var message = "Invalid Jira Id Provided.";
+                loggingRepository.Log(jiraId, "Process Story Update", message, false);
+
+                throw new ArgumentException(message);
+            }
+
+            try
+            {
+                var fields = "customfield_15716,customfield_15717,customfield_15718,customfield_15705";
+                var bugUrl = string.Format(JiraIssuePathWithFields, GetApiRoot(), jiraId, fields);
+                var bug = jiraSender.Get<Issue>(bugUrl);
+                var action = string.Format("Process Bug Update: Update IAM Score on Bug {0}", bug.Key);
+
+                var score = GetScore(defectScoringRepository.GetUserImpactScores(), bug.Fields.DefectScaleOfUserImpact);
+                score += GetScore(defectScoringRepository.GetFunctionalImpactScores(), bug.Fields.DefectScaleOfFunctionalImpact);
+                score += GetScore(defectScoringRepository.GetWorkAroundScores(), bug.Fields.DefectWorkaround);
+
+                if (!bug.Fields.DefectScore.HasValue || score != bug.Fields.DefectScore.Value)
+                {
+                    var json = "{ \"update\" : { \"customfield_15705\" : [{\"set\" : @@FieldValue@@ }] }}";
+                    json = json.Replace("@@FieldValue@@", score.ToString("F2"));
+
+                    var url = string.Format(JiraIssuePath, GetApiRoot(), bug.Key);
+                    var putResult = jiraSender.Put(url, json);
+
+                    loggingRepository.Log(bug.Id, bug.Key, action, putResult.Response, putResult.WasSuccessful);
+                }
+                else
+                    loggingRepository.Log(bug.Id, bug.Key, action, "No updates to apply.", true);
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log(jiraId, "Process Bug Update", string.Format("Unexpected Error: {0}", ex.Message), false);
+            }
+        }
+
         public IEnumerable<JiraAudit> GetJiraAudit(DateTime from, DateTime to)
         {
             return loggingRepository.Get(from, to);
@@ -258,6 +258,47 @@ namespace DevStats.Domain.Jira
 
             return (from issue in response.Issues
                     select new JiraDefectSummary(issue, supportUserNames));
+        }
+
+        public void UpdateDefectAnalysis(Issue story)
+        {
+            var action = string.Format("Process Story Update: Update defect analysis for {0}", story.Key);
+
+            try
+            {
+                var defects = new List<JiraDefect> { new JiraDefect(story) };
+
+                defectRepository.Save(defects);
+
+                loggingRepository.Log(story.Id, story.Key, action, string.Empty, true);
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log(story.Id, story.Key, action, ex.Message, false);
+            }
+        }
+
+        public void Delete(string jiraId)
+        {
+            var action = string.Format("Process Delete: Update defect analysis for {0}", jiraId);
+
+            if (!idValidator.Validate(jiraId))
+            {
+                var message = "Invalid Jira Id Provided.";
+                loggingRepository.Log(jiraId, jiraId, action, message, false);
+
+                throw new ArgumentException(message);
+            }
+
+            try
+            {
+                defectRepository.Delete(jiraId);
+                loggingRepository.Log(jiraId, jiraId, action, string.Empty, true);
+            }
+            catch (Exception ex)
+            {
+                loggingRepository.Log(jiraId, jiraId, action, ex.Message, false);
+            }
         }
 
         private IEnumerable<string> GetUserNames(string groupName)
@@ -381,47 +422,6 @@ namespace DevStats.Domain.Jira
             catch (Exception ex)
             {
                 loggingRepository.Log(story.Id, story.Key, action, ex.Message, false);
-            }
-        }
-
-        public void UpdateDefectAnalysis(Issue story)
-        {
-            var action = string.Format("Process Story Update: Update defect analysis for {0}", story.Key);
-
-            try
-            {
-                var defects = new List<JiraDefect> { new JiraDefect(story) };
-
-                defectRepository.Save(defects);
-
-                loggingRepository.Log(story.Id, story.Key, action, string.Empty, true);
-            }
-            catch (Exception ex)
-            {
-                loggingRepository.Log(story.Id, story.Key, action, ex.Message, false);
-            }
-        }
-
-        public void Delete(string jiraId)
-        {
-            var action = string.Format("Process Delete: Update defect analysis for {0}", jiraId);
-
-            if (!idValidator.Validate(jiraId))
-            {
-                var message = "Invalid Jira Id Provided.";
-                loggingRepository.Log(jiraId, jiraId, action, message, false);
-
-                throw new ArgumentException(message);
-            }
-
-            try
-            {
-                defectRepository.Delete(jiraId);
-                loggingRepository.Log(jiraId, jiraId, action, string.Empty, true);
-            }
-            catch (Exception ex)
-            {
-                loggingRepository.Log(jiraId, jiraId, action, ex.Message, false);
             }
         }
 
