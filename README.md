@@ -66,7 +66,7 @@ Event jql: N/A
 Event Options: N/A
 Workflow Transition: Add a Post-Function that executes a "Generic Event", this can target a WebHook.  I've used this so this event only gets triggered when moving between states.
 
-### Bug Update
-URL: api/jira/bug/update/${issue.key}
+### Impact Analysis Model Update
+URL: api/jira/iam/update/${issue.key}
 Event jql: issuetype = Bug
-Event Options: Issue - Deleted
+Event Options: Issue - Updated
