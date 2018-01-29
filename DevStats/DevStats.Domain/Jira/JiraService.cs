@@ -22,6 +22,7 @@ namespace DevStats.Domain.Jira
         private readonly IDefectScoringRepository defectScoringRepository;
         private readonly IJiraIdValidator idValidator;
         private const string JiraIssuePath = @"{0}/rest/api/2/issue/{1}";
+        private const string JiraAssigneePath = @"{0}/rest/api/2/issue/{1}/assignee";
         private const string JiraIssuePathWithFields = @"{0}/rest/api/2/issue/{1}?fields={2}";
         private const string JiraCreatePath = @"{0}/rest/api/2/issue/";
         private const string JiraTransitionPath = @"{0}/rest/api/latest/issue/{1}/transitions";
@@ -124,6 +125,7 @@ namespace DevStats.Domain.Jira
                 CopyVersionFromStoryToTask(story, tasks);
                 ProcessWorkLogs(story, tasks);
                 UpdateDefectAnalysis(story);
+                UpdateBugFromSubtasks(story, tasks);
             }
             catch (Exception ex)
             {
@@ -422,6 +424,45 @@ namespace DevStats.Domain.Jira
             catch (Exception ex)
             {
                 loggingRepository.Log(story.Id, story.Key, action, ex.Message, false);
+            }
+        }
+
+        private void UpdateBugFromSubtasks(Issue story, IEnumerable<Issue> tasks)
+        {
+            if (story.Fields.Status.Name != "Done" || story.Fields.Issuetype.Name != "Bug") return;
+
+            if (tasks == null || !tasks.Any())
+            {
+                loggingRepository.Log(story.Id, story.Key, "Process Story Update: Update Bug From Sub-Tasks", "No Sub-Tasks to process", true);
+                return;
+            }
+
+            var json = "{ \"update\" : { \"customfield_15500\" : [{\"set\" : null }] }}";
+            if (tasks.Any(x => x.Fields.TaskType.Value == "Rework"))
+                json = "{ \"update\" : { \"customfield_15500\" : [{\"set\" : [ { \"value\": \"Yes\" } ] }] }}";
+
+            var url = string.Format(JiraIssuePath, GetApiRoot(), story.Key);
+            var action = string.Format("Process Story Update: Set 'Testing Defect Returned' for {0}", story.Key);
+            var putResult = jiraSender.Put(url, json);
+
+            loggingRepository.Log(story.Id, story.Key, action, putResult.Response, putResult.WasSuccessful);
+
+            var developer = tasks.Where(x => x.Fields.TaskType.Value == "Dev" && x.Fields.Assignee != null && x.Fields.TimeTracking != null)
+                                 .GroupBy(x => x.Fields.Assignee.Name)
+                                 .Select(x => new { Developer = x.Key, Hours = x.Sum(y => y.Fields.TimeTracking.TimeSpentInSeconds) })
+                                 .OrderByDescending(x => x.Hours)
+                                 .Select(x => x.Developer).FirstOrDefault();
+
+            if (!string.IsNullOrWhiteSpace(developer))
+            {
+                url = string.Format(JiraAssigneePath, GetApiRoot(), story.Key);
+                json = "{ \"name\" : \"@@name@@\" }";
+                json = json.Replace("@@name@@", developer);
+
+                action = string.Format("Process Story Update: Set 'Assignee' for {0}", story.Key);
+                putResult = jiraSender.Put(url, json);
+
+                loggingRepository.Log(story.Id, story.Key, action, putResult.Response, putResult.WasSuccessful);
             }
         }
 
