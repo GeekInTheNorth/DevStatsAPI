@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace DevStats.Domain.Jira.JsonModels
@@ -139,5 +140,11 @@ namespace DevStats.Domain.Jira.JsonModels
 
         [JsonProperty("customfield_15705")]
         public decimal? DefectScore { get; set; }
+
+        [JsonProperty("customfield_15725")]
+        public NameField ReleaseOriginated { get; set; }
+
+        [JsonProperty("versions")]
+        public List<FixVersion> AffectedVersions { get; set; }
     }
 }

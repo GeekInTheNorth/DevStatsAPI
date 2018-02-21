@@ -29,6 +29,7 @@ namespace DevStats.Domain.Jira
         private const string CoreIssueIdRegex = "({0})[-][0-9]{{1,6}}";
         private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}";
         private const string JiraUserGroupSearchPath = @"{0}/rest/api/2/group?groupname={1}&expand=users";
+        private const string VersionNumberRegEx = "[0-9]{1,2}.[0-9]{1,3}";
 
         public JiraService(
             IJiraConvertor convertor,
@@ -126,6 +127,7 @@ namespace DevStats.Domain.Jira
                 ProcessWorkLogs(story, tasks);
                 UpdateDefectAnalysis(story);
                 UpdateBugFromSubtasks(story, tasks);
+                UpdateReleaseOriginated(story);
             }
             catch (Exception ex)
             {
@@ -463,6 +465,41 @@ namespace DevStats.Domain.Jira
                 putResult = jiraSender.Put(url, json);
 
                 loggingRepository.Log(story.Id, story.Key, action, putResult.Response, putResult.WasSuccessful);
+            }
+        }
+
+        private void UpdateReleaseOriginated(Issue story)
+        {
+            if (story.Fields.Issuetype.Name != "Bug") return;
+
+            var action = string.Format("Process Story Update: Set 'Release Originated' for {0}", story.Key);
+
+            try
+            {
+                var affectedVersions = story.Fields.AffectedVersions ?? Enumerable.Empty<FixVersion>();
+                var regEx = new Regex(VersionNumberRegEx);
+                var earliestAffected = affectedVersions.Where(x => regEx.IsMatch(x.Name))
+                                                       .Select(x => new { MatchName = regEx.Match(x.Name).Value, ReleaseName = x.Name, ReleaseId = x.Id })
+                                                       .OrderBy(x => x.MatchName)
+                                                       .FirstOrDefault();
+
+                // Can't find a valid affected version
+                if (earliestAffected == null) return;
+
+                if (story.Fields.ReleaseOriginated == null || !story.Fields.ReleaseOriginated.Name.Equals(earliestAffected.ReleaseName, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    var json = "{ \"update\" : { \"customfield_15725\" : [{\"set\" : { \"id\": \"@@VERSION@@\" } }] }}";
+                    json = json.Replace("@@VERSION@@", earliestAffected.ReleaseId);
+
+                    var url = string.Format(JiraIssuePath, GetApiRoot(), story.Key);
+                    
+                    var postResult = jiraSender.Put(url, json);
+                    loggingRepository.Log(story.Key, action, postResult.Response, postResult.WasSuccessful);
+                }
+            }
+            catch(Exception ex)
+            {
+                loggingRepository.Log(story.Key, action, string.Format("Unexpected Error: {0}", ex.Message), false);
             }
         }
 
