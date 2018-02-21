@@ -29,7 +29,7 @@ namespace DevStats.Domain.Jira
         private const string CoreIssueIdRegex = "({0})[-][0-9]{{1,6}}";
         private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}";
         private const string JiraUserGroupSearchPath = @"{0}/rest/api/2/group?groupname={1}&expand=users";
-        private const string VersionNumberRegEx = "[0-9]{1,2}.[0-9]{1,3}";
+        private const string VersionNumberRegEx = "[0-9]{1,2}[.]{1}[0-9]{1,3}";
 
         public JiraService(
             IJiraConvertor convertor,

@@ -25,5 +25,10 @@ namespace DevStats.Domain.Jira.JsonModels
 
         [JsonProperty("releaseDate")]
         public DateTime? ReleaseDate { get; set; }
+
+        public override string ToString()
+        {
+            return Name ?? string.Empty;
+        }
     }
 }
