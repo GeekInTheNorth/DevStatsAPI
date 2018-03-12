@@ -4,7 +4,7 @@ using DevStats.Domain.Logging;
 
 namespace DevStats.Data.Repositories
 {
-    public class ApiLogRepository : BaseRepository, IApiLogRepository
+    public class ApiLogRepository : IApiLogRepository
     {
         public void Log(string apiName, string apiUrl, string action, bool success, string content)
         {
@@ -18,8 +18,11 @@ namespace DevStats.Data.Repositories
                 Content = content
             };
 
-            Context.ApiLogs.Add(newLog);
-            Context.SaveChanges();
+            using (var context = new DevStatContext())
+            {
+                context.ApiLogs.Add(newLog);
+                context.SaveChanges();
+            }
         }
 
         public void Success(string apiName, string apiUrl, string action)
