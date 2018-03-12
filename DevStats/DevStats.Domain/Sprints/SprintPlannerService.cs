@@ -41,7 +41,7 @@ namespace DevStats.Domain.Sprints
                 var boards = new List<NameField>();
                 foreach (var project in projects)
                 {
-                    var boardUrl = string.Format("{0}/rest/agile/1.0/board?projectKeyOrId={1}", GetApiRoot(), project);
+                    var boardUrl = string.Format("{0}/rest/agile/1.0/board?projectLocation={1}", GetApiRoot(), project);
                     var projectBoards = jiraSender.Get<NameCollection>(boardUrl).Names;
 
                     boards.AddRange(projectBoards.Where(x => !boards.Any(y => y.Id == x.Id)));
