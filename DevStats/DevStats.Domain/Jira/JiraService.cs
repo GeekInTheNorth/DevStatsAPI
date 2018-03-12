@@ -116,7 +116,7 @@ namespace DevStats.Domain.Jira
                 if (taskSummaries.Any())
                 {
                     var taskSearch = string.Format("issueKey in ({0})", string.Join(",", taskSummaries.Select(x => x.Key)));
-                    var taskUrl = "{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,resolutiondate,customfield_13701,customfield_13709,assignee,customfield_13700";
+                    var taskUrl = "{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,resolutiondate,customfield_13701,customfield_13709,assignee,customfield_13700,timeoriginalestimate";
                     taskUrl = string.Format(taskUrl, GetApiRoot(), HttpUtility.JavaScriptStringEncode(taskSearch));
 
                     tasks = jiraSender.Get<JiraIssues>(taskUrl).Issues ?? new Issue[] { };
@@ -128,6 +128,7 @@ namespace DevStats.Domain.Jira
                 UpdateDefectAnalysis(story);
                 UpdateBugFromSubtasks(story, tasks);
                 UpdateReleaseOriginated(story);
+                UpdateAssigneeOnParent(story, tasks);
             }
             catch (Exception ex)
             {
@@ -448,21 +449,32 @@ namespace DevStats.Domain.Jira
             var putResult = jiraSender.Put(url, json);
 
             loggingRepository.Log(story.Id, story.Key, action, putResult.Response, putResult.WasSuccessful);
+        }
 
-            var developer = tasks.Where(x => x.Fields.TaskType.Value == "Dev" && x.Fields.Assignee != null && x.Fields.TimeTracking != null)
-                                 .GroupBy(x => x.Fields.Assignee.Name)
-                                 .Select(x => new { Developer = x.Key, Hours = x.Sum(y => y.Fields.TimeTracking.TimeSpentInSeconds) })
-                                 .OrderByDescending(x => x.Hours)
-                                 .Select(x => x.Developer).FirstOrDefault();
-
-            if (!string.IsNullOrWhiteSpace(developer))
+        private void UpdateAssigneeOnParent(Issue story, IEnumerable<Issue> tasks)
+        {
+            if (tasks == null || !tasks.Any())
             {
-                url = string.Format(JiraAssigneePath, GetApiRoot(), story.Key);
-                json = "{ \"name\" : \"@@name@@\" }";
-                json = json.Replace("@@name@@", developer);
+                loggingRepository.Log(story.Id, story.Key, "Process Story Update: Update Assignee on Parent Task", "No Sub-Tasks to process", true);
+                return;
+            }
 
-                action = string.Format("Process Story Update: Set 'Assignee' for {0}", story.Key);
-                putResult = jiraSender.Put(url, json);
+            var newAssignee = tasks.Where(x => x.Fields.TaskType.Value == "Dev" && x.Fields.Assignee != null && x.Fields.Timeoriginalestimate.HasValue)
+                                   .GroupBy(x => x.Fields.Assignee.Name)
+                                   .Select(x => new { Developer = x.Key, Hours = x.Sum(y => y.Fields.Timeoriginalestimate ?? 0) })
+                                   .OrderByDescending(x => x.Hours)
+                                   .Select(x => x.Developer).FirstOrDefault();
+
+            var oldAssignee = story.Fields.Assignee == null ? "UNKNOWN" : story.Fields.Assignee.Name;
+
+            if (!string.IsNullOrWhiteSpace(newAssignee) && !newAssignee.Equals(oldAssignee, StringComparison.CurrentCultureIgnoreCase))
+            {
+                var url = string.Format(JiraAssigneePath, GetApiRoot(), story.Key);
+                var json = "{ \"name\" : \"@@name@@\" }";
+                json = json.Replace("@@name@@", newAssignee);
+
+                var action = string.Format("Process Story Update: Set 'Assignee' for {0}", story.Key);
+                var putResult = jiraSender.Put(url, json);
 
                 loggingRepository.Log(story.Id, story.Key, action, putResult.Response, putResult.WasSuccessful);
             }
