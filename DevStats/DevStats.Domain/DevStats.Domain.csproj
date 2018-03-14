@@ -92,6 +92,7 @@
     <Compile Include="Bitbucket\BitbucketService.cs" />
     <Compile Include="Bitbucket\BuildStatus.cs" />
     <Compile Include="Bitbucket\BuildStatusModel.cs" />
+    <Compile Include="Bitbucket\Commit.cs" />
     <Compile Include="Bitbucket\IBitbucketSender.cs" />
     <Compile Include="Bitbucket\IBitbucketService.cs" />
     <Compile Include="Communications\IEmailService.cs" />
@@ -162,7 +163,7 @@
     </Compile>
     <Compile Include="Messages\IJsonConvertor.cs" />
     <Compile Include="Messages\JsonConvertor.cs" />
-    <Compile Include="Messages\PostResult.cs" />    
+    <Compile Include="Messages\PostResult.cs" />
     <Compile Include="MVP\IMvpRepository.cs" />
     <Compile Include="MVP\IMvpService.cs" />
     <Compile Include="MVP\MvpService.cs" />

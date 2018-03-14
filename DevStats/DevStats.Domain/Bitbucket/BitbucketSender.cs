@@ -18,6 +18,23 @@ namespace DevStats.Domain.Bitbucket
             this.convertor = convertor;
         }
 
+        public T Get<T>(string url)
+        {
+            var webRequest = WebRequest.Create(url);
+            webRequest.Headers.Add(string.Format("Authorization: Basic {0}", GetEncryptedCredentials()));
+            webRequest.ContentType = "application/json; charset=utf-8";
+            webRequest.Method = "GET";
+
+            var httpResponse = (HttpWebResponse)webRequest.GetResponse();
+            var response = string.Empty;
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                response = streamReader.ReadToEnd();
+            }
+
+            return convertor.Deserialize<T>(response);
+        }
+
         public PostResult Post<T>(string url, T objectToSend)
         {
             var objectJson = convertor.Serialize<T>(objectToSend);
