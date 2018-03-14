@@ -8,7 +8,7 @@ namespace DevStats.Data.Entities
 
         public string ApiName { get; set; }
 
-        public string ApUrl { get; set; }
+        public string ApiUrl { get; set; }
 
         public string IssueKey { get; set; }
 

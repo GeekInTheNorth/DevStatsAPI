@@ -11,7 +11,7 @@ namespace DevStats.Data.Repositories
             var newLog = new ApiLog
             {
                 ApiName = apiName,
-                ApUrl = apiUrl,
+                ApiUrl = apiUrl,
                 Action = action,
                 Triggered = DateTime.Now,
                 Success = success,

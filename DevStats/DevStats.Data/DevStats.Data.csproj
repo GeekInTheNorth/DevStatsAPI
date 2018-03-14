@@ -143,6 +143,10 @@
     <Compile Include="Migrations\201711170845217_CreateReleaseQualityReport.Designer.cs">
       <DependentUpon>201711170845217_CreateReleaseQualityReport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803141146558_CorrectApiUrlColumnOnApiLog.cs" />
+    <Compile Include="Migrations\201803141146558_CorrectApiUrlColumnOnApiLog.Designer.cs">
+      <DependentUpon>201803141146558_CorrectApiUrlColumnOnApiLog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -229,6 +233,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711170845217_CreateReleaseQualityReport.resx">
       <DependentUpon>201711170845217_CreateReleaseQualityReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803141146558_CorrectApiUrlColumnOnApiLog.resx">
+      <DependentUpon>201803141146558_CorrectApiUrlColumnOnApiLog.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
