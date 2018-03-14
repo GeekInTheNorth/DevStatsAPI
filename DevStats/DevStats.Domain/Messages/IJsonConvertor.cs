@@ -1,6 +1,6 @@
-﻿namespace DevStats.Domain.Jira
+﻿namespace DevStats.Domain.Messages
 {
-    public interface IJiraConvertor
+    public interface IJsonConvertor
     {
         T Deserialize<T>(byte[] jsonData);
 

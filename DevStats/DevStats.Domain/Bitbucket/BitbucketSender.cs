@@ -5,59 +5,24 @@ using System.Net;
 using System.Text;
 using DevStats.Domain.Messages;
 
-namespace DevStats.Domain.Jira
+namespace DevStats.Domain.Bitbucket
 {
-    public class JiraSender : IJiraSender
+    public class BitbucketSender : IBitbucketSender
     {
         private readonly IJsonConvertor convertor;
-        private string jiraKey;
 
-        public JiraSender(IJsonConvertor convertor)
+        public BitbucketSender(IJsonConvertor convertor)
         {
             if (convertor == null) throw new ArgumentNullException(nameof(convertor));
 
             this.convertor = convertor;
         }
 
-        public T Get<T>(string url)
-        {
-            var webRequest = WebRequest.Create(url);
-            webRequest.Headers.Add(string.Format("Authorization: Basic {0}", GetEncryptedCredentials()));
-            webRequest.ContentType = "application/json; charset=utf-8";
-            webRequest.Method = "GET";
-
-            var httpResponse = (HttpWebResponse)webRequest.GetResponse();
-            var response = string.Empty;
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                response = streamReader.ReadToEnd();
-            }
-
-            return convertor.Deserialize<T>(response);
-        }
-
         public PostResult Post<T>(string url, T objectToSend)
         {
             var objectJson = convertor.Serialize<T>(objectToSend);
 
-            return Post(url, objectJson);
-        }
-
-        public PostResult Post(string url, string jsonPackage)
-        {
-            return Send(url, jsonPackage, "POST");
-        }
-
-        public PostResult Put<T>(string url, T objectToSend)
-        {
-            var objectJson = convertor.Serialize<T>(objectToSend);
-
-            return Put(url, objectJson);
-        }
-
-        public PostResult Put(string url, string jsonPackage)
-        {
-            return Send(url, jsonPackage, "PUT");
+            return Send(url, objectJson, "POST");
         }
 
         private PostResult Send(string url, string jsonPackage, string method)
@@ -106,22 +71,12 @@ namespace DevStats.Domain.Jira
 
         private string GetEncryptedCredentials()
         {
-            if (string.IsNullOrWhiteSpace(jiraKey))
-            {
-                jiraKey = ConfigurationManager.AppSettings.Get("JiraEncryptedAuth") ?? string.Empty;
-            }
+            var user = ConfigurationManager.AppSettings.Get("BitbucketUserName") ?? string.Empty;
+            var pass = ConfigurationManager.AppSettings.Get("BitbucketPassword") ?? string.Empty;
+            var plainTextKey = string.Format("{0}:{1}", user, pass);
+            var plainTextBytes = Encoding.UTF8.GetBytes(plainTextKey);
 
-            if (string.IsNullOrWhiteSpace(jiraKey))
-            {
-                var user = ConfigurationManager.AppSettings.Get("JiraUserName") ?? string.Empty;
-                var pass = ConfigurationManager.AppSettings.Get("JiraPassword") ?? string.Empty;
-                var plainTextKey = string.Format("{0}:{1}", user, pass);
-                var plainTextBytes = Encoding.UTF8.GetBytes(plainTextKey);
-
-                jiraKey = Convert.ToBase64String(plainTextBytes);
-            }
-
-            return jiraKey;
+            return Convert.ToBase64String(plainTextBytes);
         }
     }
 }

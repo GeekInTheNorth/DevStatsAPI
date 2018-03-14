@@ -280,6 +280,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AhaController.cs" />
+    <Compile Include="Controllers\API\BitbucketController.cs" />
     <Compile Include="Controllers\API\JiraController.cs" />
     <Compile Include="Controllers\API\JiraStateCheckerController.cs" />
     <Compile Include="Controllers\API\KPIController.cs" />

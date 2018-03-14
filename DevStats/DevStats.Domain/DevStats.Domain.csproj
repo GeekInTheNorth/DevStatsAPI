@@ -88,6 +88,12 @@
     <Compile Include="Aha\IAhaService.cs" />
     <Compile Include="Aha\JsonModels\CustomField.cs" />
     <Compile Include="Aha\JsonModels\SimpleField.cs" />
+    <Compile Include="Bitbucket\BitbucketSender.cs" />
+    <Compile Include="Bitbucket\BitbucketService.cs" />
+    <Compile Include="Bitbucket\BuildStatus.cs" />
+    <Compile Include="Bitbucket\BuildStatusModel.cs" />
+    <Compile Include="Bitbucket\IBitbucketSender.cs" />
+    <Compile Include="Bitbucket\IBitbucketService.cs" />
     <Compile Include="Communications\IEmailService.cs" />
     <Compile Include="DefectAnalysis\ProductDefectSummaries.cs" />
     <Compile Include="Jira\IDefectScoringRepository.cs" />
@@ -135,9 +141,7 @@
     <Compile Include="Jira\JsonModels\Worklogs.cs" />
     <Compile Include="Jira\Logging\IJiraLogRepository.cs" />
     <Compile Include="Jira\FilterBuilder.cs" />
-    <Compile Include="Jira\IJiraConvertor.cs" />
     <Compile Include="Jira\IJiraService.cs" />
-    <Compile Include="Jira\JiraConvertor.cs" />
     <Compile Include="Jira\JiraService.cs" />
     <Compile Include="Jira\JsonModels\FixVersion.cs" />
     <Compile Include="Jira\JsonModels\JiraIssues.cs" />
@@ -148,7 +152,6 @@
     <Compile Include="Jira\JsonModels\User.cs" />
     <Compile Include="Jira\JsonModels\Votes.cs" />
     <Compile Include="Jira\Logging\JiraHook.cs" />
-    <Compile Include="Jira\PostResult.cs" />
     <Compile Include="Jira\JiraStateSummary.cs" />
     <Compile Include="Jira\ProjectsRepository.cs" />
     <Compile Include="Jira\StoryEffort.cs" />
@@ -157,6 +160,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>JsonFiles.resx</DependentUpon>
     </Compile>
+    <Compile Include="Messages\IJsonConvertor.cs" />
+    <Compile Include="Messages\JsonConvertor.cs" />
+    <Compile Include="Messages\PostResult.cs" />    
     <Compile Include="MVP\IMvpRepository.cs" />
     <Compile Include="MVP\IMvpService.cs" />
     <Compile Include="MVP\MvpService.cs" />
@@ -193,7 +199,6 @@
       <LastGenOutput>JsonFiles.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

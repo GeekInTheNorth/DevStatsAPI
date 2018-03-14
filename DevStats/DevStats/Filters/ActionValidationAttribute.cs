@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;
@@ -37,12 +39,22 @@ namespace DevStats.Filters
 
         private void ValidateArgument(HttpActionContext actionContext, string argumentName, object argument)
         {
-            if (argumentName.Equals("jiraId", StringComparison.CurrentCultureIgnoreCase))
+            if (argument != null && argument is IValidatableObject)
+            {
+                if (!actionContext.ModelState.IsValid)
+                {
+                    var errors = actionContext.ModelState.Values.SelectMany(x => x.Errors.Select(y => y.ErrorMessage));
+                    var errorMessage = string.Join("; ", errors);
+                    LogValidationError(actionContext, argumentName, errorMessage);
+                    actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, string.Format("Invalid model: {0}", errorMessage));
+                }
+            }
+            else if (argumentName.Equals("jiraId", StringComparison.CurrentCultureIgnoreCase))
             {
                 if (!jiraIdValidator.Validate(argument.ToString()))
                 {
-                    actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, string.Format("Invalid Jira Id: {0}", argument.ToString()));
                     LogValidationError(actionContext, argumentName, argument);
+                    actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, string.Format("Invalid Jira Id: {0}", argument.ToString()));
                 }
             }
         }

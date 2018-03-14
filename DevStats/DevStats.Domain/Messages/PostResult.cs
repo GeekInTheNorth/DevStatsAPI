@@ -1,4 +1,4 @@
-﻿namespace DevStats.Domain.Jira
+﻿namespace DevStats.Domain.Messages
 {
     public class PostResult
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
-using DevStats.Domain.Jira;
+using DevStats.Domain.Messages;
 
 namespace DevStats.Models.Jira
 {

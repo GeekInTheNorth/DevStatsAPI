@@ -1,4 +1,6 @@
-﻿namespace DevStats.Domain.Jira
+﻿using DevStats.Domain.Messages;
+
+namespace DevStats.Domain.Jira
 {
     public interface IJiraSender
     {

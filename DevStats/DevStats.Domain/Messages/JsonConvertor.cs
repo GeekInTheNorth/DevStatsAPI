@@ -1,8 +1,8 @@
 ﻿using System.Text;
 
-namespace DevStats.Domain.Jira
+namespace DevStats.Domain.Messages
 {
-    public class JiraConvertor : IJiraConvertor
+    public class JsonConvertor : IJsonConvertor
     {
         public T Deserialize<T>(byte[] jsonData)
         {

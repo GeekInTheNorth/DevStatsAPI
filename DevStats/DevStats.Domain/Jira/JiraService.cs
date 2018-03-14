@@ -8,12 +8,13 @@ using System.Web;
 using DevStats.Domain.DefectAnalysis;
 using DevStats.Domain.Jira.JsonModels;
 using DevStats.Domain.Jira.Logging;
+using DevStats.Domain.Messages;
 
 namespace DevStats.Domain.Jira
 {
     public class JiraService : IJiraService
     {
-        private readonly IJiraConvertor convertor;
+        private readonly IJsonConvertor convertor;
         private readonly IJiraLogRepository loggingRepository;
         private readonly IJiraSender jiraSender;
         private readonly IProjectsRepository projectsRepository;
@@ -32,7 +33,7 @@ namespace DevStats.Domain.Jira
         private const string VersionNumberRegEx = "[0-9]{1,2}[.]{1}[0-9]{1,3}";
 
         public JiraService(
-            IJiraConvertor convertor,
+            IJsonConvertor convertor,
             IJiraLogRepository loggingRepository,
             IJiraSender jiraSender,
             IProjectsRepository projectsRepository,
