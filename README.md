@@ -41,6 +41,8 @@ Unless otherwise stated, all settings are empty in source control.
 | Application Setting | AhaApiRoot | Blank in source control |
 | Application Setting | AhaApiKey | Blank in source control |
 | Application Setting | MvpDistributionEmail | Target email address for MVP notifications |
+| Application Setting | BitbucketUserName | Process User Account in Jira |
+| Application Setting | BitbucketPassword | Process User Password in Bitbucket. Do look at using "App Passwords" with limited access rather than using the real password. |
 
 ## Jira Cloud Webhook Setup
 In all of the following cases, the URL must be prefixed with the domain of the DevStats instance.  The suggested JQL is slightly different in my own depoyed instance as it includes project filters.
@@ -70,3 +72,19 @@ Workflow Transition: Add a Post-Function that executes a "Generic Event", this c
 URL: api/jira/iam/update/${issue.key}
 Event jql: issuetype = Bug
 Event Options: Issue - Updated
+
+## Other End points
+
+### Post build status to Bitbucket
+URL: api/bitbucket/build/status
+Notes: Used to update the build status in bitbucket for any branch built regardless of build system. This functionality replaces the build status integrations from older versions of TeamCity to Bitbucket.  The following is the body content that should be provided:
+
+```JSON
+{ 
+	"BuildNumber" = "<Build Number>",
+	"CommitSha" = "SHA for the last commit on the branch being built",
+	"Status" = "<INPROGRESS|SUCCESSFUL|FAILED>",
+	"RepositoryName" = "<Repo Name>",
+	"BitbucketOrganisation" = "<Org Name>"
+}
+```

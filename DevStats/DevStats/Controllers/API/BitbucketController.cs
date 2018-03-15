@@ -20,7 +20,7 @@ namespace DevStats.Controllers.API
 
         [HttpPost]
         [Route("build/status")]
-        public void BuildStarted([FromBody]BuildStatusModel model)
+        public void BuildStatus([FromBody]BuildStatusModel model)
         {
             service.Update(model, Request.RequestUri.GetLeftPart(UriPartial.Authority));
         }
