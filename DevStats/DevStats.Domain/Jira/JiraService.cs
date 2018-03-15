@@ -341,7 +341,7 @@ namespace DevStats.Domain.Jira
                        .Replace("@@TASKID@@", "11510")
                        .Replace("@@TASKNAME@@", "Merge")
                        .Replace("@@PROJECT@@", project)
-                       .Replace("@@DESCRIPTION@@", "Merge to Develop");
+                       .Replace("@@DESCRIPTION@@", "Merge to Master");
 
             var url = string.Format(JiraCreatePath, GetApiRoot());
             var postResult = jiraSender.Post(url, json);
