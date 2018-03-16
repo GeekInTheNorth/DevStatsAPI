@@ -95,6 +95,7 @@
     <Compile Include="Bitbucket\Commit.cs" />
     <Compile Include="Bitbucket\IBitbucketSender.cs" />
     <Compile Include="Bitbucket\IBitbucketService.cs" />
+    <Compile Include="Bitbucket\IBuildStatusRepository.cs" />
     <Compile Include="Communications\IEmailService.cs" />
     <Compile Include="DefectAnalysis\ProductDefectSummaries.cs" />
     <Compile Include="Jira\IDefectScoringRepository.cs" />

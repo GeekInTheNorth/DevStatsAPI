@@ -12,14 +12,17 @@ namespace DevStats.Domain.Bitbucket
         private const string jiraUrl = "{0}/browse/{1}";
         private readonly IBitbucketSender sender;
         private readonly IJiraLogRepository loggingRepository;
+        private readonly IBuildStatusRepository buildStatusRepository;
 
-        public BitbucketService(IBitbucketSender sender, IJiraLogRepository loggingRepository)
+        public BitbucketService(IBitbucketSender sender, IJiraLogRepository loggingRepository, IBuildStatusRepository buildStatusRepository)
         {
             if (sender == null) throw new ArgumentNullException(nameof(sender));
             if (loggingRepository == null) throw new ArgumentNullException(nameof(loggingRepository));
+            if (buildStatusRepository == null) throw new ArgumentNullException(nameof(buildStatusRepository));
 
             this.sender = sender;
             this.loggingRepository = loggingRepository;
+            this.buildStatusRepository = buildStatusRepository;
         }
 
         public void Update(BuildStatusModel buildStatus, string url)
@@ -42,6 +45,7 @@ namespace DevStats.Domain.Bitbucket
 
             var postResult = sender.Post(bitbucketurl, state);
             loggingRepository.Log(buildStatus.BuildNumber, "Update Bitbucket build status", postResult.Response, postResult.WasSuccessful);
+            buildStatusRepository.Log(jiraId, buildStatus.BuildNumber, buildStatus.CommitSha, buildStatus.Status.ToUpper(), buildStatus.RepositoryName, buildStatus.BitbucketOrganisation);
         }
 
         private string GetJiraIdFromCommit(BuildStatusModel buildStatus)

@@ -38,6 +38,7 @@ namespace DevStats
             container.RegisterType<IReleaseQualityRepository, ReleaseQualityRepository>();
             container.RegisterType<IDefectScoringRepository, DefectScoringRepository>();
             container.RegisterType<IEstimationRepository, EstimationRepository>();
+            container.RegisterType<IBuildStatusRepository, BuildStatusRepository>();
 
             // Utilities
             container.RegisterType<IJsonConvertor, JsonConvertor>();

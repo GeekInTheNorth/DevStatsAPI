@@ -28,6 +28,8 @@ namespace DevStats.Data
 
         public DbSet<ReleaseQuality> ReleaseQualities { get; set; }
 
+        public DbSet<BuildStatusLog> BuildStatusLogs { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

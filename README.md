@@ -88,3 +88,33 @@ Notes: Used to update the build status in bitbucket for any branch built regardl
 	"BitbucketOrganisation" = "<Org Name>"
 }
 ```
+
+## Database
+
+DevStats uses Code First Entity Framework 6 with Migrations.  To create and apply migrations you need to use the nuget package manager console in the context of the DevStats.Data project.
+
+### Add Migrations
+
+This will look at the DevStatContext and the linked entities as well as the DB updated to the previous migration to determin what table and column changes there are and it will script those as changes.
+
+```C# Example
+Add-Migration LogBuildStatusChanges
+```
+
+If you have not yet updated the database and you have made more changes to the entities or the context, running the same command again with "-Force" will regenerate the migration to include your extra changes.
+
+### Apply updates to current DB
+
+This will look at the migrations table in the database to determin which migrations to apply. See example below:
+
+```C#
+Update-Database
+```
+
+### Rolling back to a specific migration
+
+This will roll back the DB to a specified migration. See example below:
+
+```C#
+Update-Database -target:CorrectApiUrlColumnOnApiLog
+```

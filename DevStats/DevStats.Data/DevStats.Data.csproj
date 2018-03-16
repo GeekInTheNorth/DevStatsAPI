@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Entities\ApiLog.cs" />
     <Compile Include="DevStatContext.cs" />
+    <Compile Include="Entities\BuildStatusLog.cs" />
     <Compile Include="Entities\DefectCategory.cs" />
     <Compile Include="Entities\JiraLog.cs" />
     <Compile Include="Entities\MvpVote.cs" />
@@ -147,12 +148,17 @@
     <Compile Include="Migrations\201803141146558_CorrectApiUrlColumnOnApiLog.Designer.cs">
       <DependentUpon>201803141146558_CorrectApiUrlColumnOnApiLog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803150944325_LogBuildStatusChanges.cs" />
+    <Compile Include="Migrations\201803150944325_LogBuildStatusChanges.Designer.cs">
+      <DependentUpon>201803150944325_LogBuildStatusChanges.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ActualsVsEstimatesRepository.cs" />
     <Compile Include="Repositories\ApiLogRepository.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
+    <Compile Include="Repositories\BuildStatusRepository.cs" />
     <Compile Include="Repositories\DefectRepository.cs" />
     <Compile Include="Repositories\DefectScoringRepository.cs" />
     <Compile Include="Repositories\EstimationRepository.cs" />
@@ -236,6 +242,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803141146558_CorrectApiUrlColumnOnApiLog.resx">
       <DependentUpon>201803141146558_CorrectApiUrlColumnOnApiLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803150944325_LogBuildStatusChanges.resx">
+      <DependentUpon>201803150944325_LogBuildStatusChanges.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
