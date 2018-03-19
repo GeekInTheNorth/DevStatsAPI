@@ -93,6 +93,23 @@ Notes: Used to update the build status in bitbucket for any branch built regardl
 
 DevStats uses Code First Entity Framework 6 with Migrations.  To create and apply migrations you need to use the nuget package manager console in the context of the DevStats.Data project.
 
+If you need to alter and roll back migrations that are in development, you will need to make a change to the configuration.cs file to turn off automatic migrations until development is complete.  Autmatic migrations should be turned back on before pushing to master.
+
+```C#
+namespace DevStats.Data.Migrations
+{
+    using System.Data.Entity.Migrations;
+
+    internal sealed class Configuration : DbMigrationsConfiguration<DevStatContext>
+    {
+        public Configuration()
+        {
+            // If actively developing DB changes, set this to false to allow you to manually roll forward/backward.  Set it back to true before merging to master
+            AutomaticMigrationsEnabled = true;
+            ContextKey = "DevStats.Data.DevStatContext";
+        }
+```
+
 ### Add Migrations
 
 This will look at the DevStatContext and the linked entities as well as the DB updated to the previous migration to determin what table and column changes there are and it will script those as changes.

@@ -1,19 +1,17 @@
 namespace DevStats.Data.Migrations
 {
-    using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<DevStats.Data.DevStatContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<DevStatContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            // If actively developing DB changes, set this to false to allow you to manually roll forward/backward.  Set it back to true before merging to master
+            AutomaticMigrationsEnabled = true;
             ContextKey = "DevStats.Data.DevStatContext";
         }
 
-        protected override void Seed(DevStats.Data.DevStatContext context)
+        protected override void Seed(DevStatContext context)
         {
             //  This method will be called after migrating to the latest version.
 

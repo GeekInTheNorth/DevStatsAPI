@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using DevStats.Data.Entities;
+using DevStats.Data.Migrations;
 
 namespace DevStats.Data
 {
@@ -32,6 +33,7 @@ namespace DevStats.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DevStatContext, Configuration>());
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
     }
