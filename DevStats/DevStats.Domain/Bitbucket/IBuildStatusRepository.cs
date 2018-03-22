@@ -2,6 +2,6 @@
 {
     public interface IBuildStatusRepository
     {
-        void Log(string jiraId, string buildNumber, string commitSha, string status, string repository, string organisation);
+        void Log(string jiraId, string buildNumber, string commitSha, string status, string repository, string organisation, bool bitbucketUpdated);
     }
 }

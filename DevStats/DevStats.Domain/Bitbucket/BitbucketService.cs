@@ -45,7 +45,7 @@ namespace DevStats.Domain.Bitbucket
 
             var postResult = sender.Post(bitbucketurl, state);
             loggingRepository.Log(buildStatus.BuildNumber, "Update Bitbucket build status", postResult.Response, postResult.WasSuccessful);
-            buildStatusRepository.Log(jiraId, buildStatus.BuildNumber, buildStatus.CommitSha, buildStatus.Status.ToUpper(), buildStatus.RepositoryName, buildStatus.BitbucketOrganisation);
+            buildStatusRepository.Log(jiraId, buildStatus.BuildNumber, buildStatus.CommitSha, buildStatus.Status.ToUpper(), buildStatus.RepositoryName, buildStatus.BitbucketOrganisation, postResult.WasSuccessful);
         }
 
         private string GetJiraIdFromCommit(BuildStatusModel buildStatus)

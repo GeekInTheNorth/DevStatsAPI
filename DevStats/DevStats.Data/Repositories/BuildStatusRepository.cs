@@ -6,7 +6,7 @@ namespace DevStats.Data.Repositories
 {
     public class BuildStatusRepository : IBuildStatusRepository
     {
-        public void Log(string jiraId, string buildNumber, string commitSha, string status, string repository, string organisation)
+        public void Log(string jiraId, string buildNumber, string commitSha, string status, string repository, string organisation, bool bitbucketUpdated)
         {
             var newObject = new BuildStatusLog
             {
@@ -16,7 +16,8 @@ namespace DevStats.Data.Repositories
                 Organisation = organisation,
                 Repository = repository,
                 Status = status,
-                StatusDate = DateTime.Now
+                StatusDate = DateTime.Now,
+                BitbucketUpdated = bitbucketUpdated
             };
 
             using (var context = new DevStatContext())
