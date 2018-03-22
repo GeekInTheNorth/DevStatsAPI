@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -28,28 +29,35 @@ namespace DevStats.Controllers.API
 
         [HttpGet]
         [Route("api/sprintplanning/sprintstories/{boardId}/{sprintId}")]
-        public IEnumerable<SprintStory> GetStoriesInSprint(int boardId, int sprintId)
+        public SprintStoriesModel GetStoriesInSprint(int boardId, int sprintId)
         {
-            return service.GetSprintItems(boardId, sprintId);
+            return new SprintStoriesModel
+            {
+                BoardId = boardId,
+                SprintId = sprintId,
+                Stories = service.GetSprintItems(boardId, sprintId).ToList()
+            };
         }
 
         [HttpGet]
         [Route("api/sprintplanning/refinedstories/{team}/{sprintBeingPlanned}")]
-        public IEnumerable<SprintStory> GetRefinedStories(string team, int sprintBeingPlanned)
+        public RefinedStoriesModel GetRefinedStories(string team, int sprintBeingPlanned)
         {
-            return service.GetRefinedItems(team, sprintBeingPlanned);
+            return new RefinedStoriesModel
+            {
+                SprintBeingPlanned = sprintBeingPlanned,
+                Team = team,
+                Stories = service.GetRefinedItems(team, sprintBeingPlanned).ToList()
+            };
         }
 
         [HttpPost]
         [Route("api/sprintplanning/sprintstories/{boardId}/{sprintId}")]
         public HttpResponseMessage SetStoriesInSprint([FromUri]int boardId, [FromUri]int sprintId, [FromBody]CommitSprintModel sprintModel)
         {
-            if (sprintModel == null || !sprintModel.IsValid())
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-
             try
             {
-                service.SetSprintContents(boardId, sprintId, sprintModel.Keys);
+                service.SetSprintContents(boardId, sprintId, sprintModel.TeamName, sprintModel.Keys);
                 return new HttpResponseMessage(HttpStatusCode.OK);
             }
             catch (Exception)

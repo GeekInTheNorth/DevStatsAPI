@@ -72,22 +72,31 @@ function getSprintStories(boardid, sprintid) {
     $.get(sprintStoriesUrl, function (data) {
         fillSprintStories(data);
 
-        completedSprintStories = true;
-
         if (completedSprintStories && completedBacklogStories)
             setButtonState(true);
     });
 }
 
 function fillSprintStories(data) {
+    var sprintOption = $("#ddlSprints").find(":selected");
+    var boardid = sprintOption.data("boardid");
+    var sprintid = sprintOption.data("sprintid");
+
+    if (boardid !== data.BoardId || sprintid !== data.SprintId)
+        return;
+
     $("div#sprint-content").html(getHeaderRowMarkUp("tblsprintstories"));
 
-    $.each(data, function (dataIndex) {
-        var dataItem = data[dataIndex];
-        $("#tblsprintstories > tbody").append(getRowMarkUp(dataItem, true));
+    var stories = data.Stories;
+
+    $.each(stories, function (index) {
+        var story = stories[index];
+        $("#tblsprintstories > tbody").append(getRowMarkUp(story, true));
     });
 
     addTotalRow("tblsprintstories", true);
+
+    completedSprintStories = true;
 }
 
 function getRefinedStories(team, sprintid) {
@@ -96,22 +105,31 @@ function getRefinedStories(team, sprintid) {
     $.get(refinedStoriesUrl, function (data) {
         fillRefinedStories(data);
 
-        completedBacklogStories = true;
-
         if (completedSprintStories && completedBacklogStories)
             setButtonState(true);
     });
 }
 
 function fillRefinedStories(data) {
+    var sprintOption = $("#ddlSprints").find(":selected");
+    var sprintid = sprintOption.data("sprintid");
+    var team = $("#ddlTeam").val();
+
+    if (data.Team !== team || sprintid !== data.SprintBeingPlanned)
+        return;
+
     $("div#refined-items").html(getHeaderRowMarkUp("tblrefinedstories"));
 
-    $.each(data, function (dataIndex) {
-        var dataItem = data[dataIndex];
-        $("#tblrefinedstories > tbody").append(getRowMarkUp(dataItem, false));
+    var stories = data.Stories;
+
+    $.each(stories, function (index) {
+        var story = stories[index];
+        $("#tblrefinedstories > tbody").append(getRowMarkUp(story, false));
     });
 
     addTotalRow("tblrefinedstories", false);
+
+    completedBacklogStories = true;
 }
 
 function clearContainers() {
@@ -276,6 +294,7 @@ function onSprintUpdate() {
     var sprintid = sprintOption.data("sprintid");
 
     var package = new Object();
+    package.TeamName = $("#ddlTeam").val();
     package.Keys = [];
     var $actionButtons = $("#tblsprintstories a.delete-button");
 
@@ -312,7 +331,12 @@ function showSprintUpdateSuccess(data, textStatus, jqXHR) {
 
 function showSprintUpdateFail(data, textStatus, jqXHR) {
     var markUp = "<div class='alert alert-danger alert-dismissible'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>";
-    markUp += textStatus + " : " + jqXHR + "</div>";
+    markUp += jqXHR;
+
+    if (data !== undefined && data.responseJSON !== undefined && data.responseJSON.Message !== undefined) {
+        markUp += ": " + data.responseJSON.Message;
+    }
+    markUp += "</div>";
 
     $(markUp).insertAfter("#filter-bar");
 }

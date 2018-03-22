@@ -10,6 +10,6 @@ namespace DevStats.Domain.Sprints
 
         IEnumerable<SprintStory> GetRefinedItems(string owningTeam, int currentSprint);
 
-        void SetSprintContents(int boardId, int sprintId, IEnumerable<string> storyKeys);
+        void SetSprintContents(int boardId, int sprintId, string teamName, IEnumerable<string> storyKeys);
     }
 }

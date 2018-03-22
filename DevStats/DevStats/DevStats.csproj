@@ -311,6 +311,8 @@
     <Compile Include="Models\Jira\AuditModel.cs" />
     <Compile Include="Models\Jira\CommitSprintModel.cs" />
     <Compile Include="Models\Jira\DefectAnalysisModel.cs" />
+    <Compile Include="Models\Jira\RefinedStoriesModel.cs" />
+    <Compile Include="Models\Jira\SprintStoriesModel.cs" />
     <Compile Include="Models\Jira\StateCheckerModel.cs" />
     <Compile Include="Models\KPI\ActualsVsEstimatesModel.cs" />
     <Compile Include="Models\KPI\NewFeatureFailureRateApiModel.cs" />
