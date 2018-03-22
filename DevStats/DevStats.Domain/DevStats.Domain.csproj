@@ -184,6 +184,10 @@
     <Compile Include="Communications\EmailService.cs" />
     <Compile Include="Security\IApplicationUserStore.cs" />
     <Compile Include="Security\IUserRepository.cs" />
+    <Compile Include="SiteStats\ISiteStatisticRepository.cs" />
+    <Compile Include="SiteStats\ISiteStatisticService.cs" />
+    <Compile Include="SiteStats\SiteStatisticService.cs" />
+    <Compile Include="SiteStats\UsageStatistic.cs" />
     <Compile Include="Sprints\ISprintPlannerService.cs" />
     <Compile Include="Sprints\SprintInformation.cs" />
     <Compile Include="Sprints\SprintPlannerService.cs" />

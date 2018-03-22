@@ -1,5 +1,29 @@
-﻿@{
+﻿@model DevStats.Models.Home.HomeModel
+
+@{
     Layout = "~/Views/Shared/Shared.cshtml";
+    Page.Title = "Welcome to Devstats";
 }
 
 <h2>Welcome to DevStats</h2>
+
+<table class='table table-hover'>
+
+    <tr>
+        <th>Usage</th>
+        <th>Today</th>
+        <th>Last 7 Days</th>
+        <th>Last 30 Days</th>
+    </tr>
+
+    @foreach (var statistic in Model.Statistics)
+    {
+    <tr>
+        <td>@statistic.StatisticType</td>
+        <td>@statistic.UsagesToday</td>
+        <td>@statistic.UsagesLastSevenDays</td>
+        <td>@statistic.UsagesLastThirtyDays</td>
+    </tr>
+    }
+
+</table>

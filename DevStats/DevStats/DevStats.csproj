@@ -306,6 +306,7 @@
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
     <Compile Include="Models\Account\ResetPasswordRequestModel.cs" />
+    <Compile Include="Models\Home\HomeModel.cs" />
     <Compile Include="Models\Jira\ApiTestModel.cs" />
     <Compile Include="Models\DefectTracking\DefectModel.cs" />
     <Compile Include="Models\Jira\AuditModel.cs" />

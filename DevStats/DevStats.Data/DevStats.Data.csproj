@@ -166,6 +166,7 @@
     <Compile Include="Repositories\MvpRepository.cs" />
     <Compile Include="Repositories\NewFeatureFailureRateRepository.cs" />
     <Compile Include="Repositories\ReleaseQualityRepository.cs" />
+    <Compile Include="Repositories\SiteStatisticRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\WorkLogRepository.cs" />
   </ItemGroup>
