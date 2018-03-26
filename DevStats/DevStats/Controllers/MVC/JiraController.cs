@@ -92,8 +92,11 @@ namespace DevStats.Controllers.MVC
         }
 
         [HttpGet]
-        public ActionResult SprintPlanner()
+        [Route("Jira/SprintPlanner/{teamName?}")]
+        public ActionResult SprintPlanner(string teamName)
         {
+            ViewData["teamName"] = teamName;
+
             return View();
         }
 

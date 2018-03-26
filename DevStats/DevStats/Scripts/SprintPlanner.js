@@ -4,6 +4,7 @@ var completedSprintStories = false;
 var completedBacklogStories = false;
 
 $(document).ready(function () {
+    checkOptions();
     onTeamChange();
 
     $("#ddlSprints").change(function () {
@@ -339,4 +340,24 @@ function showSprintUpdateFail(data, textStatus, jqXHR) {
     markUp += "</div>";
 
     $(markUp).insertAfter("#filter-bar");
+}
+
+function checkOptions() {
+    var teamName = $("input#teamName").val();
+
+    if (teamName === undefined || teamName === null || teamName === "")
+        return;
+
+    var hasMatchingTeam = false;
+    $("#ddlTeam > option").each(function () {
+        if (this.value.toLowerCase() === teamName.toLowerCase())
+            hasMatchingTeam = true;
+    });
+
+    if (hasMatchingTeam) {
+        $("#ddlTeam > option").each(function () {
+            if (this.value.toLowerCase() !== teamName.toLowerCase())
+                $(this).remove();
+        });
+    }
 }

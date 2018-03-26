@@ -4,9 +4,9 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@Page.Title</title>
-    <link href="../Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="../Content/DevStats.css" rel="stylesheet" />
-    <script src="../Scripts/jquery-3.2.1.min.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/DevStats.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
 </head>
 <body>
@@ -30,6 +30,10 @@
                     <ul class="dropdown-menu">
                         <li>@Html.ActionLink("Tasking Out Status", "TaskingStatus", "Jira")</li>
                         <li>@Html.ActionLink("Sprint Planner", "SprintPlanner", "Jira")</li>
+                        <li class="divider"></li>
+                        <li>@Html.ActionLink("HR Sprint Planner", "SprintPlanner", "Jira", new { @teamName = "HR" }, new { })</li>
+                        <li>@Html.ActionLink("Octopus Sprint Planner", "SprintPlanner", "Jira", new { @teamName = "Octopus" }, new { })</li>
+                        <li>@Html.ActionLink("Payroll Sprint Planner", "SprintPlanner", "Jira", new { @teamName = "Payroll" }, new { })</li>
                     </ul>
                 </li>
                 <li class="dropdown">
