@@ -10,7 +10,6 @@ using Microsoft.AspNet.Identity.Owin;
 namespace DevStats.Controllers.MVC
 {
     [Authorize]
-    [Route("MVP")]
     public class MvpController : Controller
     {
         private ApplicationUserManager UserManager => HttpContext.GetOwinContext().Get<ApplicationUserManager>();

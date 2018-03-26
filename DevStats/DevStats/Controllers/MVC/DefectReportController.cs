@@ -6,7 +6,6 @@ using DevStats.Models.Jira;
 namespace DevStats.Controllers.MVC
 {
     [Authorize]
-
     public class DefectReportController : Controller
     {
         private readonly IDefectService defectService;
