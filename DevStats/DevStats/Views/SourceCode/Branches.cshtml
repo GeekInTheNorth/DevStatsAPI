@@ -1,0 +1,48 @@
+﻿@model  DevStats.Domain.SourceCode.SourceCodeBranches
+
+@{
+    ViewBag.Title = string.Format("{0} Branches", Model.RepositoryName);
+    Layout = "~/Views/Shared/Shared.cshtml";
+    Func<bool, string> FormatBoolean = (thisBool) => thisBool ? "Yes" : "No";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class='table table-hover'>
+    <tr>
+        <th>Branch</th>
+        <th>Is Jira Story</th>
+        <th>Jira Id</th>
+        <th>Jira Title</th>
+        <th>Owner</th>
+        <th>Jira Status</th>
+    </tr>
+
+    @foreach (var branch in Model.Branches)
+    {
+        var bitbucketUrl = "https://bitbucket.org/ngiris/"+ ViewData["RepoName"] + "/branch/" + branch.Name;
+
+        <tr>
+            <td><a href="@bitbucketUrl" target="_blank">@branch.Name</a></td>
+            <td>@FormatBoolean(branch.IsJiraBranch)</td>
+
+            @if (branch.IsJiraBranch)
+            {
+                var jiraUrl = "https://ngiris.atlassian.net/browse/" + branch.JiraId;
+
+                <td><a href="@jiraUrl" target="_blank">@branch.JiraId</a></td>
+                <td>@branch.Title</td>
+                <td>@branch.Author</td>
+                <td>@branch.Status</td>
+            }
+            else
+            {
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            }
+
+        </tr>
+    }
+</table>

@@ -188,6 +188,10 @@
     <Compile Include="SiteStats\ISiteStatisticService.cs" />
     <Compile Include="SiteStats\SiteStatisticService.cs" />
     <Compile Include="SiteStats\UsageStatistic.cs" />
+    <Compile Include="SourceCode\ISourceCodeService.cs" />
+    <Compile Include="SourceCode\SourceCodeBranch.cs" />
+    <Compile Include="SourceCode\SourceCodeBranches.cs" />
+    <Compile Include="SourceCode\SourceCodeService.cs" />
     <Compile Include="Sprints\ISprintPlannerService.cs" />
     <Compile Include="Sprints\SprintInformation.cs" />
     <Compile Include="Sprints\SprintPlannerService.cs" />

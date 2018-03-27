@@ -17,6 +17,7 @@ using Microsoft.Practices.Unity;
 using DevStats.Domain.Bitbucket;
 using DevStats.Domain.Messages;
 using DevStats.Domain.SiteStats;
+using DevStats.Domain.SourceCode;
 
 namespace DevStats
 {
@@ -62,6 +63,7 @@ namespace DevStats
             container.RegisterType<ITaskingStatusService, TaskingStatusService>();
             container.RegisterType<IBitbucketService, BitbucketService>();
             container.RegisterType<ISiteStatisticService, SiteStatisticService>();
+            container.RegisterType<ISourceCodeService, SourceCodeService>();
 
             DependencyResolver.SetResolver(new Unity.Mvc5.UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);

@@ -295,6 +295,7 @@
     <Compile Include="Controllers\MVC\KPIController.cs" />
     <Compile Include="Controllers\MVC\MvpController.cs" />
     <Compile Include="Controllers\MVC\ReleaseQualityController.cs" />
+    <Compile Include="Controllers\MVC\SourceCodeController.cs" />
     <Compile Include="Filters\ActionValidationAttribute.cs" />
     <Compile Include="Filters\RequireSecureConnectionFilter.cs" />
     <Compile Include="Filters\ResponseManagementAttribute.cs" />
@@ -354,6 +355,7 @@
     <Content Include="Views\KPI\ActualsVsEstimates.cshtml" />
     <Content Include="Views\ReleaseQuality\Index.cshtml" />
     <Content Include="Views\Jira\TaskingStatus.cshtml" />
+    <Content Include="Views\SourceCode\Branches.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
