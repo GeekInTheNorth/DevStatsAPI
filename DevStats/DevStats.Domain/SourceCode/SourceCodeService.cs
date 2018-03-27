@@ -14,7 +14,7 @@ namespace DevStats.Domain.SourceCode
         private readonly IBitbucketSender bitbucketSender;
         private readonly IJiraSender jiraSender;
         private const string BranchApi = "https://api.bitbucket.org/1.0/repositories/{0}/{1}/branches";
-        private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}";
+        private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}&validateQuery=Warn";
 
         public SourceCodeService(IBitbucketSender bitbucketSender, IJiraSender jiraSender)
         {
@@ -31,6 +31,8 @@ namespace DevStats.Domain.SourceCode
 
             var branches =  bitbucketSender.Get<Dictionary<string, SourceCodeBranch>>(url)
                                          .Select(x => x.Value)
+                                         .Where(x => !x.Name.Equals("master", StringComparison.OrdinalIgnoreCase))
+                                         .Where(x => !x.Name.StartsWith("release/", StringComparison.OrdinalIgnoreCase))
                                          .OrderBy(x => x.Name)
                                          .ToList();
 

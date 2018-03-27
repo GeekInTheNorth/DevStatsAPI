@@ -28,7 +28,7 @@ namespace DevStats.Domain.Jira
         private const string JiraCreatePath = @"{0}/rest/api/2/issue/";
         private const string JiraTransitionPath = @"{0}/rest/api/latest/issue/{1}/transitions";
         private const string CoreIssueIdRegex = "({0})[-][0-9]{{1,6}}";
-        private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}";
+        private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}&validateQuery=Warn";
         private const string JiraUserGroupSearchPath = @"{0}/rest/api/2/group?groupname={1}&expand=users";
         private const string VersionNumberRegEx = "[0-9]{1,2}[.]{1}[0-9]{1,3}";
 
