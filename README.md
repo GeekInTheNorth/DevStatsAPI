@@ -106,7 +106,7 @@ Event Options: Issue - Updated
 URL: api/bitbucket/build/status
 Notes: Used to update the build status in bitbucket for any branch built regardless of build system. This functionality replaces the build status integrations from older versions of TeamCity to Bitbucket.  The following is the body content that should be provided:
 
-```JSON
+```
 { 
 	"BuildNumber" = "<Build Number>",
 	"CommitSha" = "SHA for the last commit on the branch being built",
@@ -122,7 +122,7 @@ DevStats uses Code First Entity Framework 6 with Migrations.  To create and appl
 
 If you need to alter and roll back migrations that are in development, you will need to make a change to the configuration.cs file to turn off automatic migrations until development is complete.  Autmatic migrations should be turned back on before pushing to master.
 
-```C#
+```
 namespace DevStats.Data.Migrations
 {
     using System.Data.Entity.Migrations;
@@ -141,7 +141,7 @@ namespace DevStats.Data.Migrations
 
 This will look at the DevStatContext and the linked entities as well as the DB updated to the previous migration to determin what table and column changes there are and it will script those as changes.
 
-```C# Example
+```
 Add-Migration LogBuildStatusChanges
 ```
 
@@ -151,7 +151,7 @@ If you have not yet updated the database and you have made more changes to the e
 
 This will look at the migrations table in the database to determin which migrations to apply. See example below:
 
-```C#
+```
 Update-Database
 ```
 
@@ -159,6 +159,6 @@ Update-Database
 
 This will roll back the DB to a specified migration. See example below:
 
-```C#
+```
 Update-Database -target:CorrectApiUrlColumnOnApiLog
 ```
