@@ -29,14 +29,22 @@ namespace DevStats.Domain.SourceCode
         {
             var url = string.Format(BranchApi, "ngiris", repoName);
 
-            var branches =  bitbucketSender.Get<Dictionary<string, SourceCodeBranch>>(url)
-                                         .Select(x => x.Value)
-                                         .Where(x => !x.Name.Equals("master", StringComparison.OrdinalIgnoreCase))
-                                         .Where(x => !x.Name.StartsWith("release/", StringComparison.OrdinalIgnoreCase))
-                                         .OrderBy(x => x.Name)
-                                         .ToList();
+            var branches = bitbucketSender.Get<Dictionary<string, SourceCodeBranch>>(url);
 
-            var jiraIds = branches.Where(x => x.IsJiraBranch).Select(x => x.JiraId);
+            if (branches == null)
+                return new SourceCodeBranches { RepositoryName = repoName };
+
+            var filteredBranches = branches.Where(x => !x.Key.Equals("master", StringComparison.OrdinalIgnoreCase))
+                                           .Where(x => !x.Key.StartsWith("release/", StringComparison.OrdinalIgnoreCase))
+                                           .OrderBy(x => x.Key)
+                                           .Select(x => new SourceCodeBranch
+                                           {
+                                               Author = x.Value.Author,
+                                               Name = x.Value.Name ?? x.Key
+                                           })
+                                           .ToList();
+
+            var jiraIds = filteredBranches.Where(x => x.IsJiraBranch).Select(x => x.JiraId);
 
             var storySearch = string.Format("issueKey in ({0})", string.Join(",", jiraIds));
             var storyUrl = string.Format(JiraIssueSearchPath, GetApiRoot(), HttpUtility.JavaScriptStringEncode(storySearch));
@@ -44,7 +52,7 @@ namespace DevStats.Domain.SourceCode
 
             foreach(var story in stories)
             {
-                var branch = branches.FirstOrDefault(x => x.JiraId == story.Key);
+                var branch = filteredBranches.FirstOrDefault(x => x.JiraId == story.Key);
 
                 if (branch != null)
                 {
@@ -56,7 +64,7 @@ namespace DevStats.Domain.SourceCode
             return new SourceCodeBranches
             {
                 RepositoryName = repoName,
-                Branches = branches
+                Branches = filteredBranches
             };
         }
 
