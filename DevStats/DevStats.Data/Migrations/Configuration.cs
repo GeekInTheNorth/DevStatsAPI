@@ -8,6 +8,7 @@ namespace DevStats.Data.Migrations
         {
             // If actively developing DB changes, set this to false to allow you to manually roll forward/backward.  Set it back to true before merging to master
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
             ContextKey = "DevStats.Data.DevStatContext";
         }
 

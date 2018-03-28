@@ -27,8 +27,6 @@ namespace DevStats.Data
 
         public DbSet<MvpVote> MvpVotes { get; set; }
 
-        public DbSet<ReleaseQuality> ReleaseQualities { get; set; }
-
         public DbSet<BuildStatusLog> BuildStatusLogs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

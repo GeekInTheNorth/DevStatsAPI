@@ -60,7 +60,6 @@
     <Compile Include="Entities\DefectCategory.cs" />
     <Compile Include="Entities\JiraLog.cs" />
     <Compile Include="Entities\MvpVote.cs" />
-    <Compile Include="Entities\ReleaseQuality.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\WorkLogStory.cs" />
     <Compile Include="Entities\WorkLogTask.cs" />
@@ -152,6 +151,10 @@
     <Compile Include="Migrations\201803150944325_LogBuildStatusChanges.Designer.cs">
       <DependentUpon>201803150944325_LogBuildStatusChanges.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803280656374_RemoveReleaseQualityReport.cs" />
+    <Compile Include="Migrations\201803280656374_RemoveReleaseQualityReport.Designer.cs">
+      <DependentUpon>201803280656374_RemoveReleaseQualityReport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Entities\Defect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -165,7 +168,6 @@
     <Compile Include="Repositories\JiraLogRepository.cs" />
     <Compile Include="Repositories\MvpRepository.cs" />
     <Compile Include="Repositories\NewFeatureFailureRateRepository.cs" />
-    <Compile Include="Repositories\ReleaseQualityRepository.cs" />
     <Compile Include="Repositories\SiteStatisticRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Repositories\WorkLogRepository.cs" />
@@ -246,6 +248,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803150944325_LogBuildStatusChanges.resx">
       <DependentUpon>201803150944325_LogBuildStatusChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803280656374_RemoveReleaseQualityReport.resx">
+      <DependentUpon>201803280656374_RemoveReleaseQualityReport.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

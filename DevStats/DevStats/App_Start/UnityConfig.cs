@@ -10,7 +10,6 @@ using DevStats.Domain.Security;
 using DevStats.Domain.KPI;
 using DevStats.Domain.Logging;
 using DevStats.Domain.MVP;
-using DevStats.Domain.Reports.ReleaseReport;
 using DevStats.Domain.Reports.TaskingStatus;
 using DevStats.Domain.Sprints;
 using Microsoft.Practices.Unity;
@@ -37,7 +36,6 @@ namespace DevStats
             container.RegisterType<IApiLogRepository, ApiLogRepository>();
             container.RegisterType<IMvpRepository, MvpRepository>();
             container.RegisterType<IActualsVsEstimatesRepository, ActualsVsEstimatesRepository>();
-            container.RegisterType<IReleaseQualityRepository, ReleaseQualityRepository>();
             container.RegisterType<IDefectScoringRepository, DefectScoringRepository>();
             container.RegisterType<IEstimationRepository, EstimationRepository>();
             container.RegisterType<IBuildStatusRepository, BuildStatusRepository>();
@@ -59,7 +57,6 @@ namespace DevStats
             container.RegisterType<IMvpService, MvpService>();
             container.RegisterType<IEmailService, EmailService>();
             container.RegisterType<IActualsVsEstimatesService, ActualsVsEstimatesService>();
-            container.RegisterType<IReleaseQualityService, ReleaseQualityService>();
             container.RegisterType<ITaskingStatusService, TaskingStatusService>();
             container.RegisterType<IBitbucketService, BitbucketService>();
             container.RegisterType<ISiteStatisticService, SiteStatisticService>();
