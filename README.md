@@ -45,22 +45,41 @@ Unless otherwise stated, all settings are empty in source control.
 | Application Setting | BitbucketPassword | Process User Password in Bitbucket. Do look at using "App Passwords" with limited access rather than using the real password. |
 
 ## Jira Cloud Webhook Setup
-In all of the following cases, the URL must be prefixed with the domain of the DevStats instance.  The suggested JQL is slightly different in my own depoyed instance as it includes project filters.
+In all of the following cases, the URL must be prefixed with the domain of the DevStats instance. Jira workflows require a transistion of state.  This means key data cannot be updated or analysed if something other than state is changed.
 
 ### Story Creation
 URL: /api/jira/story/create/${issue.key}
-Event jql: issuetype in standardIssueTypes() AND issueType != "Task"
+Event jql: project in (CPR,OCT,CHR) AND issuetype in standardIssueTypes() AND issueType != "Task"
 Event Options: Issue - Created
+
+| Data Changes | Reason | Jira Projects |
+| ------ | ------ | ------ |
+| Create Merge Task | Because every story needs one and there is no variation. | CPR, CHR, OCT |
+| Create PO Review Task | Because every story needs one and there is no variation. | CPR, CHR, OCT |
 
 ### Story Update
 URL: api/jira/story/update/${issue.key}
-Event jql: issuetype in standardIssueTypes()
+Event jql: project in (CPR,OCT,CHR) AND issueType in standardIssueTypes()
 Event Options: Issue - Updated
+
+| Data Changes | Reason | Jira Projects |
+| ------ | ------ | ------ |
+| Copies Team from Bug/Story to Subtask | Prevents subtasks from appearing on other teams boards as orphans. | CPR, CHR, OCT |
+| Copies Version from Bug/Story to Subtask | KPI reporting requires versions against rework subtasks. | CPR, CHR, OCT |
+| Processes Work Logs | Used for developer Feature Return Rate KPI. This could be removed as KPI reporting at a group level is made more visible to the team. | CPR, CHR, OCT |
+| Update Defect Analysis | Jira does not handle reporting of defects in the way that SMT want to consume the data. Module breakdown that we are required to report doesn't align with the modules we want to record.  This results in a report in Devstats running fast instead of requiring a manual effort in terms of reporting. If this is replaced by group level reporting, then this can be removed. | CPR, CHR, OCT |
+| Sets Defect Returned on Bugs | This ensures that Bugs are have Defect Returned ticked if they have one or more reworks. This is required for the Defect Return Rate KPI reporting | CPR, CHR, OCT |
+| Sets Release Originated | Reviews the Affected Versions field and copies the earliest value to Release Originated. Release Originated is used for SMT release reporting while we want to record all affected versions | CPR, CHR, OCT |
+| Sets Assignee on Story/Bug | Sets the Assignee based on the Developer who owns the greatest quantity of subtasks.  Team members work at a subtask level when performing tasks which are automatically assigned to them as they move them into "In Progress" and "Done", so they very rarely change the story. | CPR, CHR, OCT |
 
 ### Story Delete
 URL: api/jira/story/delete/${issue.key}
-Event jql: issuetype in standardIssueTypes()
+Event jql: project in (CPR,OCT,CHR) AND issuetype in standardIssueTypes()
 Event Options: Issue - Deleted
+
+| Data Changes | Reason | Jira Projects |
+| ------ | ------ | ------ |
+| Update Defect Analysis | Jira does not handle reporting of defects in the way that SMT want to consume the data. Module breakdown that we are required to report doesn't align with the modules we want to record.  This results in a report in Devstats running fast instead of requiring a manual effort in terms of reporting. If this is replaced by group level reporting, then this can be removed. | CPR, CHR, OCT |
 
 ### Subtask Update
 URL: api/jira/subtask/update/${issue.key}
@@ -68,10 +87,18 @@ Event jql: N/A
 Event Options: N/A
 Workflow Transition: Add a Post-Function that executes a "Generic Event", this can target a WebHook.  I've used this so this event only gets triggered when moving between states.
 
+| Data Changes | Reason | Jira Projects |
+| ------ | ------ | ------ |
+| Updates Parent State | This moves the Story/Bug to In Progress when a subtask moves to In Progress. Jira does not automatically perform this status change on parents. | CPR, CHR, OCT |
+
 ### Impact Analysis Model Update
 URL: api/jira/iam/update/${issue.key}
-Event jql: issuetype = Bug
+Event jql: (project in (CHR,CPR,OCT,KFPAYROLL,OPAYSLIP) AND issuetype = Bug) OR (project in (SE32,SIP,SIQ,SGP,SPM,S12P) AND issuetype in (Correction, Defect))
 Event Options: Issue - Updated
+
+| Data Changes | Reason | Jira Projects |
+| ------ | ------ | ------ |
+| Updates IAM Score | This reviews the chosen values for the IAM Model Questions and assigns a score as per the HCM Engineering IAM guide. | CHR, CPR, OCT, KFPAYROLL, OPAYSLIP, SE32, SIP, SIQ, SGP, SPM, S12P |
 
 ## Other End points
 
