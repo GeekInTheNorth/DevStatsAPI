@@ -20,7 +20,7 @@
 
     @foreach (var branch in Model.Branches)
     {
-        var bitbucketUrl = "https://bitbucket.org/ngiris/"+ ViewData["RepoName"] + "/branch/" + branch.Name;
+        var bitbucketUrl = "https://bitbucket.org/ngiris/"+ Model.RepositoryName + "/branch/" + branch.Name;
 
         <tr>
             <td><a href="@bitbucketUrl" target="_blank">@branch.Name</a></td>
