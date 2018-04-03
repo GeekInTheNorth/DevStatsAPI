@@ -193,6 +193,12 @@
     <Compile Include="Sprints\SprintPlannerService.cs" />
     <Compile Include="Sprints\SprintStory.cs" />
     <Compile Include="Sprints\StoryKeys.cs" />
+    <Compile Include="SystemProperties\ISystemPropertyRepository.cs" />
+    <Compile Include="SystemProperties\ISystemPropertyService.cs" />
+    <Compile Include="SystemProperties\SystemProperty.cs" />
+    <Compile Include="SystemProperties\SystemPropertyName.cs" />
+    <Compile Include="SystemProperties\SystemPropertyService.cs" />
+    <Compile Include="SystemProperties\SystemPropertyType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

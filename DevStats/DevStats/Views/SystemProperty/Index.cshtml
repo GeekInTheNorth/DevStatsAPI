@@ -1,0 +1,61 @@
+﻿@model DevStats.Models.SystemProperties.SystemPropertiesModel
+
+@{
+    ViewBag.Title = "System Properties";
+    Layout = "~/Views/Shared/Shared.cshtml";
+}
+
+<h2>System Properties (Requires Admin Permission)</h2>
+
+<table class='table table-hover table-striped' id="tbl-properties">
+
+    <tr>
+        <th>Property</th>
+        <th>Data Type</th>
+        <th>Value</th>
+        <th>Actions</th>
+    </tr>
+
+    @foreach (var property in Model.Properties)
+    {
+        var editButtonId = "btn-edit-" + property.Name;
+        var saveButtonId = "btn-save-" + property.Name;
+        var cancelButtonId = "btn-cancel-" + property.Name;
+
+        <tr>
+            <td>@property.Name</td>
+            <td><span class="property-data-type" id="@property.Name">@property.DataType</span></td>
+
+            @if (property.DataType == DevStats.Domain.SystemProperties.SystemPropertyType.Password)
+            {
+                <td>
+                    <span class="view-property" id="@property.Name">***Hidden***</span>
+                    <input type="password" class="edit-property" id="@property.Name" style="display: none;" />
+                </td>
+            }
+            else if (property.DataType == DevStats.Domain.SystemProperties.SystemPropertyType.EmailAddress)
+            {
+                <td>
+                    <span class="view-property" id="@property.Name">@property.Value</span>
+                    <input type="email" class="edit-property" id="@property.Name" style="display: none;" />
+                </td>
+            }
+            else
+            {
+                <td>
+                    <span class="view-property" id="@property.Name">@property.Value</span>
+                    <input type="email" class="edit-property" id="@property.Name" style="display: none;" />
+                </td>
+            }
+
+            <td>
+                <a onclick="showEditProperty(this)" data-propertyname="@property.Name" class="btn btn-primary btn-xs" id="@editButtonId">Edit</a>
+                <a onclick="saveProperty(this)" data-propertyname="@property.Name" class="btn btn-success btn-xs" style="display: none;" id="@saveButtonId">Save</a>
+                <a onclick="showViewProperty(this)" data-propertyname="@property.Name" class="btn btn-danger btn-xs" style="display: none;" id="@cancelButtonId">Cancel</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+<script src="~/Scripts/SystemProperties.js"></script>

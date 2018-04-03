@@ -28,5 +28,15 @@ namespace DevStats.Controllers.MVC
 
             return View(model);
         }
+
+        public ActionResult NoAccess()
+        {
+            return View();
+        }
+
+        public ActionResult Error()
+        {
+            return View();
+        }
     }
 }

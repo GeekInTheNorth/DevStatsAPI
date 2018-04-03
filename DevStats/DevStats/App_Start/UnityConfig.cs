@@ -17,6 +17,7 @@ using DevStats.Domain.Bitbucket;
 using DevStats.Domain.Messages;
 using DevStats.Domain.SiteStats;
 using DevStats.Domain.SourceCode;
+using DevStats.Domain.SystemProperties;
 
 namespace DevStats
 {
@@ -40,6 +41,7 @@ namespace DevStats
             container.RegisterType<IEstimationRepository, EstimationRepository>();
             container.RegisterType<IBuildStatusRepository, BuildStatusRepository>();
             container.RegisterType<ISiteStatisticRepository, SiteStatisticRepository>();
+            container.RegisterType<ISystemPropertyRepository, SystemPropertyRepository>();
 
             // Utilities
             container.RegisterType<IJsonConvertor, JsonConvertor>();
@@ -61,6 +63,7 @@ namespace DevStats
             container.RegisterType<IBitbucketService, BitbucketService>();
             container.RegisterType<ISiteStatisticService, SiteStatisticService>();
             container.RegisterType<ISourceCodeService, SourceCodeService>();
+            container.RegisterType<ISystemPropertyService, SystemPropertyService>();
 
             DependencyResolver.SetResolver(new Unity.Mvc5.UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);

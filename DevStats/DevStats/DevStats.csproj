@@ -268,6 +268,7 @@
     <Content Include="Scripts\mdb.min.js" />
     <Content Include="Scripts\SprintPlanner.js" />
     <Content Include="Content\DevStats.css" />
+    <Content Include="Scripts\SystemProperties.js" />
     <Content Include="Scripts\TaskingStatus.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -287,6 +288,7 @@
     <Compile Include="Controllers\API\MvpController.cs" />
     <Compile Include="Controllers\API\SecureBaseApiController.cs" />
     <Compile Include="Controllers\API\SprintPlanningController.cs" />
+    <Compile Include="Controllers\API\SystemPropertyController.cs" />
     <Compile Include="Controllers\API\TaskingStatusController.cs" />
     <Compile Include="Controllers\MVC\AccountController.cs" />
     <Compile Include="Controllers\MVC\DefectReportController.cs" />
@@ -295,6 +297,7 @@
     <Compile Include="Controllers\MVC\KPIController.cs" />
     <Compile Include="Controllers\MVC\MvpController.cs" />
     <Compile Include="Controllers\MVC\SourceCodeController.cs" />
+    <Compile Include="Controllers\MVC\SystemPropertyController.cs" />
     <Compile Include="Filters\ActionValidationAttribute.cs" />
     <Compile Include="Filters\RequireSecureConnectionFilter.cs" />
     <Compile Include="Filters\ResponseManagementAttribute.cs" />
@@ -321,6 +324,8 @@
     <Compile Include="Models\MVP\MvpVoteListModel.cs" />
     <Compile Include="Models\MVP\MvpVoteModel.cs" />
     <Compile Include="Models\MVP\VoteModel.cs" />
+    <Compile Include="Models\SystemProperties\SystemPropertiesModel.cs" />
+    <Compile Include="Models\SystemProperties\SystemPropertyModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -353,6 +358,9 @@
     <Content Include="Views\KPI\ActualsVsEstimates.cshtml" />
     <Content Include="Views\Jira\TaskingStatus.cshtml" />
     <Content Include="Views\SourceCode\Branches.cshtml" />
+    <Content Include="Views\Home\NoAccess.cshtml" />
+    <Content Include="Views\Home\Error.cshtml" />
+    <Content Include="Views\SystemProperty\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

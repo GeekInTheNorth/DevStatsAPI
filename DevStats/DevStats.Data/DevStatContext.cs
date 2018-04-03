@@ -29,6 +29,8 @@ namespace DevStats.Data
 
         public DbSet<BuildStatusLog> BuildStatusLogs { get; set; }
 
+        public DbSet<SystemProperty> SystemProperties { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<DevStatContext, Configuration>());
