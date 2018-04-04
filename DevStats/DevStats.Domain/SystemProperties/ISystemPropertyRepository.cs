@@ -6,6 +6,8 @@ namespace DevStats.Domain.SystemProperties
     {
         SystemProperty Get(SystemPropertyName propertyName);
 
+        string GetNonNullValue(SystemPropertyName propertyName);
+
         IEnumerable<SystemProperty> Get(IEnumerable<SystemPropertyName> propertyNames);
 
         void Save(SystemProperty property);

@@ -1,22 +1,25 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Text;
 using DevStats.Domain.Messages;
+using DevStats.Domain.SystemProperties;
 
 namespace DevStats.Domain.Jira
 {
     public class JiraSender : IJiraSender
     {
+        private readonly ISystemPropertyRepository systemPropertyRepository;
         private readonly IJsonConvertor convertor;
         private string jiraKey;
 
-        public JiraSender(IJsonConvertor convertor)
+        public JiraSender(IJsonConvertor convertor, ISystemPropertyRepository systemPropertyRepository)
         {
             if (convertor == null) throw new ArgumentNullException(nameof(convertor));
+            if (systemPropertyRepository == null) throw new ArgumentNullException(nameof(systemPropertyRepository));
 
             this.convertor = convertor;
+            this.systemPropertyRepository = systemPropertyRepository;
         }
 
         public T Get<T>(string url)
@@ -108,13 +111,8 @@ namespace DevStats.Domain.Jira
         {
             if (string.IsNullOrWhiteSpace(jiraKey))
             {
-                jiraKey = ConfigurationManager.AppSettings.Get("JiraEncryptedAuth") ?? string.Empty;
-            }
-
-            if (string.IsNullOrWhiteSpace(jiraKey))
-            {
-                var user = ConfigurationManager.AppSettings.Get("JiraUserName") ?? string.Empty;
-                var pass = ConfigurationManager.AppSettings.Get("JiraPassword") ?? string.Empty;
+                var user = systemPropertyRepository.GetNonNullValue(SystemPropertyName.JiraUserName);
+                var pass = systemPropertyRepository.GetNonNullValue(SystemPropertyName.JiraPassword);
                 var plainTextKey = string.Format("{0}:{1}", user, pass);
                 var plainTextBytes = Encoding.UTF8.GetBytes(plainTextKey);
 

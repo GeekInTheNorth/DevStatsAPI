@@ -12,11 +12,11 @@ namespace DevStats.Domain.Security
     {
         private readonly IApplicationUserStore<ApplicationUser, int> store;
 
-        public ApplicationUserManager(IApplicationUserStore<ApplicationUser, int> store) : base(store)
+        public ApplicationUserManager(IApplicationUserStore<ApplicationUser, int> store, IEmailService emailService) : base(store)
         {
             this.store = store;
             UserTokenProvider = new EmailTokenProvider<ApplicationUser, int>();
-            EmailService = new EmailService();
+            EmailService = emailService;
         }
 
         public async Task<bool> IsInRoleAsync(string userName, string role)

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Configuration;
 using System.Text.RegularExpressions;
 using DevStats.Domain.Jira.Logging;
+using DevStats.Domain.SystemProperties;
 
 namespace DevStats.Domain.Bitbucket
 {
@@ -13,16 +13,19 @@ namespace DevStats.Domain.Bitbucket
         private readonly IBitbucketSender sender;
         private readonly IJiraLogRepository loggingRepository;
         private readonly IBuildStatusRepository buildStatusRepository;
+        private readonly ISystemPropertyRepository systemPropertyRepository;
 
-        public BitbucketService(IBitbucketSender sender, IJiraLogRepository loggingRepository, IBuildStatusRepository buildStatusRepository)
+        public BitbucketService(IBitbucketSender sender, IJiraLogRepository loggingRepository, IBuildStatusRepository buildStatusRepository, ISystemPropertyRepository systemPropertyRepository)
         {
             if (sender == null) throw new ArgumentNullException(nameof(sender));
             if (loggingRepository == null) throw new ArgumentNullException(nameof(loggingRepository));
             if (buildStatusRepository == null) throw new ArgumentNullException(nameof(buildStatusRepository));
+            if (systemPropertyRepository == null) throw new ArgumentNullException(nameof(systemPropertyRepository));
 
             this.sender = sender;
             this.loggingRepository = loggingRepository;
             this.buildStatusRepository = buildStatusRepository;
+            this.systemPropertyRepository = systemPropertyRepository;
         }
 
         public void Update(BuildStatusModel buildStatus, string url)
@@ -31,7 +34,7 @@ namespace DevStats.Domain.Bitbucket
             if (string.IsNullOrWhiteSpace(url)) throw new ArgumentException(nameof(url));
 
             var jiraId = GetJiraIdFromCommit(buildStatus);
-            var statusUrl = string.IsNullOrWhiteSpace(jiraId) ? url : string.Format(jiraUrl, GetApiRoot(), jiraId);
+            var statusUrl = string.IsNullOrWhiteSpace(jiraId) ? url : string.Format(jiraUrl, GetJiraApiRoot(), jiraId);
 
             var state = new BuildStatus
             {
@@ -68,9 +71,9 @@ namespace DevStats.Domain.Bitbucket
             return string.Empty;
         }
 
-        private string GetApiRoot()
+        private string GetJiraApiRoot()
         {
-            return ConfigurationManager.AppSettings.Get("JiraApiRoot") ?? string.Empty;
+            return systemPropertyRepository.GetNonNullValue(SystemPropertyName.JiraApiRoot);
         }
     }
 }

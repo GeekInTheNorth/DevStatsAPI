@@ -1,12 +1,20 @@
-﻿using System.Configuration;
-using System.IO;
+﻿using System.IO;
 using System.Net;
+using DevStats.Domain.SystemProperties;
 
 namespace DevStats.Domain.Aha
 {
     public class AhaSender : IAhaSender
     {
+        private readonly ISystemPropertyRepository systemPropertyRepository;
         private string ahaKey;
+
+        public AhaSender(ISystemPropertyRepository systemPropertyRepository)
+        {
+            if (systemPropertyRepository == null) throw new System.ArgumentNullException(nameof(systemPropertyRepository));
+
+            this.systemPropertyRepository = systemPropertyRepository;
+        }
 
         public T Get<T>(string url)
         {
@@ -29,7 +37,7 @@ namespace DevStats.Domain.Aha
         {
             if (string.IsNullOrWhiteSpace(ahaKey))
             {
-                ahaKey = ConfigurationManager.AppSettings.Get("AhaApiKey") ?? string.Empty;
+                ahaKey = systemPropertyRepository.GetNonNullValue(SystemPropertyName.AhaApiKey);
             }
 
             return ahaKey;

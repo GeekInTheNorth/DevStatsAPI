@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using DevStats.Domain.Jira;
 using DevStats.Domain.Jira.JsonModels;
+using DevStats.Domain.SystemProperties;
 
 namespace DevStats.Domain.Reports.TaskingStatus
 {
@@ -11,23 +11,26 @@ namespace DevStats.Domain.Reports.TaskingStatus
     {
         private readonly IJiraSender jiraSender;
         private readonly IEstimationRepository estimationRepository;
+        private readonly ISystemPropertyRepository systemPropertyRepository;
 
         private const string IssueSearchPath = @"{0}/rest/api/2/search?jql={1}&fields=summary,issuetype,status,subtasks,customfield_13709,customfield_13704,customfield_13701,timeoriginalestimate,customfield_10004";
         private const string storyjql = "\"Cascade Team\" = {0} AND type in (Bug, Story, Task) AND Refinement in (Ready, \"QA to Task Out\", \"Dev to Task Out\") AND status = \"To Do\"";
         private const string taskjql = "parent in ({0})";
 
-        public TaskingStatusService(IJiraSender jiraSender, IEstimationRepository estimationRepository)
+        public TaskingStatusService(IJiraSender jiraSender, IEstimationRepository estimationRepository, ISystemPropertyRepository systemPropertyRepository)
         {
             if (jiraSender == null) throw new ArgumentNullException(nameof(jiraSender));
             if (estimationRepository == null) throw new ArgumentNullException(nameof(estimationRepository));
+            if (systemPropertyRepository == null) throw new ArgumentNullException(nameof(systemPropertyRepository));
 
             this.jiraSender = jiraSender;
             this.estimationRepository = estimationRepository;
+            this.systemPropertyRepository = systemPropertyRepository;
         }
 
         private string GetApiRoot()
         {
-            return ConfigurationManager.AppSettings.Get("JiraApiRoot") ?? string.Empty;
+            return systemPropertyRepository.GetNonNullValue(SystemPropertyName.JiraApiRoot);
         }
 
         private class BandEqualityComparer : IEqualityComparer<KeyValuePair<string, decimal>>

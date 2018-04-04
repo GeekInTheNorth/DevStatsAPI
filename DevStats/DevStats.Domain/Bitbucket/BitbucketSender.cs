@@ -1,21 +1,24 @@
 ﻿using System;
-using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Text;
 using DevStats.Domain.Messages;
+using DevStats.Domain.SystemProperties;
 
 namespace DevStats.Domain.Bitbucket
 {
     public class BitbucketSender : IBitbucketSender
     {
         private readonly IJsonConvertor convertor;
+        private readonly ISystemPropertyRepository systemPropertyRepository;
 
-        public BitbucketSender(IJsonConvertor convertor)
+        public BitbucketSender(IJsonConvertor convertor, ISystemPropertyRepository systemPropertyRepository)
         {
             if (convertor == null) throw new ArgumentNullException(nameof(convertor));
+            if (systemPropertyRepository == null) throw new ArgumentNullException(nameof(systemPropertyRepository));
 
             this.convertor = convertor;
+            this.systemPropertyRepository = systemPropertyRepository;
         }
 
         public T Get<T>(string url)
@@ -88,8 +91,8 @@ namespace DevStats.Domain.Bitbucket
 
         private string GetEncryptedCredentials()
         {
-            var user = ConfigurationManager.AppSettings.Get("BitbucketUserName") ?? string.Empty;
-            var pass = ConfigurationManager.AppSettings.Get("BitbucketPassword") ?? string.Empty;
+            var user = systemPropertyRepository.GetNonNullValue(SystemPropertyName.BitbucketUserName);
+            var pass = systemPropertyRepository.GetNonNullValue(SystemPropertyName.BitbucketPassword);
             var plainTextKey = string.Format("{0}:{1}", user, pass);
             var plainTextBytes = Encoding.UTF8.GetBytes(plainTextKey);
 

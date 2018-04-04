@@ -284,9 +284,7 @@
     <Compile Include="Controllers\API\BitbucketController.cs" />
     <Compile Include="Controllers\API\JiraController.cs" />
     <Compile Include="Controllers\API\JiraStateCheckerController.cs" />
-    <Compile Include="Controllers\API\KPIController.cs" />
     <Compile Include="Controllers\API\MvpController.cs" />
-    <Compile Include="Controllers\API\SecureBaseApiController.cs" />
     <Compile Include="Controllers\API\SprintPlanningController.cs" />
     <Compile Include="Controllers\API\SystemPropertyController.cs" />
     <Compile Include="Controllers\API\TaskingStatusController.cs" />

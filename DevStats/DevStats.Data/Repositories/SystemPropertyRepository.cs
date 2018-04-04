@@ -26,6 +26,16 @@ namespace DevStats.Data.Repositories
             }
         }
 
+        public string GetNonNullValue(SystemPropertyName propertyName)
+        {
+            var property = Get(propertyName);
+
+            if (property == null || string.IsNullOrWhiteSpace(property.Value))
+                return string.Empty;
+
+            return property.Value;
+        }
+
         public IEnumerable<SystemProperty> Get(IEnumerable<SystemPropertyName> propertyNames)
         {
             using (var context = new DevStatContext())

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using DevStats.Domain.Communications;
 using DevStats.Domain.Security;
+using DevStats.Domain.SystemProperties;
 
 namespace DevStats.Domain.MVP
 {
@@ -13,16 +14,19 @@ namespace DevStats.Domain.MVP
         private readonly IUserRepository userRepository;
         private readonly IMvpRepository mvpRepository;
         private readonly IEmailService emailService;
+        private readonly ISystemPropertyRepository systemPropertyRepository;
 
-        public MvpService(IMvpRepository mvpRepository, IUserRepository userRepository, IEmailService emailService)
+        public MvpService(IMvpRepository mvpRepository, IUserRepository userRepository, IEmailService emailService, ISystemPropertyRepository systemPropertyRepository)
         {
             if (mvpRepository == null) throw new ArgumentNullException(nameof(mvpRepository));
             if (userRepository == null) throw new ArgumentNullException(nameof(userRepository));
             if (emailService == null) throw new ArgumentNullException(nameof(emailService));
+            if (systemPropertyRepository == null) throw new ArgumentNullException(nameof(systemPropertyRepository));
 
             this.mvpRepository = mvpRepository;
             this.userRepository = userRepository;
             this.emailService = emailService;
+            this.systemPropertyRepository = systemPropertyRepository;
         }
 
         public Dictionary<int, string> GetVotableUsers(int currentUserId)
@@ -80,7 +84,7 @@ namespace DevStats.Domain.MVP
                 var votee = users.FirstOrDefault(x => x.Id == voteeId);
                 var voter = users.FirstOrDefault(x => x.Id == voterId);
 
-                var targetEmail = ConfigurationManager.AppSettings["MvpDistributionEmail"];
+                var targetEmail = systemPropertyRepository.GetNonNullValue(SystemPropertyName.MvpDistributionEmail);
                 var subject = string.Format("MVP: Vote placed for {0}", votee.DisplayName);
                 var bodyText = "<div style=\"margin: 10px; font-family: tahoma; font-size: 1.2em;\"><h1>MVP Award</h1><p>A vote has been placed for {0}.</p><p>For: {1}</p></div>";
 

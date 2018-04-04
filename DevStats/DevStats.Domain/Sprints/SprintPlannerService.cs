@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net;
 using DevStats.Domain.Jira;
 using DevStats.Domain.Jira.JsonModels;
 using DevStats.Domain.Jira.Logging;
+using DevStats.Domain.SystemProperties;
 
 namespace DevStats.Domain.Sprints
 {
@@ -13,7 +13,7 @@ namespace DevStats.Domain.Sprints
     {
         private readonly IJiraLogRepository loggingRepository;
         private readonly IJiraSender jiraSender;
-        private readonly IProjectsRepository projectsRepository;
+        private readonly ISystemPropertyRepository systemPropertyRepository;
         private const string JiraIssuePath = @"{0}/rest/api/2/issue/{1}";
         private const string IssueSearchPath = @"{0}/rest/api/2/search?jql={1}&fields=parent,timetracking,summary,issuetype,status,subtasks,customfield_13701,customfield_13709&maxResults=500";
         private const string GetSprintItemsPath = @"{0}/rest/agile/1.0/sprint/{1}/issue?maxResults=500";
@@ -21,20 +21,20 @@ namespace DevStats.Domain.Sprints
         private const string MoveToSprintPath = @"{0}/rest/agile/1.0/sprint/{1}/issue";
         private const string UpdateSprintPath = @"{0}/rest/agile/1.0/sprint/{1}";
 
-        public SprintPlannerService(IJiraLogRepository loggingRepository, IJiraSender jiraSender, IProjectsRepository projectsRepository)
+        public SprintPlannerService(IJiraLogRepository loggingRepository, IJiraSender jiraSender, ISystemPropertyRepository systemPropertyRepository)
         {
             if (loggingRepository == null) throw new ArgumentNullException(nameof(loggingRepository));
             if (jiraSender == null) throw new ArgumentNullException(nameof(jiraSender));
-            if (projectsRepository == null) throw new ArgumentNullException(nameof(projectsRepository));
+            if (systemPropertyRepository == null) throw new ArgumentNullException(nameof(systemPropertyRepository));
 
             this.loggingRepository = loggingRepository;
             this.jiraSender = jiraSender;
-            this.projectsRepository = projectsRepository;
+            this.systemPropertyRepository = systemPropertyRepository;
         }
 
         public IEnumerable<SprintInformation> GetSprints()
         {
-            var projects = projectsRepository.Get();
+            var projects = GetJiraProjects();
             var sprintInfos = new List<SprintInformation>();
 
             try
@@ -90,7 +90,7 @@ namespace DevStats.Domain.Sprints
             try
             {
                 var apiRoot = GetApiRoot();
-                var projects = projectsRepository.Get();
+                var projects = GetJiraProjects();
                 var jql = "project in ({0}) AND issuetype in (Bug, Story, Task) AND \"Cascade Team\" = {1} AND Status = \"To Do\" AND Refinement in (\"Dev to Task Out\", \"QA to Task Out\", Ready) AND (Sprint = NULL OR Sprint != {2})";
                 jql = string.Format(jql, string.Join(",", projects), owningTeam, currentSprint);
 
@@ -176,7 +176,16 @@ namespace DevStats.Domain.Sprints
 
         private string GetApiRoot()
         {
-            return ConfigurationManager.AppSettings.Get("JiraApiRoot") ?? string.Empty;
+            return systemPropertyRepository.GetNonNullValue(SystemPropertyName.JiraApiRoot);
+        }
+
+        public IEnumerable<string> GetJiraProjects()
+        {
+            var allowedProjects = systemPropertyRepository.GetNonNullValue(SystemPropertyName.JiraProjects);
+
+            if (string.IsNullOrWhiteSpace(allowedProjects)) return new List<string>();
+
+            return allowedProjects.Split(',');
         }
     }
 }

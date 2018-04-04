@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using DevStats.Domain.Aha.JsonModels;
 using DevStats.Domain.DefectAnalysis;
 using DevStats.Domain.Logging;
+using DevStats.Domain.SystemProperties;
 
 namespace DevStats.Domain.Aha
 {
@@ -12,15 +12,15 @@ namespace DevStats.Domain.Aha
         private readonly IAhaSender sender;
         private readonly IApiLogRepository apiLogRepository;
         private readonly IDefectRepository defectRepository;
-        private readonly string apiRoot;
+        private readonly ISystemPropertyRepository systemPropertyRepository;
         private const string IssueSearchPath = @"{0}/api/v1/features?updated_since={1:yyyy-MM-dd}&fields=reference_num,name,created_at,updated_at,workflow_status,integration_fields,custom_fields,workflow_kind&page={2}";
 
-        public AhaService(IAhaSender sender, IApiLogRepository apiLogRepository, IDefectRepository defectRepository)
+        public AhaService(IAhaSender sender, IApiLogRepository apiLogRepository, IDefectRepository defectRepository, ISystemPropertyRepository systemPropertyRepository)
         {
             this.sender = sender;
             this.apiLogRepository = apiLogRepository;
             this.defectRepository = defectRepository;
-            this.apiRoot = ConfigurationManager.AppSettings.Get("AhaApiRoot") ?? string.Empty;
+            this.systemPropertyRepository = systemPropertyRepository;
         }
 
         public void UpdateDefectsFromAha(DateTime earliestModified)
@@ -47,7 +47,7 @@ namespace DevStats.Domain.Aha
 
         private FeatureCollection GetDefectsFromAha(DateTime earliestModified, int pageNumber)
         {
-            var url = string.Format(IssueSearchPath, apiRoot, earliestModified, pageNumber);
+            var url = string.Format(IssueSearchPath, GetApiRoot(), earliestModified, pageNumber);
 
             try
             {
@@ -92,6 +92,11 @@ namespace DevStats.Domain.Aha
                 type = DefectType.Internal;
 
             return new AhaDefect(jiraId, feature.Id, module, type, feature.Created, endDate);
+        }
+
+        private string GetApiRoot()
+        {
+            return systemPropertyRepository.GetNonNullValue(SystemPropertyName.AhaApiRoot);
         }
     }
 }

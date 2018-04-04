@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using DevStats.Domain.KPI;
 using DevStats.Domain.Security;
+using DevStats.Domain.SystemProperties;
 using DevStats.Models.KPI;
 using Microsoft.AspNet.Identity.Owin;
 
@@ -17,14 +18,17 @@ namespace DevStats.Controllers.MVC
 
         private readonly IActualsVsEstimatesService actualsVsEstimatesService;
         private readonly INewFeatureFailureRateService newFeatureFailureRateService;
+        private readonly ISystemPropertyRepository systemPropertyRepository;
 
-        public KPIController(IActualsVsEstimatesService actualsVsEstimatesService, INewFeatureFailureRateService newFeatureFailureRateService)
+        public KPIController(IActualsVsEstimatesService actualsVsEstimatesService, INewFeatureFailureRateService newFeatureFailureRateService, ISystemPropertyRepository systemPropertyRepository)
         {
             if (actualsVsEstimatesService == null) throw new ArgumentNullException(nameof(actualsVsEstimatesService));
             if (newFeatureFailureRateService == null) throw new ArgumentNullException(nameof(newFeatureFailureRateService));
+            if (systemPropertyRepository == null) throw new ArgumentNullException(nameof(systemPropertyRepository));
 
             this.actualsVsEstimatesService = actualsVsEstimatesService;
             this.newFeatureFailureRateService = newFeatureFailureRateService;
+            this.systemPropertyRepository = systemPropertyRepository;
         }
 
         [HttpGet]
@@ -81,7 +85,7 @@ namespace DevStats.Controllers.MVC
 
         private string GetJiraRoot()
         {
-            return ConfigurationManager.AppSettings.Get("JiraApiRoot") ?? string.Empty;
+            return systemPropertyRepository.GetNonNullValue(SystemPropertyName.JiraApiRoot);
         }
     }
 }

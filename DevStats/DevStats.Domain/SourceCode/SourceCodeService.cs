@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Web;
 using DevStats.Domain.Bitbucket;
 using DevStats.Domain.Jira;
 using DevStats.Domain.Jira.JsonModels;
+using DevStats.Domain.SystemProperties;
 
 namespace DevStats.Domain.SourceCode
 {
@@ -13,16 +13,19 @@ namespace DevStats.Domain.SourceCode
     {
         private readonly IBitbucketSender bitbucketSender;
         private readonly IJiraSender jiraSender;
+        private readonly ISystemPropertyRepository systemPropertyRepository;
         private const string BranchApi = "https://api.bitbucket.org/1.0/repositories/{0}/{1}/branches";
         private const string JiraIssueSearchPath = @"{0}/rest/api/2/search?jql={1}&validateQuery=Warn";
 
-        public SourceCodeService(IBitbucketSender bitbucketSender, IJiraSender jiraSender)
+        public SourceCodeService(IBitbucketSender bitbucketSender, IJiraSender jiraSender, ISystemPropertyRepository systemPropertyRepository)
         {
             if (bitbucketSender == null) throw new ArgumentNullException(nameof(bitbucketSender));
             if (jiraSender == null) throw new ArgumentNullException(nameof(jiraSender));
+            if (systemPropertyRepository == null) throw new ArgumentNullException(nameof(systemPropertyRepository));
 
             this.bitbucketSender = bitbucketSender;
             this.jiraSender = jiraSender;
+            this.systemPropertyRepository = systemPropertyRepository;
         }
 
         public SourceCodeBranches Get(string repoName)
@@ -70,7 +73,7 @@ namespace DevStats.Domain.SourceCode
 
         private string GetApiRoot()
         {
-            return ConfigurationManager.AppSettings.Get("JiraApiRoot") ?? string.Empty;
+            return systemPropertyRepository.GetNonNullValue(SystemPropertyName.JiraApiRoot);
         }
     }
 }

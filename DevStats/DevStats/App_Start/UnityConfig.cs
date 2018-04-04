@@ -30,7 +30,6 @@ namespace DevStats
             // Repositories
             container.RegisterType<IDefectRepository, DefectRepository>();
             container.RegisterType<IJiraLogRepository, JiraLogRepository>();
-            container.RegisterType<IProjectsRepository, ProjectsRepository>();
             container.RegisterType<IWorkLogRepository, WorkLogRepository>();
             container.RegisterType<IUserRepository, UserRepository>();
             container.RegisterType<INewFeatureFailureRateRepository, NewFeatureFailureRateRepository>();

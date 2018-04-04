@@ -128,7 +128,6 @@
     <Compile Include="DefectAnalysis\IDefectRepository.cs" />
     <Compile Include="DefectAnalysis\IDefectService.cs" />
     <Compile Include="Jira\IJiraSender.cs" />
-    <Compile Include="Jira\IProjectsRepository.cs" />
     <Compile Include="Jira\IWorkLogRepository.cs" />
     <Compile Include="Jira\JiraAudit.cs" />
     <Compile Include="Jira\JiraSender.cs" />
@@ -155,7 +154,6 @@
     <Compile Include="Jira\JsonModels\Votes.cs" />
     <Compile Include="Jira\Logging\JiraHook.cs" />
     <Compile Include="Jira\JiraStateSummary.cs" />
-    <Compile Include="Jira\ProjectsRepository.cs" />
     <Compile Include="Jira\StoryEffort.cs" />
     <Compile Include="JsonFiles.Designer.cs">
       <AutoGen>True</AutoGen>

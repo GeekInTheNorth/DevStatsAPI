@@ -1,14 +1,23 @@
 ﻿using System;
-using System.Configuration;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using DevStats.Domain.SystemProperties;
 using Microsoft.AspNet.Identity;
 
 namespace DevStats.Domain.Communications
 {
     public class EmailService : IEmailService
     {
+        private readonly ISystemPropertyRepository systemPropertyRepository;
+
+        public EmailService(ISystemPropertyRepository systemPropertyRepository)
+        {
+            if (systemPropertyRepository == null) throw new ArgumentNullException(nameof(systemPropertyRepository));
+
+            this.systemPropertyRepository = systemPropertyRepository;
+        }
+
         public Task SendAsync(IdentityMessage message)
         {
             SendEmail(message.Destination, message.Subject, message.Body);
@@ -18,10 +27,11 @@ namespace DevStats.Domain.Communications
 
         public void SendEmail(string destination, string subject, string body)
         {
-            var emailUserName = ConfigurationManager.AppSettings["EmailUserName"];
-            var emailPassword = ConfigurationManager.AppSettings["EmailPassword"];
-            var host = ConfigurationManager.AppSettings["EmailHost"];
-            var port = Convert.ToInt32(ConfigurationManager.AppSettings["EmailPort"]);
+            var emailUserName = systemPropertyRepository.GetNonNullValue(SystemPropertyName.EmailUserName);
+            var emailPassword = systemPropertyRepository.GetNonNullValue(SystemPropertyName.EmailPassword);
+            var host = systemPropertyRepository.GetNonNullValue(SystemPropertyName.EmailHost);
+            var port = Convert.ToInt32(systemPropertyRepository.GetNonNullValue(SystemPropertyName.EmailPort));
+
             var email = new MailMessage(new MailAddress(emailUserName, "(Do Not Reply)"), new MailAddress(destination))
             {
                 Subject = subject,

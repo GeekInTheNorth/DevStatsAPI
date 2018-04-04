@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -8,20 +7,19 @@ using System.Web;
 using DevStats.Domain.DefectAnalysis;
 using DevStats.Domain.Jira.JsonModels;
 using DevStats.Domain.Jira.Logging;
-using DevStats.Domain.Messages;
+using DevStats.Domain.SystemProperties;
 
 namespace DevStats.Domain.Jira
 {
     public class JiraService : IJiraService
     {
-        private readonly IJsonConvertor convertor;
         private readonly IJiraLogRepository loggingRepository;
         private readonly IJiraSender jiraSender;
-        private readonly IProjectsRepository projectsRepository;
         private readonly IWorkLogRepository workLogRepository;
         private readonly IDefectRepository defectRepository;
         private readonly IDefectScoringRepository defectScoringRepository;
         private readonly IJiraIdValidator idValidator;
+        private readonly ISystemPropertyRepository systemPropertyRepository;
         private const string JiraIssuePath = @"{0}/rest/api/2/issue/{1}";
         private const string JiraAssigneePath = @"{0}/rest/api/2/issue/{1}/assignee";
         private const string JiraIssuePathWithFields = @"{0}/rest/api/2/issue/{1}?fields={2}";
@@ -33,32 +31,29 @@ namespace DevStats.Domain.Jira
         private const string VersionNumberRegEx = "[0-9]{1,2}[.]{1}[0-9]{1,3}";
 
         public JiraService(
-            IJsonConvertor convertor,
             IJiraLogRepository loggingRepository,
             IJiraSender jiraSender,
-            IProjectsRepository projectsRepository,
             IWorkLogRepository workLogRepository,
             IDefectRepository defectRepository,
             IDefectScoringRepository defectScoringRepository,
-            IJiraIdValidator idValidator)
+            IJiraIdValidator idValidator,
+            ISystemPropertyRepository systemPropertyRepository)
         {
-            if (convertor == null) throw new ArgumentNullException(nameof(convertor));
             if (loggingRepository == null) throw new ArgumentNullException(nameof(loggingRepository));
             if (jiraSender == null) throw new ArgumentNullException(nameof(jiraSender));
-            if (projectsRepository == null) throw new ArgumentNullException(nameof(projectsRepository));
             if (workLogRepository == null) throw new ArgumentNullException(nameof(workLogRepository));
             if (defectRepository == null) throw new ArgumentNullException(nameof(defectRepository));
             if (defectScoringRepository == null) throw new ArgumentNullException(nameof(defectScoringRepository));
             if (idValidator == null) throw new ArgumentNullException(nameof(idValidator));
+            if (systemPropertyRepository == null) throw new ArgumentNullException(nameof(systemPropertyRepository));
 
-            this.convertor = convertor;
             this.loggingRepository = loggingRepository;
             this.jiraSender = jiraSender;
-            this.projectsRepository = projectsRepository;
             this.workLogRepository = workLogRepository;
             this.defectRepository = defectRepository;
             this.defectScoringRepository = defectScoringRepository;
             this.idValidator = idValidator;
+            this.systemPropertyRepository = systemPropertyRepository;
         }
 
         public void ProcessStoryCreate(string jiraId)
@@ -235,7 +230,7 @@ namespace DevStats.Domain.Jira
 
         public IEnumerable<JiraStateSummary> GetStateSummaries(string requestData)
         {
-            var projects = projectsRepository.Get();
+            var projects = GetJiraProjects();
             var regExStr = string.Format(CoreIssueIdRegex, string.Join("|", projects));
             var matches = Regex.Matches(requestData, regExStr);
 
@@ -254,7 +249,7 @@ namespace DevStats.Domain.Jira
         {
             var supportUserNames = GetUserNames(GetServiceDeskGroup());
             var jql = FilterBuilder.Create()
-                                   .WithProjects(projectsRepository.Get())
+                                   .WithProjects(GetJiraProjects())
                                    .WithIssueTypesOf(JiraIssueType.Bugs)
                                    .WithIssueStatesOf(JiraState.UnResolved)
                                    .Build();
@@ -518,12 +513,12 @@ namespace DevStats.Domain.Jira
 
         private string GetApiRoot()
         {
-            return ConfigurationManager.AppSettings.Get("JiraApiRoot") ?? string.Empty;
+            return systemPropertyRepository.GetNonNullValue(SystemPropertyName.JiraApiRoot);
         }
 
         private string GetServiceDeskGroup()
         {
-            return ConfigurationManager.AppSettings.Get("JiraServiceDeskGroup") ?? string.Empty;
+            return systemPropertyRepository.GetNonNullValue(SystemPropertyName.JiraServiceDeskGroup);
         }
 
         private decimal GetScore(Dictionary<string, decimal> scores, ValueField field)
@@ -540,6 +535,15 @@ namespace DevStats.Domain.Jira
                 return 0;
 
             return scores.ContainsKey(option) ? scores[option] : 0;
+        }
+
+        public IEnumerable<string> GetJiraProjects()
+        {
+            var allowedProjects = systemPropertyRepository.GetNonNullValue(SystemPropertyName.JiraProjects);
+
+            if (string.IsNullOrWhiteSpace(allowedProjects)) return new List<string>();
+
+            return allowedProjects.Split(',');
         }
     }
 }
