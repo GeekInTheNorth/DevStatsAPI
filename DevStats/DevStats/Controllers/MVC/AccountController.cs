@@ -68,7 +68,7 @@ namespace DevStats.Controllers.MVC
             var user = Request.GetOwinContext().Authentication.User;
             var isAdmin = await UserManager.IsInRoleAsync(user.Identity.Name, "Admin");
 
-            if (!isAdmin) return RedirectToAction("Index", "Home");
+            if (!isAdmin) return RedirectToAction("NoAccess", "Home");
 
             return View(new RegisterModel());
         }
@@ -81,13 +81,14 @@ namespace DevStats.Controllers.MVC
             var user = Request.GetOwinContext().Authentication.User;
             var isAdmin = await UserManager.IsInRoleAsync(user.Identity.Name, "Admin");
 
-            if (!isAdmin) return RedirectToAction("Index", "Home");
+            if (!isAdmin) return RedirectToAction("NoAccess", "Home");
 
             if (ModelState.IsValid)
             {
                 var newUser = new ApplicationUser
                 {
-                    UserName = model.UserName,
+                    UserName = model.Email.Split('@')[0],
+                    DisplayName = model.DisplayName,
                     EmailAddress = model.Email,
                     Role = model.Role,
                     PasswordHash = UserManager.PasswordHasher.HashPassword(new Guid().ToString().Replace("'", string.Empty))
@@ -115,7 +116,7 @@ namespace DevStats.Controllers.MVC
             var user = Request.GetOwinContext().Authentication.User;
             var isAdmin = await UserManager.IsInRoleAsync(user.Identity.Name, "Admin");
 
-            if (!isAdmin) return RedirectToAction("Index", "Home");
+            if (!isAdmin) return RedirectToAction("NoAccess", "Home");
 
             var model = new IndexModel(UserStore.GetUsers());
 

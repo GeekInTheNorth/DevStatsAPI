@@ -54,15 +54,16 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Source<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>@Html.ActionLink("Cascade Branch Check", "Branches", "SourceCode", new { @repoName = "Cascade" }, new { })</li>
+                        <li>@Html.ActionLink("State Checker", "StateChecker", "Jira")</li>
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tools<span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin Tools<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("API Audit", "Audit", "Jira")</li>
-                        <li>@Html.ActionLink("API Execution", "ApiTest", "Jira")</li>
-                        <li>@Html.ActionLink("State Checker", "StateChecker", "Jira")</li>
-                        <li>@Html.ActionLink("System Properties (Admin)", "Index", "SystemProperty")</li>
+                        <li>@Html.ActionLink("Jira Audit", "Audit", "Jira")</li>
+                        <li>@Html.ActionLink("Jira Webhook Execution", "ApiTest", "Jira")</li>
+                        <li>@Html.ActionLink("System Properties", "Index", "SystemProperty")</li>
+                        <li>@Html.ActionLink("Users", "Index", "Account")</li>
                     </ul>
                 </li>
             </ul>

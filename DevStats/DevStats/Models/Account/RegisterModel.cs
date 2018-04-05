@@ -6,8 +6,8 @@ namespace DevStats.Models.Account
     public class RegisterModel
     {
         [Required]
-        [Display(Name = "User name")]
-        public string UserName { get; set; }
+        [Display(Name = "Display Name")]
+        public string DisplayName { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]

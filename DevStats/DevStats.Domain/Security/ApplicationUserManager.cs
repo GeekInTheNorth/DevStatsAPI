@@ -79,5 +79,35 @@ namespace DevStats.Domain.Security
 
             return errors;
         }
+
+        public async override Task<IdentityResult> AddToRoleAsync(int userId, string role)
+        {
+            try
+            {
+                var user = await store.FindByIdAsync(userId);
+                user.Role = role;
+                await store.UpdateAsync(user);
+            }
+            catch (Exception ex)
+            {
+                return IdentityResult.Failed(ex.Message);
+            }
+
+            return IdentityResult.Success;
+        }
+
+        public async override Task<IdentityResult> DeleteAsync(ApplicationUser user)
+        {
+            try
+            {
+                await store.DeleteAsync(user);
+            }
+            catch (Exception ex)
+            {
+                return IdentityResult.Failed(ex.Message);
+            }
+
+            return IdentityResult.Success;
+        }
     }
 }

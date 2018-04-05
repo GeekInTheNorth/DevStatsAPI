@@ -5,26 +5,42 @@
     Page.Title = "Users";
 }
 
-<h1>Current Users</h1>
+<h1>
+    Users
+    @Html.ActionLink("Create User", "Register", "Account", null, new { @class = "btn btn-primary" })
+</h1>
 
-<table class="table table-striped">
+<table class="table table-striped" id="tbl-users">
     <thead>
         <tr>
             <th class="text">User</th>
-            <th class="text">User Name</th>
             <th class="text">Email Address</th>
             <th class="text">Role</th>
+            <th class="text">Action</th>
         </tr>
     </thead>
     <tbody>
-        @foreach(var user in Model.Users)
+        @foreach (var user in Model.Users)
         {
             <tr>
-                <td class="text">@user.User</td>
-                <td class="text">@user.UserName</td>
+                <td class="text">@user.DisplayName</td>
                 <td class="text">@user.EmailAddress</td>
                 <td class="text">@user.Role</td>
+                <td>
+                    @if (user.Role == "Admin")
+                    {
+                        <button data-id="@user.Id" data-username="@user.DisplayName" class="btn btn-primary btn-xs" onclick="updateUser(this, 'demote');">Demote</button>
+                    }
+                    else
+                    {
+                        <button data-id="@user.Id" data-username="@user.DisplayName" class="btn btn-primary btn-xs" onclick="updateUser(this, 'promote');">Promote</button>
+                    }
+
+                    <button data-id="@user.Id" data-username="@user.DisplayName" class="btn btn-danger btn-xs" onclick="deleteUser(this)">Delete</button>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+
+<script src="~/Scripts/Accounts.js"></script>
