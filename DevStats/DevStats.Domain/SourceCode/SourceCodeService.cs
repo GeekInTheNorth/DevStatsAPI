@@ -55,12 +55,12 @@ namespace DevStats.Domain.SourceCode
 
             foreach(var story in stories)
             {
-                var branch = filteredBranches.FirstOrDefault(x => x.JiraId == story.Key);
+                var branchMatches = filteredBranches.Where(x => x.JiraId == story.Key);
 
-                if (branch != null)
+                foreach(var branchMatch in branchMatches)
                 {
-                    branch.Status = story.Fields.Status.Name;
-                    branch.Title = story.Fields.Summary;
+                    branchMatch.Status = story.Fields.Status.Name;
+                    branchMatch.Title = story.Fields.Summary;
                 }
             }
 
