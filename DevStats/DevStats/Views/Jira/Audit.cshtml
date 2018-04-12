@@ -40,11 +40,35 @@
                 <td>@auditItem.JiraId</td>
                 <td>@auditItem.Action</td>
                 <td>@auditItem.WasSuccessfulString</td>
-                <td>@auditItem.Content</td>
+                @if (auditItem.IsJson)
+                {
+                    <td><a onclick="showJsonContent(this)" data-jsoncontent="@auditItem.Content" class="btn btn-primary btn-xs">Show Json Content</a></td>
+                }
+                else
+                {
+                    <td>@auditItem.Content</td>
+                }
             </tr>
         }
     </tbody>
 </table>
+
+<div id="audit-json-popup" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Json Content</h4>
+            </div>
+            <div class="modal-body">
+                <span id="json-content-holder"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
     $('.input-daterange').datepicker({
@@ -54,4 +78,10 @@
         daysOfWeekHighlighted: "1,2,3,4,5",
         todayHighlight: true
     });
+
+    function showJsonContent(button) {
+        var content = $(button).data("jsoncontent");
+        $("#json-content-holder").text(JSON.stringify(content, null, 2));
+        $('#audit-json-popup').modal('show');
+    }
 </script>

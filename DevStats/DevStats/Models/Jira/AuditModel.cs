@@ -21,6 +21,8 @@ namespace DevStats.Models.Jira
 
         public string Content { get; private set; }
 
+        public bool IsJson { get; private set; }
+
         public bool WasSuccessful { get; private set; }
 
         public string WasSuccessfulString
@@ -36,11 +38,8 @@ namespace DevStats.Models.Jira
             Action = auditItem.Action;
             WasSuccessful = auditItem.WasSuccessful;
             AuditDate = auditItem.AuditDate;
-
-            if (!string.IsNullOrWhiteSpace(auditItem.Content) && auditItem.Content.StartsWith("{"))
-                Content = "Json file was retrieved and stored.";
-            else
-                Content = auditItem.Content;
+            IsJson = !string.IsNullOrWhiteSpace(auditItem.Content) && auditItem.Content.StartsWith("{");
+            Content = auditItem.Content;
         }
     }
 }
