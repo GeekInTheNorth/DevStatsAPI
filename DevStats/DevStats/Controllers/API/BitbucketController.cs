@@ -34,12 +34,30 @@ namespace DevStats.Controllers.API
         }
 
         [HttpPost]
-        [Route("webhook/approve")]
+        [Route("pullrequest/approve")]
         public void Approve([FromBody]Domain.Bitbucket.Models.Webhook.Payload payload)
         {
             var content = jsonConvertor.Serialize(payload);
 
             logRepository.Log("n/a", "Approve Pull Request", content, true);
+        }
+
+        [HttpPost]
+        [Route("pullrequest/disapprove")]
+        public void Disapprove([FromBody]Domain.Bitbucket.Models.Webhook.Payload payload)
+        {
+            var content = jsonConvertor.Serialize(payload);
+
+            logRepository.Log("n/a", "Disapprove Pull Request", content, true);
+        }
+
+        [HttpPost]
+        [Route("pullrequest/test")]
+        public void testapproval()
+        {
+            var content = Request.Content.ToString();
+
+            logRepository.Log("n/a", "Disapprove Pull Request", content, true);
         }
     }
 }
