@@ -57,6 +57,10 @@ namespace DevStats.Filters
                     actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, string.Format("Invalid Jira Id: {0}", argument.ToString()));
                 }
             }
+            else if (argumentName.Equals("payload", StringComparison.CurrentCultureIgnoreCase) && argument == null)
+            {
+                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "No Payload");
+            }
         }
 
         private void LogValidationError(HttpActionContext actionContext, string argumentName, object argument)

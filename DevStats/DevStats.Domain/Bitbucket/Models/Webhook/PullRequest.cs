@@ -6,6 +6,9 @@ namespace DevStats.Domain.Bitbucket.Models.Webhook
 {
     public class PullRequest
     {
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
         [JsonProperty("approval")]
         public int Id { get; set; }
 
@@ -28,7 +31,7 @@ namespace DevStats.Domain.Bitbucket.Models.Webhook
         public Commit MergeCommit { get; set; }
 
         [JsonProperty("participants")]
-        public List<User> Participants { get; set; }
+        public List<Participant> Participants { get; set; }
 
         [JsonProperty("reviewers")]
         public List<User> Reviewers { get; set; }
@@ -47,5 +50,8 @@ namespace DevStats.Domain.Bitbucket.Models.Webhook
 
         [JsonProperty("updated_on")]
         public DateTime Updated { get; set; }
+
+        [JsonProperty("task_count")]
+        public int TaskCount { get; set; }
     }
 }

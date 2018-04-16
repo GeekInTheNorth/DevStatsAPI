@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using DevStats.Domain.Bitbucket;
 using DevStats.Domain.Jira.Logging;
-using DevStats.Domain.Messages;
 
 namespace DevStats.Controllers.API
 {
@@ -13,17 +13,14 @@ namespace DevStats.Controllers.API
     {
         private readonly IBitbucketService service;
         private readonly IJiraLogRepository logRepository;
-        private readonly IJsonConvertor jsonConvertor;
 
-        public BitbucketController(IBitbucketService service, IJiraLogRepository logRepository, IJsonConvertor jsonConvertor)
+        public BitbucketController(IBitbucketService service, IJiraLogRepository logRepository)
         {
             if (service == null) throw new ArgumentNullException(nameof(service));
             if (logRepository == null) throw new ArgumentNullException(nameof(logRepository));
-            if (jsonConvertor == null) throw new ArgumentNullException(nameof(jsonConvertor));
 
             this.service = service;
             this.logRepository = logRepository;
-            this.jsonConvertor = jsonConvertor;
         }
 
         [HttpPost]
@@ -37,27 +34,23 @@ namespace DevStats.Controllers.API
         [Route("pullrequest/approve")]
         public void Approve([FromBody]Domain.Bitbucket.Models.Webhook.Payload payload)
         {
-            var content = jsonConvertor.Serialize(payload);
-
-            logRepository.Log("n/a", "Approve Pull Request", content, true);
+            service.Approval(payload, true);
         }
 
         [HttpPost]
         [Route("pullrequest/disapprove")]
         public void Disapprove([FromBody]Domain.Bitbucket.Models.Webhook.Payload payload)
         {
-            var content = jsonConvertor.Serialize(payload);
-
-            logRepository.Log("n/a", "Disapprove Pull Request", content, true);
+            service.Approval(payload, false);
         }
 
         [HttpPost]
         [Route("pullrequest/test")]
-        public void testapproval()
+        public async Task TestAndLog()
         {
-            var content = Request.Content.ToString();
+            var content = await Request.Content.ReadAsStringAsync();
 
-            logRepository.Log("n/a", "Disapprove Pull Request", content, true);
+            logRepository.Log("n/a", "Recieved Test Message", content, true);
         }
     }
 }

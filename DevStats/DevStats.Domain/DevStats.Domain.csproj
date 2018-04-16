@@ -100,6 +100,7 @@
     <Compile Include="Bitbucket\Models\Webhook\BaseIdentity.cs" />
     <Compile Include="Bitbucket\Models\Webhook\Branch.cs" />
     <Compile Include="Bitbucket\Models\Webhook\Commit.cs" />
+    <Compile Include="Bitbucket\Models\Webhook\Participant.cs" />
     <Compile Include="Bitbucket\Models\Webhook\Payload.cs" />
     <Compile Include="Bitbucket\Models\Webhook\Project.cs" />
     <Compile Include="Bitbucket\Models\Webhook\PullRequest.cs" />
