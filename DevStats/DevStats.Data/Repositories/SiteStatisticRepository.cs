@@ -16,8 +16,7 @@ namespace DevStats.Data.Repositories
             return new List<UsageStatistic>
             {
                 GetApiLogStatistic(today, sevenDay, thirtyDay),
-                GetJiraLogStatistic(today, sevenDay, thirtyDay),
-                GetBuildLogStatistic(today, sevenDay, thirtyDay)
+                GetJiraLogStatistic(today, sevenDay, thirtyDay)
             };
         }
 
@@ -45,21 +44,6 @@ namespace DevStats.Data.Repositories
             return new UsageStatistic
             {
                 StatisticType = "Jira Administrations",
-                UsagesToday = todayCount,
-                UsagesLastSevenDays = sevenDayCount,
-                UsagesLastThirtyDays = thirtyDayCount
-            };
-        }
-
-        private UsageStatistic GetBuildLogStatistic(DateTime today, DateTime sevenDay, DateTime thirtyDay)
-        {
-            var todayCount = Context.BuildStatusLogs.Where(x => x.StatusDate >= today && x.BitbucketUpdated).Count();
-            var sevenDayCount = Context.BuildStatusLogs.Where(x => x.StatusDate >= sevenDay && x.BitbucketUpdated).Count();
-            var thirtyDayCount = Context.BuildStatusLogs.Where(x => x.StatusDate >= thirtyDay && x.BitbucketUpdated).Count();
-
-            return new UsageStatistic
-            {
-                StatisticType = "Build Status Updates",
                 UsagesToday = todayCount,
                 UsagesLastSevenDays = sevenDayCount,
                 UsagesLastThirtyDays = thirtyDayCount
