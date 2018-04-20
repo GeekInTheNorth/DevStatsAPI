@@ -22,7 +22,7 @@ End Points for Jira Webhooks:
  - Story Deletion (Updates Defect Data)
  - Sub-Task Update (Forces state correction of parent stories)
 
-## Azure Webapp Settings that need setting up
+## Website Settings that can be configured as an admin user
 Unless otherwise stated, all settings are empty in source control.
 
 | Setting Type | Name | Notes |
