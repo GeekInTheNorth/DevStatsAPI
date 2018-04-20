@@ -63,6 +63,7 @@ namespace DevStats
             container.RegisterType<ISiteStatisticService, SiteStatisticService>();
             container.RegisterType<ISourceCodeService, SourceCodeService>();
             container.RegisterType<ISystemPropertyService, SystemPropertyService>();
+            container.RegisterType<IApiLogService, ApiLogService>();
 
             DependencyResolver.SetResolver(new Unity.Mvc5.UnityDependencyResolver(container));
             GlobalConfiguration.Configuration.DependencyResolver = new Unity.WebApi.UnityDependencyResolver(container);

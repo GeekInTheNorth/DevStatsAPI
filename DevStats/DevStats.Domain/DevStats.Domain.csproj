@@ -127,6 +127,8 @@
     <Compile Include="KPI\NewFeaturePassRateService.cs" />
     <Compile Include="KPI\NewFeaturePassRateStory.cs" />
     <Compile Include="KPI\NewFeaturePassRateTask.cs" />
+    <Compile Include="Logging\ApiLog.cs" />
+    <Compile Include="Logging\ApiLogService.cs" />
     <Compile Include="Logging\IApiLogRepository.cs" />
     <Compile Include="Aha\JsonModels\Feature.cs" />
     <Compile Include="Aha\JsonModels\FeatureCollection.cs" />
@@ -172,6 +174,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>JsonFiles.resx</DependentUpon>
     </Compile>
+    <Compile Include="Logging\IApiLogService.cs" />
     <Compile Include="Messages\IJsonConvertor.cs" />
     <Compile Include="Messages\JsonConvertor.cs" />
     <Compile Include="Messages\PostResult.cs" />

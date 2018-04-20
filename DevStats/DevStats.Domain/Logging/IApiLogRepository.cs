@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DevStats.Domain.Logging
 {
@@ -9,5 +10,7 @@ namespace DevStats.Domain.Logging
         void Success(string apiName, string apiUrl, string action);
 
         void Failure(string apiName, string apiUrl, string action, Exception exception);
+
+        IEnumerable<ApiLog> Get(DateTime from, DateTime to);
     }
 }

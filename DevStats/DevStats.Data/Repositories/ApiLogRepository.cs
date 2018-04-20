@@ -1,5 +1,6 @@
 ﻿using System;
-using DevStats.Data.Entities;
+using System.Collections.Generic;
+using System.Linq;
 using DevStats.Domain.Logging;
 
 namespace DevStats.Data.Repositories
@@ -8,7 +9,7 @@ namespace DevStats.Data.Repositories
     {
         public void Log(string apiName, string apiUrl, string action, bool success, string content)
         {
-            var newLog = new ApiLog
+            var newLog = new Entities.ApiLog
             {
                 ApiName = apiName,
                 ApiUrl = apiUrl,
@@ -33,6 +34,18 @@ namespace DevStats.Data.Repositories
         public void Failure(string apiName, string apiUrl, string action, Exception exception)
         {
             Log(apiName, apiUrl, action, false, exception.Message);
+        }
+
+        public IEnumerable<ApiLog> Get(DateTime from, DateTime to)
+        {
+            using (var context = new DevStatContext())
+            {
+                return context.ApiLogs
+                              .Where(x => x.Triggered >= from && x.Triggered <= to)
+                              .AsEnumerable()
+                              .Select(x => new ApiLog(x.ApiName, x.ApiUrl, x.Action, x.Content, x.IssueKey, x.Success, x.Triggered))
+                              .ToList();
+            }
         }
     }
 }

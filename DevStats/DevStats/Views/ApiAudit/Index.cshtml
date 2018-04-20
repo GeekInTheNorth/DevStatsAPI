@@ -1,0 +1,90 @@
+﻿@model DevStats.Models.Audit.ApiAuditModel
+
+@{
+    Layout = "~/Views/Shared/Shared.cshtml";
+    Page.Title = "API Audit";
+}
+
+<link href="../Content/bootstrap-datepicker.css" rel="stylesheet" />
+<script src="../Scripts/bootstrap-datepicker.min.js"></script>
+
+<div class="filter">
+    @using (Html.BeginForm("Index", "ApiAudit", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-inline" }))
+    {
+        <div class="input-daterange input-group">
+            @Html.TextBox("dateFrom", Model.FilterFrom.ToString("dd/MM/yyyy"), new { @class = "input-sm form-control" })
+            <span class="input-group-addon">To:</span>
+            @Html.TextBox("dateTo", Model.FilterTo.ToString("dd/MM/yyyy"), new { @class = "input-sm form-control" })
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-default">Search</button>
+            </span>
+        </div>
+    }
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Controller</th>
+            <th>Action</th>
+            <th>Url</th>
+            <th>Triggered</th>
+            <th>Success</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var auditItem in Model.AuditItems)
+        {
+            var rowClass = auditItem.Success ? "" : "danger";
+            <tr class="@rowClass">
+                <td>@auditItem.ApiName</td>
+                <td>@auditItem.Action</td>
+                <td>@auditItem.ApiUrl</td>
+                <td>@auditItem.Triggered.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                <td>@auditItem.SuccessAsString</td>
+                @if (auditItem.ContentIsJson)
+                {
+                    <td><a onclick="showJsonContent(this)" data-jsoncontent="@auditItem.Content" class="btn btn-primary btn-xs">Show Json Content</a></td>
+                }
+                else
+                {
+                    <td>@auditItem.Content</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div id="audit-json-popup" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Json Content</h4>
+            </div>
+            <div class="modal-body">
+                <span id="json-content-holder"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('.input-daterange').datepicker({
+        format: "dd/mm/yyyy",
+        todayBtn: true,
+        daysOfWeekDisabled: "0,6",
+        daysOfWeekHighlighted: "1,2,3,4,5",
+        todayHighlight: true
+    });
+
+    function showJsonContent(button) {
+        var content = $(button).data("jsoncontent");
+        $("#json-content-holder").text(JSON.stringify(content, null, 2));
+        $('#audit-json-popup').modal('show');
+    }
+</script>

@@ -291,6 +291,7 @@
     <Compile Include="Controllers\API\SystemPropertyController.cs" />
     <Compile Include="Controllers\API\TaskingStatusController.cs" />
     <Compile Include="Controllers\MVC\AccountController.cs" />
+    <Compile Include="Controllers\MVC\AuditController.cs" />
     <Compile Include="Controllers\MVC\DefectReportController.cs" />
     <Compile Include="Controllers\MVC\HomeController.cs" />
     <Compile Include="Controllers\MVC\JiraController.cs" />
@@ -309,6 +310,7 @@
     <Compile Include="Models\Account\RegisterModel.cs" />
     <Compile Include="Models\Account\ResetPasswordModel.cs" />
     <Compile Include="Models\Account\ResetPasswordRequestModel.cs" />
+    <Compile Include="Models\Audit\ApiAuditModel.cs" />
     <Compile Include="Models\Home\HomeModel.cs" />
     <Compile Include="Models\Jira\ApiTestModel.cs" />
     <Compile Include="Models\DefectTracking\DefectModel.cs" />
@@ -361,6 +363,7 @@
     <Content Include="Views\Home\NoAccess.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\SystemProperty\Index.cshtml" />
+    <Content Include="Views\ApiAudit\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
