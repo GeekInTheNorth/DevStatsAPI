@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace DevStats.Domain.KPI
 {
-    public class NewFeatureFailureRateService : INewFeatureFailureRateService
+    public class NewFeaturePassRateService : INewFeaturePassRateService
     {
-        private readonly INewFeatureFailureRateRepository repository;
+        private readonly INewFeaturePassRateRepository repository;
 
-        public NewFeatureFailureRateService(INewFeatureFailureRateRepository repository)
+        public NewFeaturePassRateService(INewFeaturePassRateRepository repository)
         {
             if (repository == null) throw new ArgumentNullException(nameof(repository));
 
@@ -21,16 +21,16 @@ namespace DevStats.Domain.KPI
             return repository.GetDevelopers().ToDictionary(x => x, y => FormatName(y));
         }
 
-        public NewFeatureFailureRate GetQualityKpi(string developer)
+        public NewFeaturePassRate GetQualityKpi(string developer)
         {
             var stories = repository.GetQualityApi(developer);
 
-            return new NewFeatureFailureRate(stories);
+            return new NewFeaturePassRate(stories);
         }
 
-        public Dictionary<string, NewFeatureFailureRate> GetQualityKpi()
+        public Dictionary<string, NewFeaturePassRate> GetQualityKpi()
         {
-            var results = new Dictionary<string, NewFeatureFailureRate>();
+            var results = new Dictionary<string, NewFeaturePassRate>();
             var developers = GetDevelopers().Select(x => x.Key);
 
             foreach(var developer in developers)

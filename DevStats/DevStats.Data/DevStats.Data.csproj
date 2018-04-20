@@ -172,7 +172,7 @@
     <Compile Include="Repositories\EstimationRepository.cs" />
     <Compile Include="Repositories\JiraLogRepository.cs" />
     <Compile Include="Repositories\MvpRepository.cs" />
-    <Compile Include="Repositories\NewFeatureFailureRateRepository.cs" />
+    <Compile Include="Repositories\NewFeaturePassRateRepository.cs" />
     <Compile Include="Repositories\SiteStatisticRepository.cs" />
     <Compile Include="Repositories\SystemPropertyRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />

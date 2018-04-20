@@ -4,7 +4,7 @@ using DevStats.Domain.KPI;
 
 namespace DevStats.Models.KPI
 {
-    public class NewFeatureFailureRateModel
+    public class NewFeaturePassRateModel
     {
         public Dictionary<string, string> Developers { get; set; }
 
@@ -14,7 +14,7 @@ namespace DevStats.Models.KPI
 
         public string JiraRoot { get; set; }
 
-        public NewFeatureFailureRate Quality { get; set; }
+        public NewFeaturePassRate Quality { get; set; }
 
         public int TotalDevTaskDuration
         {
@@ -60,11 +60,11 @@ namespace DevStats.Models.KPI
             }
         }
 
-        public NewFeatureFailureRateModel(Dictionary<string, string> developers, string userName, bool isAdmin, string jiraRoot) : this(developers, userName, isAdmin, jiraRoot, userName)
+        public NewFeaturePassRateModel(Dictionary<string, string> developers, string userName, bool isAdmin, string jiraRoot) : this(developers, userName, isAdmin, jiraRoot, userName)
         {
         }
 
-        public NewFeatureFailureRateModel(Dictionary<string, string> developers, string userName, bool isAdmin, string jiraRoot, string selectedDeveloper)
+        public NewFeaturePassRateModel(Dictionary<string, string> developers, string userName, bool isAdmin, string jiraRoot, string selectedDeveloper)
         {
             Developers = developers.Where(x => x.Key == userName || isAdmin).ToDictionary(x => x.Key, y => y.Value);
             IsAdmin = isAdmin;

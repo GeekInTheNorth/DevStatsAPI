@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DevStats.Domain.KPI
 {
-    public class NewFeatureFailureRateStory
+    public class NewFeaturePassRateStory
     {
         public string Key { get; private set; }
 
@@ -27,7 +27,7 @@ namespace DevStats.Domain.KPI
 
         public bool IsOnTrack
         {
-            get { return ReworkProportion < 0.125M; }
+            get { return ReworkProportion < 0.1M; }
         }
 
         public int TotalPlannedDevelopment { get; private set; }
@@ -39,7 +39,7 @@ namespace DevStats.Domain.KPI
             get { return GetProportionOfTime(TotalPlannedDevelopment, TotalPlannedDevelopmentByDeveloper); }
         }
 
-        public NewFeatureFailureRateStory(string storyKey, string storyDescription, string release, DateTime? lastWorkedOn , IEnumerable<NewFeatureFailureRateTask> tasks, string developer)
+        public NewFeaturePassRateStory(string storyKey, string storyDescription, string release, DateTime? lastWorkedOn , IEnumerable<NewFeaturePassRateTask> tasks, string developer)
         {
             Key = storyKey;
             Description = storyDescription;

@@ -32,7 +32,7 @@ namespace DevStats
             container.RegisterType<IJiraLogRepository, JiraLogRepository>();
             container.RegisterType<IWorkLogRepository, WorkLogRepository>();
             container.RegisterType<IUserRepository, UserRepository>();
-            container.RegisterType<INewFeatureFailureRateRepository, NewFeatureFailureRateRepository>();
+            container.RegisterType<INewFeaturePassRateRepository, NewFeaturePassRateRepository>();
             container.RegisterType<IApiLogRepository, ApiLogRepository>();
             container.RegisterType<IMvpRepository, MvpRepository>();
             container.RegisterType<IActualsVsEstimatesRepository, ActualsVsEstimatesRepository>();
@@ -53,7 +53,7 @@ namespace DevStats
             container.RegisterType<IDefectService, DefectService>();
             container.RegisterType<IJiraService, JiraService>();
             container.RegisterType<ISprintPlannerService, SprintPlannerService>();
-            container.RegisterType<INewFeatureFailureRateService, NewFeatureFailureRateService>();
+            container.RegisterType<INewFeaturePassRateService, NewFeaturePassRateService>();
             container.RegisterType<IAhaService, AhaService>();
             container.RegisterType<IMvpService, MvpService>();
             container.RegisterType<IEmailService, EmailService>();

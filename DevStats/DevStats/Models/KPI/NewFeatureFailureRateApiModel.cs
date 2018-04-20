@@ -13,7 +13,7 @@ namespace DevStats.Models.KPI
         {
         }
 
-        public NewFeatureFailureRateApiModel(Dictionary<string, NewFeatureFailureRate> kpis)
+        public NewFeatureFailureRateApiModel(Dictionary<string, NewFeaturePassRate> kpis)
         {
             KpiData = new List<NewFeatureFailureRateApiModelItem>();
 
@@ -25,7 +25,7 @@ namespace DevStats.Models.KPI
             }
         }
 
-        public NewFeatureFailureRateApiModel(string developer, NewFeatureFailureRate kpi)
+        public NewFeatureFailureRateApiModel(string developer, NewFeaturePassRate kpi)
         {
             KpiData = new List<NewFeatureFailureRateApiModelItem>();
 
@@ -67,7 +67,7 @@ namespace DevStats.Models.KPI
         {
         }
 
-        public NewFeatureFailureRateApiModelItem(string developer, NewFeatureFailureRateStory storyBreakdown)
+        public NewFeatureFailureRateApiModelItem(string developer, NewFeaturePassRateStory storyBreakdown)
         {
             Developer = developer;
             Product = storyBreakdown.Product;

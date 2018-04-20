@@ -1,8 +1,8 @@
-﻿@model DevStats.Models.KPI.NewFeatureFailureRateModel
+﻿@model DevStats.Models.KPI.NewFeaturePassRateModel
 
 @{
     Layout = "~/Views/Shared/Shared.cshtml";
-    Page.Title = "New Feature Failure Rate";
+    Page.Title = "New Feature Pass Rate";
     Func<decimal, string> FormatTime = (seconds) => string.Format("{0:F2} hrs", seconds / 3600);
     Func<decimal, string> FormatProportion = (proportion) => string.Format("{0:F2} %", proportion * 100);
     Func<bool, string> FormatBoolean = (thisBool) => thisBool ? "Yes" : "No";
@@ -27,10 +27,14 @@
 
 <h1>Summary</h1>
 
+<p class="text-muted">Please note that the following is calculated on a rolling 365 days.</p>
+
 <ul>
     <li>Total proportional work duration: @FormatTime(Model.Quality.TotalProportionalWork)</li>
+    <li>Total proportional dev duration: @FormatTime(Model.Quality.TotalProportionalNonRework)</li>
     <li>Total proportional rework duration: @FormatTime(Model.Quality.TotalProportionalRework)</li>
     <li>Total rework proportion: @FormatProportion(Model.Quality.TotalReworkProportion)</li>
+    <li>New Feature Pass Rate: @FormatProportion(Model.Quality.PassRate)</li>
     <li>Developer On Track: @FormatBoolean(Model.Quality.IsOnTrack)</li>
 </ul>
 

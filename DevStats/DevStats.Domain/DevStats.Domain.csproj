@@ -111,10 +111,8 @@
     <Compile Include="Communications\IEmailService.cs" />
     <Compile Include="DefectAnalysis\ProductDefectSummaries.cs" />
     <Compile Include="Jira\IDefectScoringRepository.cs" />
-    <Compile Include="KPI\INewFeatureFailureRateRepository.cs" />
-    <Compile Include="KPI\INewFeatureFailureRateService.cs" />
-    <Compile Include="KPI\NewFeatureFailureRate.cs" />
-    <Compile Include="KPI\NewFeatureFailureRateService.cs" />
+    <Compile Include="KPI\INewFeaturePassRateRepository.cs" />
+    <Compile Include="KPI\INewFeaturePassRateService.cs" />
     <Compile Include="Jira\IJiraIdValidator.cs" />
     <Compile Include="Jira\JiraDefect.cs" />
     <Compile Include="Jira\JiraDefectSummary.cs" />
@@ -125,8 +123,10 @@
     <Compile Include="KPI\ActualsVsEstimateWorkItem.cs" />
     <Compile Include="KPI\IActualsVsEstimatesRepository.cs" />
     <Compile Include="KPI\IActualsVsEstimatesService.cs" />
-    <Compile Include="KPI\NewFeatureFailureRateStory.cs" />
-    <Compile Include="KPI\NewFeatureFailureRateTask.cs" />
+    <Compile Include="KPI\NewFeaturePassRate.cs" />
+    <Compile Include="KPI\NewFeaturePassRateService.cs" />
+    <Compile Include="KPI\NewFeaturePassRateStory.cs" />
+    <Compile Include="KPI\NewFeaturePassRateTask.cs" />
     <Compile Include="Logging\IApiLogRepository.cs" />
     <Compile Include="Aha\JsonModels\Feature.cs" />
     <Compile Include="Aha\JsonModels\FeatureCollection.cs" />

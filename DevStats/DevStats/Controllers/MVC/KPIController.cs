@@ -17,17 +17,17 @@ namespace DevStats.Controllers.MVC
         private ApplicationUserManager UserManager => HttpContext.GetOwinContext().Get<ApplicationUserManager>();
 
         private readonly IActualsVsEstimatesService actualsVsEstimatesService;
-        private readonly INewFeatureFailureRateService newFeatureFailureRateService;
+        private readonly INewFeaturePassRateService newFeaturePassRateService;
         private readonly ISystemPropertyRepository systemPropertyRepository;
 
-        public KPIController(IActualsVsEstimatesService actualsVsEstimatesService, INewFeatureFailureRateService newFeatureFailureRateService, ISystemPropertyRepository systemPropertyRepository)
+        public KPIController(IActualsVsEstimatesService actualsVsEstimatesService, INewFeaturePassRateService newFeaturePassRateService, ISystemPropertyRepository systemPropertyRepository)
         {
             if (actualsVsEstimatesService == null) throw new ArgumentNullException(nameof(actualsVsEstimatesService));
-            if (newFeatureFailureRateService == null) throw new ArgumentNullException(nameof(newFeatureFailureRateService));
+            if (newFeaturePassRateService == null) throw new ArgumentNullException(nameof(newFeaturePassRateService));
             if (systemPropertyRepository == null) throw new ArgumentNullException(nameof(systemPropertyRepository));
 
             this.actualsVsEstimatesService = actualsVsEstimatesService;
-            this.newFeatureFailureRateService = newFeatureFailureRateService;
+            this.newFeaturePassRateService = newFeaturePassRateService;
             this.systemPropertyRepository = systemPropertyRepository;
         }
 
@@ -58,27 +58,27 @@ namespace DevStats.Controllers.MVC
         }
 
         [HttpGet]
-        public async Task<ActionResult> NewFeatureFailureRate()
+        public async Task<ActionResult> NewFeaturePassRate()
         {
             var user = Request.GetOwinContext().Authentication.User;
             var isAdmin = await UserManager.IsInRoleAsync(user.Identity.Name, "Admin");
-            var developers = newFeatureFailureRateService.GetDevelopers();
+            var developers = newFeaturePassRateService.GetDevelopers();
 
-            var model = new NewFeatureFailureRateModel(developers, user.Identity.Name, isAdmin, GetJiraRoot());
-            model.Quality = newFeatureFailureRateService.GetQualityKpi(model.SelectedDeveloper);
+            var model = new NewFeaturePassRateModel(developers, user.Identity.Name, isAdmin, GetJiraRoot());
+            model.Quality = newFeaturePassRateService.GetQualityKpi(model.SelectedDeveloper);
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> NewFeatureFailureRate(string selectedDeveloper)
+        public async Task<ActionResult> NewFeaturePassRate(string selectedDeveloper)
         {
             var user = Request.GetOwinContext().Authentication.User;
             var isAdmin = await UserManager.IsInRoleAsync(user.Identity.Name, "Admin");
-            var developers = newFeatureFailureRateService.GetDevelopers();
+            var developers = newFeaturePassRateService.GetDevelopers();
 
-            var model = new NewFeatureFailureRateModel(developers, selectedDeveloper, isAdmin, GetJiraRoot(), selectedDeveloper);
-            model.Quality = newFeatureFailureRateService.GetQualityKpi(model.SelectedDeveloper);
+            var model = new NewFeaturePassRateModel(developers, selectedDeveloper, isAdmin, GetJiraRoot(), selectedDeveloper);
+            model.Quality = newFeaturePassRateService.GetQualityKpi(model.SelectedDeveloper);
 
             return View(model);
         }
